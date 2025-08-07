@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Roblox Player Lookup</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- ✅ Google AdSense (tu mets ton code ici) -->
+  <!-- Example (REMPLACE data-ad-client et data-ad-slot) -->
+  <!--
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" crossorigin="anonymous"></script>
+  <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+  -->
+
+  <style>
+    body {
+      background: #1f1f26;
+      color: #e0e0e0;
+      font-family: 'Montserrat', sans-serif;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      color: #ffffff;
+      font-size: 28px;
+      margin-bottom: 25px;
+      text-align: center;
+    }
+
+    input, button {
+      padding: 12px;
+      border-radius: 6px;
+      border: none;
+      font-size: 16px;
+      margin: 5px;
+    }
+
+    input {
+      width: 280px;
+      background: #2b2c31;
+      color: #fff;
+    }
+
+    button {
+      background: #3a85ff;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .card {
+      background: #2b2c31;
+      border-radius: 8px;
+      padding: 20px;
+      margin-top: 30px;
+      width: 100%;
+      max-width: 600px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+      position: relative;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 8px;
+      background: #444;
+    }
+
+    .info {
+      flex: 1;
+    }
+
+    .info h2 {
+      margin: 0;
+      font-size: 22px;
+      color: #fff;
+    }
+
+    .info p {
+      margin: 4px 0;
+      color: #ccc;
+    }
+
+    .status {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-size: 14px;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    .offline { background: grey; }
+    .online { background: #3a85ff; }
+    .playing { background: #43b581; }
+    .studio { background: #ffaa00; }
+
+    .error {
+      color: #f04747;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+
+    .ad-card {
+      display: flex;
+      background: #2b2d31;
+      border: 1px solid #3a3c40;
+      border-radius: 8px;
+      padding: 16px;
+      margin-top: 30px;
+      width: 100%;
+      max-width: 600px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    .ad-thumbnail img {
+      width: 100px;
+      height: 100px;
+      border-radius: 6px;
+      object-fit: cover;
+      margin-right: 16px;
+    }
+
+    .ad-content h3 {
+      margin: 0 0 8px 0;
+      font-size: 18px;
+      color: #fff;
+    }
+
+    .ad-content p {
+      margin: 0 0 12px 0;
+      font-size: 14px;
+      color: #bbb;
+    }
+
+    .ad-content a {
+      background: #3a85ff;
+      padding: 8px 14px;
+      color: white;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .ad-content a:hover {
+      background: #507aff;
+    }
+
+    .adsense-placeholder {
+      width: 100%;
+      max-width: 600px;
+      height: 100px;
+      margin-top: 30px;
+      background: #2a2a2a;
+      color: #999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      border-radius: 6px;
+      border: 1px dashed #444;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Roblox Player Lookup</h1>
+
+  <div>
+    <input type="text" id="input" placeholder="Enter Username or User ID">
+    <button onclick="lookup()">Search</button>
+  </div>
+
+  <div id="result"></div>
+
+  <!-- ✅ Zone pour publicité Google AdSense -->
+  <div class="adsense-placeholder">
+    <!-- 👉 Tu peux remplacer ceci par ton script AdSense -->
+    Your AdSense ad will appear here
+  </div>
+
+  <!-- ✅ Zone de pub personnalisée -->
+  <div id="ad"></div>
+
+  <script>
+    const ads = [
+      {
+        title: "🔥 Featured Game: Obby Rush",
+        description: "Try the most addictive obby on Roblox! 500+ levels of fun.",
+        image: "https://tr.rbxcdn.com/93b11cc2e65b58a6a4e587cd8b4e9821/420/420/Image/Png",
+        link: "https://www.roblox.com/games/1234567890/Obby-Rush"
+      },
+      {
+        title: "👑 Join the Ultimate Tycoon",
+        description: "Build your empire and become the richest tycoon on Roblox.",
+        image: "https://tr.rbxcdn.com/6b4302c5a0e201ab1d3cba0a7a41421d/420/420/Image/Png",
+        link: "https://www.roblox.com/games/9876543210/Tycoon-Legends"
+      },
+      {
+        title: "🎮 Follow Me on YouTube",
+        description: "Get Roblox tutorials, gameplay, and devlogs every week!",
+        image: "https://yt3.ggpht.com/yti/AGOGRCqfTz7VnA6eBR5Q1Rno5RoOeBozktMAI2ktVA=s88-c-k-c0x00ffffff-no-rj",
+        link: "https://www.youtube.com/"
+      }
+    ];
+
+    function showRandomAd() {
+      const adContainer = document.getElementById('ad');
+      const ad = ads[Math.floor(Math.random() * ads.length)];
+      adContainer.innerHTML = `
+        <div class="ad-card">
+          <div class="ad-thumbnail">
+            <img src="${ad.image}" alt="Ad Image">
+          </div>
+          <div class="ad-content">
+            <h3>${ad.title}</h3>
+            <p>${ad.description}</p>
+            <a href="${ad.link}" target="_blank">Check it out</a>
+          </div>
+        </div>
+      `;
+    }
+
+    async function lookup() {
+      const query = document.getElementById('input').value.trim();
+      const result = document.getElementById('result');
+      result.innerHTML = '';
+      showRandomAd();
+
+      if (!query) {
+        result.innerHTML = '<p class="error">Please enter a username or user ID.</p>';
+        return;
+      }
+
+      const proxy = "https://corsproxy.io/?";
+      let userId = query;
+
+      try {
+        if (isNaN(Number(query))) {
+          const res = await fetch(proxy + encodeURIComponent('https://users.roblox.com/v1/usernames/users'), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ usernames: [query.toLowerCase()], excludeBannedUsers: false })
+          });
+          const data = await res.json();
+          if (!data.data || !data.data[0]) throw new Error("User not found");
+          userId = data.data[0].id;
+        }
+
+        const [
+          userData,
+          avatarData,
+          friends,
+          followers,
+          following,
+          presence
+        ] = await Promise.all([
+          fetch(proxy + encodeURIComponent(`https://users.roblox.com/v1/users/${userId}`)).then(r => r.json()),
+          fetch(proxy + encodeURIComponent(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${userId}&size=150x150&format=Png&isCircular=false`)).then(r => r.json()),
+          fetch(proxy + encodeURIComponent(`https://friends.roblox.com/v1/users/${userId}/friends/count`)).then(r => r.json()),
+          fetch(proxy + encodeURIComponent(`https://friends.roblox.com/v1/users/${userId}/followers/count`)).then(r => r.json()),
+          fetch(proxy + encodeURIComponent(`https://friends.roblox.com/v1/users/${userId}/followings/count`)).then(r => r.json()),
+          fetch(proxy + encodeURIComponent(`https://presence.roblox.com/v1/presence/users`), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userIds: [userId] })
+          }).then(r => r.json())
+        ]);
+
+        const avatarUrl = avatarData?.data?.[0]?.imageUrl || '';
+        const created = userData.created ? new Date(userData.created).toLocaleString() : 'Unavailable';
+        const presenceType = presence.userPresences?.[0]?.userPresenceType;
+
+        let statusClass = 'offline', statusText = 'Offline';
+        if (presenceType === 1) { statusClass = 'online'; statusText = 'Online'; }
+        else if (presenceType === 2) { statusClass = 'playing'; statusText = 'In Game'; }
+        else if (presenceType === 3) { statusClass = 'studio'; statusText = 'In Studio'; }
+
+        result.innerHTML = `
+          <div class="card">
+            <div class="header">
+              <img class="avatar" src="${avatarUrl}" alt="Avatar">
+              <div class="info">
+                <h2>${userData.name || 'Unknown'} (${userData.displayName || 'Unknown'})</h2>
+                <p><strong>Created:</strong> ${created}</p>
+                <p><strong>Friends:</strong> ${friends.count} • Followers: ${followers.count} • Following: ${following.count}</p>
+                <p><strong>Bio:</strong> ${userData.description ? userData.description : 'None'}</p>
+              </div>
+            </div>
+            <div class="status ${statusClass}">${statusText}</div>
+          </div>
+        `;
+      } catch (err) {
+        console.error(err);
+        result.innerHTML = '<p class="error">Failed to load user. Check username or ID and try again.</p>';
+      }
+    }
+
+    // Show ad on load
+    showRandomAd();
+  </script>
+
+</body>
+</html>
