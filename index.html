@@ -1,19 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Roblox Player Lookup</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
-
-  <!-- ✅ Google AdSense (tu mets ton code ici) -->
-  <!-- Example (REMPLACE data-ad-client et data-ad-slot) -->
-  <!--
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" crossorigin="anonymous"></script>
-  <script>
-    (adsbygoogle = window.adsbygoogle || []).push({});
-  </script>
-  -->
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet" />
+  
+  <!-- ✅ Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6941574746900426"
+     crossorigin="anonymous"></script>
 
   <style>
     body {
@@ -160,19 +155,11 @@
       background: #507aff;
     }
 
-    .adsense-placeholder {
-      width: 100%;
-      max-width: 600px;
-      height: 100px;
+    .adsense-box {
       margin-top: 30px;
-      background: #2a2a2a;
-      color: #999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      border-radius: 6px;
-      border: 1px dashed #444;
+      max-width: 600px;
+      width: 100%;
+      text-align: center;
     }
   </style>
 </head>
@@ -181,19 +168,27 @@
   <h1>Roblox Player Lookup</h1>
 
   <div>
-    <input type="text" id="input" placeholder="Enter Username or User ID">
+    <input type="text" id="input" placeholder="Enter Username or User ID" />
     <button onclick="lookup()">Search</button>
   </div>
 
   <div id="result"></div>
 
-  <!-- ✅ Zone pour publicité Google AdSense -->
-  <div class="adsense-placeholder">
-    <!-- 👉 Tu peux remplacer ceci par ton script AdSense -->
-    Your AdSense ad will appear here
+  <!-- ✅ Google AdSense container -->
+  <div class="adsense-box">
+    <!-- Replace with your actual ad slot markup -->
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-6941574746900426"
+         data-ad-slot="YOUR_SLOT_ID"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
   </div>
 
-  <!-- ✅ Zone de pub personnalisée -->
+  <!-- ✅ Custom ad -->
   <div id="ad"></div>
 
   <script>
@@ -224,7 +219,7 @@
       adContainer.innerHTML = `
         <div class="ad-card">
           <div class="ad-thumbnail">
-            <img src="${ad.image}" alt="Ad Image">
+            <img src="${ad.image}" alt="Ad Image" />
           </div>
           <div class="ad-content">
             <h3>${ad.title}</h3>
@@ -293,7 +288,7 @@
         result.innerHTML = `
           <div class="card">
             <div class="header">
-              <img class="avatar" src="${avatarUrl}" alt="Avatar">
+              <img class="avatar" src="${avatarUrl}" alt="Avatar" />
               <div class="info">
                 <h2>${userData.name || 'Unknown'} (${userData.displayName || 'Unknown'})</h2>
                 <p><strong>Created:</strong> ${created}</p>
@@ -310,7 +305,7 @@
       }
     }
 
-    // Show ad on load
+    // Show custom ad on page load
     showRandomAd();
   </script>
 
