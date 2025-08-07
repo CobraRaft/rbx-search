@@ -6,253 +6,134 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet" />
 
-  <!-- ✅ Google AdSense -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6941574746900426"
-     crossorigin="anonymous"></script>
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6941574746900426" crossorigin="anonymous"></script>
 
   <style>
+    :root { --bg:#1f1f26; --panel:#2b2c31; --text:#e0e0e0; --muted:#ccc; --accent:#3a85ff; }
+    * { box-sizing: border-box; }
     body {
-      background: #1f1f26;
-      color: #e0e0e0;
+      background: var(--bg);
+      color: var(--text);
       font-family: 'Montserrat', sans-serif;
       padding: 40px 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      display: flex; flex-direction: column; align-items: center;
+      min-height: 100vh;
     }
-
-    h1 {
-      color: #ffffff;
-      font-size: 28px;
-      margin-bottom: 25px;
-      text-align: center;
-    }
-
-    input, button {
-      padding: 12px;
-      border-radius: 6px;
-      border: none;
-      font-size: 16px;
-      margin: 5px;
-    }
-
-    input {
-      width: 280px;
-      background: #2b2c31;
-      color: #fff;
-    }
-
-    button {
-      background: #3a85ff;
-      color: white;
-      font-weight: 600;
-      cursor: pointer;
-    }
+    h1 { color:#fff; font-size:28px; margin-bottom:25px; text-align:center; }
+    .bar { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; }
+    input, button { padding:12px; border-radius:6px; border:0; font-size:16px; }
+    input { width:280px; background:var(--panel); color:#fff; }
+    button { background:var(--accent); color:#fff; font-weight:600; cursor:pointer; }
+    button:disabled { opacity:.6; cursor:not-allowed; }
 
     .card {
-      background: #2b2c31;
+      background: var(--panel);
       border-radius: 8px;
       padding: 20px;
       margin-top: 30px;
       width: 100%;
-      max-width: 600px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+      max-width: 640px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.5);
       position: relative;
     }
+    .header { display:flex; align-items:center; gap:20px; }
+    .avatar { width:100px; height:100px; border-radius:8px; background:#444; object-fit:cover; }
+    .info { flex:1; min-width:0; }
+    .info h2 { margin:0; font-size:22px; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .info p { margin:6px 0; color:#ccc; word-break:break-word; }
+    .status { position:absolute; bottom:20px; right:20px; padding:8px 12px; border-radius:4px; font-size:14px; color:#fff; font-weight:700; }
+    .offline{ background:grey } .online{ background:#3a85ff } .playing{ background:#43b581 } .studio{ background:#ffaa00 }
+    .error { color:#f04747; margin-top:20px; font-weight:700; text-align:center; }
 
-    .header {
-      display: flex;
-      align-items: center;
-      gap: 20px;
+    /* AdSense container */
+    .adsense-box { margin-top:30px; max-width:640px; width:100%; text-align:center; }
+
+    /* Custom promo (renamed to avoid ad blockers) */
+    .promo-wrap { width:100%; max-width:640px; }
+    .promo-card {
+      display:flex; gap:16px; align-items:center;
+      background:#2b2d31; border:1px solid #3a3c40; border-radius:8px;
+      padding:16px; margin-top:30px; box-shadow:0 2px 8px rgba(0,0,0,.3);
     }
-
-    .avatar {
-      width: 100px;
-      height: 100px;
-      border-radius: 8px;
-      background: #444;
-    }
-
-    .info {
-      flex: 1;
-    }
-
-    .info h2 {
-      margin: 0;
-      font-size: 22px;
-      color: #fff;
-    }
-
-    .info p {
-      margin: 4px 0;
-      color: #ccc;
-    }
-
-    .status {
-      position: absolute;
-      bottom: 20px;
-      right: 20px;
-      padding: 8px 12px;
-      border-radius: 4px;
-      font-size: 14px;
-      color: #fff;
-      font-weight: bold;
-    }
-
-    .offline { background: grey; }
-    .online { background: #3a85ff; }
-    .playing { background: #43b581; }
-    .studio { background: #ffaa00; }
-
-    .error {
-      color: #f04747;
-      margin-top: 20px;
-      font-weight: bold;
-    }
-
-    .ad-card {
-      display: flex;
-      background: #2b2d31;
-      border: 1px solid #3a3c40;
-      border-radius: 8px;
-      padding: 16px;
-      margin-top: 30px;
-      width: 100%;
-      max-width: 600px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-    }
-
-    .ad-thumbnail img {
-      width: 100px;
-      height: 100px;
-      border-radius: 6px;
-      object-fit: cover;
-      margin-right: 16px;
-    }
-
-    .ad-content h3 {
-      margin: 0 0 8px 0;
-      font-size: 18px;
-      color: #fff;
-    }
-
-    .ad-content p {
-      margin: 0 0 12px 0;
-      font-size: 14px;
-      color: #bbb;
-    }
-
-    .ad-content a {
-      background: #3a85ff;
-      padding: 8px 14px;
-      color: white;
-      border-radius: 4px;
-      text-decoration: none;
-      font-weight: 600;
-    }
-
-    .ad-content a:hover {
-      background: #507aff;
-    }
-
-    .adsense-box {
-      margin-top: 30px;
-      max-width: 600px;
-      width: 100%;
-      text-align: center;
-    }
+    .promo-thumb img { width:100px; height:100px; border-radius:6px; object-fit:cover; }
+    .promo-content h3 { margin:0 0 8px 0; font-size:18px; color:#fff; }
+    .promo-content p { margin:0 0 12px 0; font-size:14px; color:#bbb; }
+    .promo-content a { background:var(--accent); padding:8px 14px; color:#fff; border-radius:4px; text-decoration:none; font-weight:600; }
+    .promo-content a:hover { filter:brightness(1.1); }
   </style>
 </head>
 <body>
-
   <h1>Roblox Player Lookup</h1>
 
-  <div>
-    <input type="text" id="input" placeholder="Enter Username or User ID" />
-    <button onclick="lookup()">Search</button>
+  <div class="bar">
+    <input id="input" placeholder="Enter Username or User ID" />
+    <button id="btn" onclick="lookup()">Search</button>
   </div>
 
   <div id="result"></div>
 
-  <!-- ✅ Google AdSense Display -->
+  <!-- AdSense block -->
   <div class="adsense-box">
-    <!-- Website's Ads -->
     <ins class="adsbygoogle"
          style="display:block"
          data-ad-client="ca-pub-6941574746900426"
          data-ad-slot="5368161496"
          data-ad-format="auto"
          data-full-width-responsive="true"></ins>
-    <script>
-         (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
+    <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
   </div>
 
-  <!-- ✅ Custom ad -->
-  <div id="ad"></div>
+  <!-- Custom promo (not blocked by adblockers) -->
+  <div class="promo-wrap" id="promo"></div>
 
   <script>
-    const ads = [
-      {
-        title: "🔥 Featured Game: Obby Rush",
-        description: "Try the most addictive obby on Roblox! 500+ levels of fun.",
-        image: "https://tr.rbxcdn.com/93b11cc2e65b58a6a4e587cd8b4e9821/420/420/Image/Png",
-        link: "https://www.roblox.com/games/1234567890/Obby-Rush"
-      },
-      {
-        title: "👑 Join the Ultimate Tycoon",
-        description: "Build your empire and become the richest tycoon on Roblox.",
-        image: "https://tr.rbxcdn.com/6b4302c5a0e201ab1d3cba0a7a41421d/420/420/Image/Png",
-        link: "https://www.roblox.com/games/9876543210/Tycoon-Legends"
-      },
-      {
-        title: "🎮 Follow Me on YouTube",
-        description: "Get Roblox tutorials, gameplay, and devlogs every week!",
-        image: "https://yt3.ggpht.com/yti/AGOGRCqfTz7VnA6eBR5Q1Rno5RoOeBozktMAI2ktVA=s88-c-k-c0x00ffffff-no-rj",
-        link: "https://www.youtube.com/"
-      }
+    /* -------- Custom promo rotation -------- */
+    const promos = [
+      { title:"Featured Game: Obby Rush", desc:"Try the most addictive obby on Roblox! 500+ levels of fun.", img:"https://tr.rbxcdn.com/93b11cc2e65b58a6a4e587cd8b4e9821/420/420/Image/Png", link:"https://www.roblox.com/games/1234567890/Obby-Rush" },
+      { title:"Join the Ultimate Tycoon", desc:"Build your empire and become the richest tycoon on Roblox.", img:"https://tr.rbxcdn.com/6b4302c5a0e201ab1d3cba0a7a41421d/420/420/Image/Png", link:"https://www.roblox.com/games/9876543210/Tycoon-Legends" },
+      { title:"Follow Me on YouTube", desc:"Get Roblox tutorials, gameplay, and devlogs every week!", img:"https://yt3.ggpht.com/yti/AGOGRCqfTz7VnA6eBR5Q1Rno5RoOeBozktMAI2ktVA=s88-c-k-c0x00ffffff-no-rj", link:"https://www.youtube.com/" }
     ];
-
-    function showRandomAd() {
-      const adContainer = document.getElementById('ad');
-      const ad = ads[Math.floor(Math.random() * ads.length)];
-      adContainer.innerHTML = `
-        <div class="ad-card">
-          <div class="ad-thumbnail">
-            <img src="${ad.image}" alt="Ad Image" />
+    function showPromo() {
+      const c = document.getElementById('promo');
+      const p = promos[Math.floor(Math.random() * promos.length)];
+      c.innerHTML = `
+        <div class="promo-card">
+          <div class="promo-thumb"><img src="${p.img}" alt="Promo"></div>
+          <div class="promo-content">
+            <h3>${p.title}</h3>
+            <p>${p.desc}</p>
+            <a href="${p.link}" target="_blank" rel="noopener">Check it out</a>
           </div>
-          <div class="ad-content">
-            <h3>${ad.title}</h3>
-            <p>${ad.description}</p>
-            <a href="${ad.link}" target="_blank">Check it out</a>
-          </div>
-        </div>
-      `;
+        </div>`;
     }
 
+    /* -------- Roblox Lookup -------- */
     async function lookup() {
-      const query = document.getElementById('input').value.trim();
+      const btn = document.getElementById('btn');
+      const q = document.getElementById('input').value.trim();
       const result = document.getElementById('result');
       result.innerHTML = '';
-      showRandomAd();
+      showPromo();
 
-      if (!query) {
-        result.innerHTML = '<p class="error">Please enter a username or user ID.</p>';
-        return;
-      }
+      if (!q) { result.innerHTML = '<p class="error">Please enter a username or user ID.</p>'; return; }
 
-      const proxy = "https://corsproxy.io/?";
-      let userId = query;
+      // prevent spam
+      btn.disabled = true; setTimeout(()=>{ btn.disabled = false; }, 1800);
+
+      const proxy = "https://corsproxy.io/?"; // simple CORS proxy for client-side testing
+      let userId = q;
 
       try {
-        if (isNaN(Number(query))) {
+        // If not numeric, treat as username (case-insensitive)
+        if (isNaN(Number(q))) {
           const res = await fetch(proxy + encodeURIComponent('https://users.roblox.com/v1/usernames/users'), {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ usernames: [query.toLowerCase()], excludeBannedUsers: false })
+            body: JSON.stringify({ usernames: [q.toLowerCase()], excludeBannedUsers: false })
           });
           const data = await res.json();
-          if (!data.data || !data.data[0]) throw new Error("User not found");
+          if (!data?.data?.length) throw new Error('User not found');
           userId = data.data[0].id;
         }
 
@@ -269,16 +150,15 @@
           fetch(proxy + encodeURIComponent(`https://friends.roblox.com/v1/users/${userId}/friends/count`)).then(r => r.json()),
           fetch(proxy + encodeURIComponent(`https://friends.roblox.com/v1/users/${userId}/followers/count`)).then(r => r.json()),
           fetch(proxy + encodeURIComponent(`https://friends.roblox.com/v1/users/${userId}/followings/count`)).then(r => r.json()),
-          fetch(proxy + encodeURIComponent(`https://presence.roblox.com/v1/presence/users`), {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+          fetch(proxy + encodeURIComponent('https://presence.roblox.com/v1/presence/users'), {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ userIds: [userId] })
           }).then(r => r.json())
         ]);
 
         const avatarUrl = avatarData?.data?.[0]?.imageUrl || '';
-        const created = userData.created ? new Date(userData.created).toLocaleString() : 'Unavailable';
-        const presenceType = presence.userPresences?.[0]?.userPresenceType;
+        const created = userData?.created ? new Date(userData.created).toLocaleString() : 'Unavailable';
+        const presenceType = presence?.userPresences?.[0]?.userPresenceType;
 
         let statusClass = 'offline', statusText = 'Offline';
         if (presenceType === 1) { statusClass = 'online'; statusText = 'Online'; }
@@ -290,10 +170,10 @@
             <div class="header">
               <img class="avatar" src="${avatarUrl}" alt="Avatar" />
               <div class="info">
-                <h2>${userData.name || 'Unknown'} (${userData.displayName || 'Unknown'})</h2>
+                <h2>${userData?.name || 'Unknown'} (${userData?.displayName || 'Unknown'})</h2>
                 <p><strong>Created:</strong> ${created}</p>
-                <p><strong>Friends:</strong> ${friends.count} • Followers: ${followers.count} • Following: ${following.count}</p>
-                <p><strong>Bio:</strong> ${userData.description ? userData.description : 'None'}</p>
+                <p><strong>Friends:</strong> ${friends?.count ?? 0} • Followers: ${followers?.count ?? 0} • Following: ${following?.count ?? 0}</p>
+                <p><strong>Bio:</strong> ${userData?.description ? userData.description : 'None'}</p>
               </div>
             </div>
             <div class="status ${statusClass}">${statusText}</div>
@@ -305,8 +185,8 @@
       }
     }
 
-    showRandomAd();
+    // Initial promo on load
+    showPromo();
   </script>
-
 </body>
 </html>
