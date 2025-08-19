@@ -4,29 +4,49 @@
   <meta charset="UTF-8" />
   <title>Roblox Lookup — Player & Game Search</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- SEO -->
+  <meta name="description" content="Roblox Lookup is a fast, privacy‑friendly search for Roblox games and users. See likes, visits, avatars, online status, and more." />
+  <meta name="keywords" content="roblox search, roblox player search, roblox game search, roblox username finder, roblox lookup" />
+  <link rel="canonical" href="https://sea-search.vercel.app/" />
+
+  <!-- Social -->
+  <meta property="og:title" content="Roblox Lookup — Player & Game Search" />
+  <meta property="og:description" content="Find Roblox games and users. Clean UI, no sign‑in, instant results." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://sea-search.vercel.app/" />
+  <meta property="og:image" content="https://static.wikia.nocookie.net/roblox/images/8/8b/Roblox_2019_Logo_Black.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Structured data: WebSite + SearchAction -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"WebSite",
+    "name":"Roblox Lookup",
+    "url":"https://sea-search.vercel.app/",
+    "potentialAction":{
+      "@type":"SearchAction",
+      "target":"https://sea-search.vercel.app/?q={query}&mode=game",
+      "query-input":"required name=query"
+    }
+  }
+  </script>
+
   <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet" />
 
-  <!-- Google AdSense (kept as-is; loads once) -->
+  <!-- Google AdSense (kept as‑is; loads once) -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6941574746900426" crossorigin="anonymous"></script>
 
   <style>
     :root{
-      --bg: #0b0f1e;
-      --bg2: #0e1328;
-      --card: #121737;
-      --card2: #171d45;
-      --text: #eaf0ff;
-      --muted: #b8c0ff;
-      --accentA: #7aa2ff;
-      --accentB: #7af1ff;
-      --good: #35e0a1;
-      --warn: #ffd166;
-      --bad: #ff6b91;
-      --outline: #283063;
-      --shadow: rgba(0,0,0,.55);
-      --radius: 16px;
+      --bg:#0b0f1e; --bg2:#0e1328; --card:#121737; --card2:#171d45;
+      --text:#eaf0ff; --muted:#b8c0ff; --accentA:#7aa2ff; --accentB:#7af1ff;
+      --good:#35e0a1; --warn:#ffd166; --bad:#ff6b91; --outline:#283063;
+      --shadow:rgba(0,0,0,.55); --radius:16px;
     }
     *{ box-sizing:border-box; }
     html,body{ height:100%; }
@@ -38,55 +58,56 @@
         linear-gradient(180deg, #0a0e1b, #0b0f1e 40%, #0b0f1e);
       color:var(--text);
       font-family:'Outfit','Montserrat',system-ui,Segoe UI,Roboto,Ubuntu,Cantarell,'Helvetica Neue',Arial;
-      padding:52px 18px 72px;
+      padding:52px 18px 92px;
       display:flex; flex-direction:column; align-items:center; gap:18px;
       min-height:100vh;
     }
-    h1{
-      margin:0 0 4px;
-      font-weight:800;
-      font-size:32px;
-      letter-spacing:.2px;
-      background: linear-gradient(90deg, #d7dcff, #7af1ff, #b3ffda);
-      -webkit-background-clip:text; background-clip:text; color:transparent;
-      text-align:center;
+    a{ color:#b7d2ff; }
+    header{
+      width:min(1000px,94vw);
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
     }
-    .sub{ margin:0 0 10px; color:var(--muted); opacity:.95; font-size:14px; text-align:center; }
+    .brand{ display:flex; align-items:center; gap:10px; }
+    .logo{
+      width:36px;height:36px;border-radius:10px; background:linear-gradient(135deg,var(--accentA),var(--accentB));
+      box-shadow:0 6px 18px rgba(122,241,255,.35);
+    }
+    nav a{
+      text-decoration:none; font-weight:800; font-size:13px; padding:8px 10px; border-radius:10px; color:#dfe6ff;
+      border:1px solid #1b2356; background:#0c1230;
+    }
+    h1{ margin:4px 0 0; font-weight:800; font-size:30px; letter-spacing:.2px;
+      background: linear-gradient(90deg, #d7dcff, #7af1ff, #b3ffda);
+      -webkit-background-clip:text; background-clip:text; color:transparent; text-align:left;
+    }
+    .sub{ margin:4px 0 10px; color:var(--muted); opacity:.95; font-size:14px; }
 
     /* Top search panel */
     .shell{
       width:min(1000px, 94vw);
       background:linear-gradient(180deg, #101634aa, #0e1430aa);
-      border:1px solid var(--outline);
-      border-radius: var(--radius);
-      box-shadow: 0 18px 44px var(--shadow);
-      padding:14px;
-      backdrop-filter: blur(10px);
+      border:1px solid var(--outline); border-radius: var(--radius);
+      box-shadow: 0 18px 44px var(--shadow); padding:14px; backdrop-filter: blur(10px);
     }
     .tabs{
       display:flex; gap:8px; padding:6px; background:#0c1230; border-radius:999px; width:max-content; margin:6px 6px 12px;
       border:1px solid #1b2356;
     }
     .tab{
-      border:none; background:transparent; color:#c9d1ff;
-      font-weight:800; padding:10px 16px; border-radius:999px; cursor:pointer; letter-spacing:.2px;
+      border:none; background:transparent; color:#c9d1ff; font-weight:800; padding:10px 16px; border-radius:999px; cursor:pointer; letter-spacing:.2px;
       transition: all .18s ease;
     }
     .tab.active{ background: linear-gradient(90deg,var(--accentA),var(--accentB)); color:#071127; box-shadow: 0 6px 18px rgba(122,241,255,.35); }
-
     .search-row{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; padding:0 6px 6px; }
     .input{
-      flex:1 1 520px; min-width:240px;
-      background:#0c1230; color:#fff; border:1px solid #1b2356;
+      flex:1 1 520px; min-width:240px; background:#0c1230; color:#fff; border:1px solid #1b2356;
       padding:14px; border-radius:12px; font-size:16px; outline:none;
       transition: border-color .2s ease, box-shadow .2s ease;
     }
     .input:focus{ border-color:var(--accentA); box-shadow:0 0 0 4px rgba(106,162,255,.2); }
     .btn{
-      background: linear-gradient(90deg,var(--accentA),var(--accentB));
-      color:#08122a; border:none; font-weight:900; letter-spacing:.3px;
-      padding:14px 18px; border-radius:12px; cursor:pointer;
-      box-shadow: 0 12px 28px rgba(106,162,255,.35);
+      background: linear-gradient(90deg,var(--accentA),var(--accentB)); color:#08122a; border:none; font-weight:900; letter-spacing:.3px;
+      padding:14px 18px; border-radius:12px; cursor:pointer; box-shadow: 0 12px 28px rgba(106,162,255,.35);
       transition: transform .12s ease, filter .12s ease, box-shadow .12s ease;
     }
     .btn:hover{ filter:brightness(1.06); transform: translateY(-1px); box-shadow: 0 16px 36px rgba(122,241,255,.35); }
@@ -100,23 +121,15 @@
       border-radius: var(--radius);
       padding:18px;
       box-shadow: 0 16px 36px var(--shadow);
-      position:relative;
-      margin-top: 22px;
+      position:relative; margin-top: 22px;
     }
     .header{ display:flex; align-items:center; gap:16px; }
-    .avatar, .game-thumb{
-      width:110px; height:110px; border-radius: 14px; background:#22306a; object-fit:cover; flex:0 0 auto;
-      border:1px solid #2a3b7f;
-    }
+    .avatar, .game-thumb{ width:110px; height:110px; border-radius: 14px; background:#22306a; object-fit:cover; flex:0 0 auto; border:1px solid #2a3b7f; }
     .info{ flex:1; min-width:0; }
     .info h2{ margin:0 0 8px; font-size:22px; }
     .info p{ margin:3px 0; color:#d7dcff; }
-
     .chips{ display:flex; gap:8px; flex-wrap:wrap; margin-top:6px; }
-    .chip{
-      padding:6px 10px; border-radius:999px; font-size:12px; font-weight:900;
-      background:#0b1234; border:1px solid #273578; color:#dce2ff;
-    }
+    .chip{ padding:6px 10px; border-radius:999px; font-size:12px; font-weight:900; background:#0b1234; border:1px solid #273578; color:#dce2ff; }
     .pill{ padding:7px 12px; border-radius:999px; font-size:12px; font-weight:900; }
     .offline{ background:#8b93af; color:#0c1126; }
     .online{ background:var(--accentA); color:#081127; }
@@ -126,97 +139,112 @@
     /* Game list */
     .list{ display:grid; grid-template-columns: 1fr; gap:10px; margin-top:10px; }
     .item{
-      background: #12183e;
-      border:1px solid #2a3676;
-      border-radius: 12px;
-      padding:12px;
-      cursor:pointer;
+      background: #12183e; border:1px solid #2a3676; border-radius: 12px; padding:12px; cursor:pointer;
       transition: transform .12s ease, border-color .2s ease, background .2s ease;
     }
     .item:hover{ transform: translateY(-1px); border-color:#3b4caa; background:#141c48; }
     .row2{ display:flex; align-items:center; gap:14px; }
     .meta{ display:flex; gap:12px; flex-wrap:wrap; font-size:13px; color:#cdd5ff; }
     .tag{ padding:3px 8px; border-radius:999px; background:#0d1437; border:1px solid #2c3d8b; font-weight:800; font-size:12px; color:#d6e4ff; }
-
-    .ratio-good{ color:#9bffd0; }
-    .ratio-mid{ color:#ffe29b; }
-    .ratio-bad{ color:#ff9aa8; }
+    .ratio-good{ color:#9bffd0; } .ratio-mid{ color:#ffe29b; } .ratio-bad{ color:#ff9aa8; }
 
     /* Loader & skeletons */
-    .loader{
-      display:flex; align-items:center; gap:10px; color:#dce2ff; font-size:14px; padding:6px 2px;
-    }
-    .spinner{
-      width:18px; height:18px; border:2px solid var(--accentB); border-top-color:transparent;
-      border-radius:50%; animation:spin .8s linear infinite;
-    }
+    .loader{ display:flex; align-items:center; gap:10px; color:#dce2ff; font-size:14px; padding:6px 2px; }
+    .spinner{ width:18px; height:18px; border:2px solid var(--accentB); border-top-color:transparent; border-radius:50%; animation:spin .8s linear infinite; }
     @keyframes spin{ to{ transform: rotate(360deg); } }
-
-    .skeleton{
-      position:relative; overflow:hidden; border-radius:var(--radius);
-      background:#11173a; border:1px solid #283063; padding:18px; width:min(1000px, 94vw);
-      margin-top: 12px;
-    }
-    .shimmer{
-      position:absolute; inset:0;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,.06), transparent);
-      transform: translateX(-100%); animation: shimmer 1.6s infinite;
-    }
+    .skeleton{ position:relative; overflow:hidden; border-radius:var(--radius); background:#11173a; border:1px solid #283063; padding:18px; width:min(1000px, 94vw); margin-top:12px; }
+    .shimmer{ position:absolute; inset:0; background: linear-gradient(90deg, transparent, rgba(255,255,255,.06), transparent); transform: translateX(-100%); animation: shimmer 1.6s infinite; }
     @keyframes shimmer{ to{ transform: translateX(100%);} }
     .sk-row{ display:flex; gap:16px; }
     .sk-ava{ width:110px; height:110px; background:#171e49; border-radius:14px; }
     .sk-lines{ flex:1; display:grid; gap:10px; padding-top:6px; }
     .sk-line{ height:14px; background:#171e49; border-radius:8px; }
-    .sk-line.short{ width:40%; }
-    .sk-line.med{ width:70%; }
-    .sk-line.long{ width:90%; }
+    .sk-line.short{ width:40%; } .sk-line.med{ width:70%; } .sk-line.long{ width:90%; }
 
     .error{ color:var(--bad); font-weight:800; margin-top:10px; text-align:center; }
+    .muted{ color:var(--muted); }
 
     /* AdSense */
     .adsense-box { margin-top: 26px; max-width:1000px; width:100%; text-align:center; }
 
-    /* Custom promo (kept, renamed classes) */
+    /* Promo */
     .promo-wrap { width:100%; max-width:1000px; }
     .promo-card{
-      display:flex; gap:16px; align-items:center;
-      background:#0e1539;
-      border:1px solid #27306b;
-      border-radius: var(--radius);
-      padding:16px;
-      margin-top: 18px;
-      box-shadow: 0 12px 28px var(--shadow);
+      display:flex; gap:16px; align-items:center; background:#0e1539; border:1px solid #27306b;
+      border-radius: var(--radius); padding:16px; margin-top: 18px; box-shadow: 0 12px 28px var(--shadow);
     }
     .promo-thumb img{ width:100px; height:100px; border-radius:12px; object-fit:cover; border:1px solid #33407a; }
     .promo-content h3{ margin:0 0 6px; color:#e8ecff; }
     .promo-content p{ margin:0 0 10px; color:#cdd4ff; font-size:14px; }
     .promo-content a{
-      display:inline-block;
-      background: linear-gradient(90deg,var(--accentA),var(--accentB));
-      padding:8px 14px; color:#0a0d1f; border-radius:8px; text-decoration:none; font-weight:900;
+      display:inline-block; background: linear-gradient(90deg,var(--accentA),var(--accentB)); padding:8px 14px; color:#0a0d1f; border-radius:8px; text-decoration:none; font-weight:900;
       box-shadow: 0 10px 26px rgba(106,162,255,.35);
     }
+
+    /* Utility sections */
+    .section{ width:min(1000px,94vw); margin-top:28px; }
+    .section h3{ margin:0 0 8px; }
+    .section p, .section li{ color:#dbe3ff; line-height:1.6; }
+    .grid-2{ display:grid; grid-template-columns:1fr; gap:14px; }
+    @media (min-width:860px){ .grid-2{ grid-template-columns:1fr 1fr; } }
+
+    .kbd{ font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; padding:2px 6px; border:1px solid #33407a; border-radius:6px; background:#0d1436; }
+
+    footer{ width:min(1000px,94vw); margin-top:34px; padding:16px; font-size:13px; border-top:1px solid #24306a; color:#bcd3ff; }
+    .footer-links a{ margin-right:10px; }
+    .notice{ font-size:12px; color:#a9b7e6; margin-top:6px; }
+    .badge{ font-size:11px; padding:4px 8px; border:1px solid #33407a; border-radius:999px; background:#0c1230; color:#cfe2ff; }
+
+    /* Chips row above results */
+    .tools{ width:min(1000px,94vw); display:flex; flex-wrap:wrap; gap:8px; margin-top:4px; }
+    .tool{ padding:8px 12px; border-radius:999px; border:1px solid #273578; background:#0b1234; font-size:13px; font-weight:800; color:#dce2ff; cursor:pointer; }
+    .tool[disabled]{ opacity:.6; cursor:not-allowed; }
   </style>
 </head>
 <body>
-
-  <h1>Roblox Lookup</h1>
-  <p class="sub">Search colorful & fast for Roblox <strong>Games</strong> and <strong>Users</strong> with unified loaders, AdSense, and promos.</p>
+  <header>
+    <div class="brand">
+      <div class="logo" aria-hidden="true"></div>
+      <div>
+        <h1>Roblox Lookup</h1>
+        <p class="sub" id="tagline">Search Roblox <strong>Games</strong> and <strong>Users</strong>. Fast, clean, no sign‑in.</p>
+      </div>
+    </div>
+    <nav aria-label="Site">
+      <a href="#about">About</a>
+      <a href="#guide">Guide</a>
+      <a href="#faq">FAQ</a>
+      <a href="#privacy">Privacy</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
 
   <!-- Top search shell -->
-  <div class="shell">
+  <div class="shell" role="search">
     <div class="tabs" role="tablist" aria-label="Search Type">
-      <button class="tab active" id="tab-game" role="tab" aria-selected="true" onclick="setMode('game')">Game Search</button>
-      <button class="tab" id="tab-user" role="tab" aria-selected="false" onclick="setMode('user')">User Search</button>
+      <button class="tab active" id="tab-game" role="tab" aria-selected="true" onclick="setMode('game')" title="Press G to switch">Game Search</button>
+      <button class="tab" id="tab-user" role="tab" aria-selected="false" onclick="setMode('user')" title="Press U to switch">User Search</button>
     </div>
     <div class="search-row">
-      <input class="input" id="input" placeholder="Search a Game (e.g., Brookhaven) or a Username/User ID" />
-      <button class="btn" id="btn" onclick="lookup()">Search</button>
+      <label for="input" class="visually-hidden" style="position:absolute;left:-9999px">Search query</label>
+      <input class="input" id="input" placeholder="Search a Game (e.g., Brookhaven) or a Username/User ID" aria-label="Search Roblox" />
+      <button class="btn" id="btn" onclick="lookup()" aria-label="Run search">Search</button>
     </div>
+    <p class="muted" style="margin:6px 8px 0">
+      Tips: press <span class="kbd">/</span> to focus, <span class="kbd">Enter</span> to search, <span class="kbd">G</span>/<span class="kbd">U</span> to toggle Game/User.
+      <span class="badge" id="badge-mode">Mode: Game</span>
+    </p>
   </div>
 
-  <!-- Results -->
-  <div id="result"></div>
+  <!-- Quick tools -->
+  <div class="tools" aria-label="Utilities">
+    <button class="tool" onclick="copyShareLink()" id="shareBtn">Copy shareable link</button>
+    <button class="tool" onclick="clearRecent()">Clear recent searches</button>
+    <span class="tool" style="cursor:default" aria-hidden="true">Trending: <span id="trending"></span></span>
+  </div>
+
+  <!-- Results (aria-live for accessibility) -->
+  <div id="result" aria-live="polite" aria-busy="false"></div>
 
   <!-- AdSense block (unchanged) -->
   <div class="adsense-box">
@@ -232,12 +260,94 @@
   <!-- Custom promo -->
   <div class="promo-wrap" id="promo"></div>
 
+  <!-- Rich content sections (useful for quality signals / AdSense) -->
+  <section class="section" id="about">
+    <h3>About Roblox Lookup</h3>
+    <div class="grid-2">
+      <p>Roblox Lookup is a lightweight web app that helps you discover <strong>popular games</strong>, check <strong>player profiles</strong>, and quickly jump into experiences. It uses official public endpoints for thumbnails, users, presence, and votes. No login required.</p>
+      <ul>
+        <li>Fast game search with fallback crawling for better coverage.</li>
+        <li>User search by username or ID with avatars and live status.</li>
+        <li>Clean interface, keyboard shortcuts, shareable links, and recent history.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" id="guide">
+    <h3>Quick Guide</h3>
+    <div class="grid-2">
+      <div>
+        <p><strong>Find a Game:</strong> switch to <em>Game Search</em>, type part of the title (e.g., “doors”, “brookhaven rp”), then press Enter. Click a result to see likes, visits, and a direct play link.</p>
+        <p><strong>Find a Player:</strong> switch to <em>User Search</em>, type a username (or numeric ID), and press Enter. You’ll see avatar, bio, counts, and online status.</p>
+      </div>
+      <div>
+        <p><strong>Deep Links:</strong> You can link directly with <span class="kbd">?q=&lt;term&gt;&amp;mode=game|user</span>. Example: <span class="kbd">?q=brookhaven&amp;mode=game</span>.</p>
+        <p><strong>Shortcuts:</strong> <span class="kbd">/</span> focus · <span class="kbd">Enter</span> search · <span class="kbd">G</span>/<span class="kbd">U</span> toggle · <span class="kbd">1</span>/<span class="kbd">2</span> tabs.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="faq">
+    <h3>FAQ</h3>
+    <div class="grid-2">
+      <div>
+        <p><strong>Is this an official Roblox site?</strong><br/>No. This is a community tool that links to roblox.com. All trademarks belong to their respective owners.</p>
+        <p><strong>Why can’t I find some games?</strong><br/>Some titles may not appear in autocomplete; the app falls back to web results and converts to universe IDs to improve coverage.</p>
+      </div>
+      <div>
+        <p><strong>Do you store my data?</strong><br/>Recent searches are saved locally on your device only. No account, no tracking beyond AdSense ads which are subject to Google’s policies.</p>
+        <p><strong>How do I report an issue?</strong><br/>Use the contact section below and include the query you tried and your browser.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="privacy">
+    <h3>Privacy</h3>
+    <p>We don’t run our own analytics. The page displays Google AdSense, which may use cookies to serve ads; you can manage ad personalization in your Google settings. Searches happen client‑side and are not sent to our server except for standard static hosting logs.</p>
+  </section>
+
+  <section class="section" id="contact">
+    <h3>Contact</h3>
+    <p>Questions, feature requests, or takedown notices? Send an email using the form below.</p>
+    <form onsubmit="return composeMail(event)" class="card" style="margin-top:10px">
+      <div class="grid-2">
+        <div>
+          <label for="c-email">Your Email</label><br/>
+          <input id="c-email" class="input" type="email" placeholder="you@example.com" required />
+        </div>
+        <div>
+          <label for="c-subj">Subject</label><br/>
+          <input id="c-subj" class="input" placeholder="Feedback for Roblox Lookup" required />
+        </div>
+      </div>
+      <div style="margin-top:10px">
+        <label for="c-msg">Message</label><br/>
+        <textarea id="c-msg" class="input" rows="4" placeholder="Write your message…" required></textarea>
+      </div>
+      <div style="margin-top:10px; display:flex; gap:8px; align-items:center">
+        <button class="btn" type="submit">Open email draft</button>
+        <span class="muted">This uses <span class="kbd">mailto:</span>; no data is stored here.</span>
+      </div>
+    </form>
+  </section>
+
+  <footer>
+    <div class="footer-links">
+      <a href="#about">About</a> · <a href="#guide">Guide</a> · <a href="#faq">FAQ</a> · <a href="#privacy">Privacy</a> · <a href="#contact">Contact</a>
+    </div>
+    <div class="notice">Not affiliated with Roblox Corporation. Game data &amp; images are fetched from public Roblox endpoints and are © their respective owners.</div>
+  </footer>
+
   <script>
     // ================= CONFIG =================
     const PROXY = "https://corsproxy.io/?"; // CORS helper for browser testing
     let MODE = 'game'; // 'game' | 'user'
     const GAME_CACHE = new Map();
     const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+    // Recent searches / trending seeds
+    const RECENT_KEY = 'rbx_lookup_recent_v1';
+    const TRENDING = ["Brookhaven","DOORS","Blox Fruits","Pet Simulator","Arsenal","Adopt Me","Murder Mystery 2"];
 
     // ================= UTIL =================
     async function fetchJSON(url, opts = {}) {
@@ -253,17 +363,20 @@
       const u = Number(up)||0, d = Number(down)||0; const t = u+d; if(!t) return {pct:0, cls:'ratio-mid', label:'0%'};
       const p = Math.round((u/t)*100); const cls = p>=80?'ratio-good':p>=60?'ratio-mid':'ratio-bad';
       return {pct:p, cls, label:p+'%'}; }
+    const $ = sel => document.querySelector(sel);
 
     // ================= TABS =================
     function setMode(mode){
       MODE = mode;
-      document.getElementById('tab-game').classList.toggle('active', mode==='game');
-      document.getElementById('tab-user').classList.toggle('active', mode==='user');
-      document.getElementById('tab-game').setAttribute('aria-selected', mode==='game');
-      document.getElementById('tab-user').setAttribute('aria-selected', mode==='user');
-      const input = document.getElementById('input');
+      $('#tab-game').classList.toggle('active', mode==='game');
+      $('#tab-user').classList.toggle('active', mode==='user');
+      $('#tab-game').setAttribute('aria-selected', mode==='game');
+      $('#tab-user').setAttribute('aria-selected', mode==='user');
+      const input = $('#input');
       input.placeholder = mode==='game' ? "Search a Game (e.g., Brookhaven)" : "Search a Username or User ID";
       input.focus();
+      $('#badge-mode').textContent = 'Mode: ' + (mode==='game'?'Game':'User');
+      syncURL();
     }
 
     // ================= UNIFIED LOADERS =================
@@ -360,7 +473,7 @@
     }
 
     function renderGameList(games){
-      const res = document.getElementById('result');
+      const res = $('#result');
       if(!games.length){ res.innerHTML = `<div class="card"><p class="error">No games found.</p></div>`; return; }
       let html = `<div class="card"><h2 style="margin:2px 0 8px">Search Results</h2><div class="list">`;
       for(const g of games){
@@ -387,7 +500,7 @@
     }
     function renderGameDetails(g){
       const lr = likeRatio(g.up,g.down);
-      document.getElementById('result').innerHTML = `
+      $('#result').innerHTML = `
         <div class="card">
           <div class="header">
             <img class="game-thumb" src="${g.thumb}" alt="">
@@ -400,17 +513,19 @@
                 <span class="chip">Favorites: ${formatInt(g.favorites)}</span>
               </div>
               <p style="margin-top:6px"><strong>Likes:</strong> <span class="${lr.cls}">${lr.label}</span> <span class="muted">(${formatInt(g.up)} up / ${formatInt(g.down)} down)</span></p>
-              <div style="margin-top:10px;">
+              <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap">
                 <a class="btn" href="https://www.roblox.com/games/${g.rootPlaceId}" target="_blank" rel="noopener">Play Game</a>
+                <button class="btn" onclick="copyShareLink(${g.id})" title="Copy a link to this result">Share</button>
               </div>
             </div>
           </div>
         </div>`;
     }
 
-    // ================= USER LOOKUP (same loader & skeleton) =================
+    // ================= USER LOOKUP =================
     async function userLookup(query){
-      const res = document.getElementById('result');
+      const res = $('#result');
+      res.setAttribute('aria-busy', 'true');
       res.innerHTML = `<div class="card"><div class="loader"><div class="spinner"></div><div>Looking up user…</div></div></div>` + skeletonCard();
 
       // Resolve userId
@@ -455,16 +570,22 @@
                 <span class="chip">Followers: ${followers.count}</span>
                 <span class="chip">Following: ${following.count}</span>
               </div>
-              <p style="margin-top:6px"><strong>Bio:</strong> ${userData.description ? userData.description : '<span class="muted">None</span>'}</p>
+              <p style="margin-top:6px"><strong>Bio:</strong> ${userData.description ? sanitize(userData.description) : '<span class="muted">None</span>'}</p>
+              <div style="margin-top:10px">
+                <a class="btn" target="_blank" rel="noopener" href="https://www.roblox.com/users/${userData.id}/profile">Open Profile</a>
+                <button class="btn" onclick="copyShareLink('${userData.name||userId}', 'user')">Share</button>
+              </div>
             </div>
           </div>
           <div class="pill ${sClass}" style="position:absolute; top:16px; right:16px">${sText}</div>
         </div>`;
+      res.setAttribute('aria-busy','false');
     }
 
-    // ================= GAME LOOKUP (same loader & skeleton list) =================
+    // ================= GAME LOOKUP =================
     async function gameLookup(keyword){
-      const res = document.getElementById('result');
+      const res = $('#result');
+      res.setAttribute('aria-busy','true');
       res.innerHTML = `<div class="card"><div class="loader"><div class="spinner"></div><div>Searching games…</div></div></div>` + skeletonList(4);
 
       // 1) Autocomplete for universe IDs
@@ -497,41 +618,46 @@
 
       if (!uniIds.length) {
         res.innerHTML = `<div class="card"><p class="error">No games found. Try another keyword (e.g., “brookhaven rp”).</p></div>`;
+        res.setAttribute('aria-busy','false');
         return;
       }
 
       const games = await getGamesDetails(uniIds);
       if (!games.length) {
         res.innerHTML = `<div class="card"><p class="error">Couldn’t load game details. Please try again.</p></div>`;
+        res.setAttribute('aria-busy','false');
         return;
       }
       renderGameList(games);
+      res.setAttribute('aria-busy','false');
     }
 
     // ================= PUBLIC ACTIONS =================
     async function lookup() {
-      showPromo(); // promo rotates on each search (AdSense stays untouched)
-      const btn = document.getElementById('btn');
-      const res = document.getElementById('result');
-      const query = document.getElementById('input').value.trim();
+      showPromo(); // rotates each search
+      const btn = $('#btn');
+      const res = $('#result');
+      const query = $('#input').value.trim();
 
       if (!query) {
         res.innerHTML = `<div class="card"><p class="error">Please type something to search.</p></div>`;
         return;
       }
 
+      // Store to recent (local only)
+      addRecent(query);
+
       btn.disabled = true;
       try {
-        if (MODE === 'user') {
-          await userLookup(query);
-        } else {
-          await gameLookup(query);
-        }
+        if (MODE === 'user') await userLookup(query);
+        else await gameLookup(query);
       } catch (err) {
         console.error(err);
         res.innerHTML = `<div class="card"><p class="error">Failed to load ${MODE}. ${err?.message ? 'Error: ' + err.message : ''}</p></div>`;
       } finally {
         btn.disabled = false;
+        syncURL(query);
+        renderRecent();
       }
     }
 
@@ -542,7 +668,7 @@
         g = arr[0];
       }
       if (!g) {
-        document.getElementById('result').innerHTML = `<div class="card"><p class="error">Could not load that game.</p></div>`;
+        $('#result').innerHTML = `<div class="card"><p class="error">Could not load that game.</p></div>`;
         return;
       }
       renderGameDetails(g);
@@ -555,7 +681,7 @@
       { title:"Follow Me on YouTube", desc:"Get Roblox tutorials, gameplay, and devlogs every week!", img:"https://yt3.ggpht.com/yti/AGOGRCqfTz7VnA6eBR5Q1Rno5RoOeBozktMAI2ktVA=s88-c-k-c0x00ffffff-no-rj", link:"https://www.youtube.com/" }
     ];
     function showPromo() {
-      const c = document.getElementById('promo');
+      const c = $('#promo');
       const p = promos[Math.floor(Math.random() * promos.length)];
       c.innerHTML = `
         <div class="promo-card">
@@ -568,9 +694,114 @@
         </div>`;
     }
 
-    // Init: set default tab & promo; AdSense loads once above.
+    // ================= QUALITY FEATURES: Recent, Deep Links, Share =================
+    function addRecent(q){
+      const arr = JSON.parse(localStorage.getItem(RECENT_KEY)||'[]');
+      const existing = arr.filter(x=>x.q.toLowerCase()!==q.toLowerCase());
+      existing.unshift({q, t:Date.now(), mode:MODE});
+      localStorage.setItem(RECENT_KEY, JSON.stringify(existing.slice(0,10)));
+    }
+    function renderRecent(){
+      const arr = JSON.parse(localStorage.getItem(RECENT_KEY)||'[]');
+      if (!arr.length) return;
+      let html = `<div class="card"><h2 style="margin:2px 0 8px">Recent Searches</h2><div class="list">`;
+      for(const r of arr){
+        html += `
+          <div class="item" onclick="restoreSearch('${encodeURIComponent(r.q)}','${r.mode}')">
+            <div class="row2">
+              <div class="game-thumb" style="display:flex;align-items:center;justify-content:center;background:#121a49;border:1px dashed #33407a;">
+                <span class="muted">${r.mode==='user'?'User':'Game'}</span>
+              </div>
+              <div class="info">
+                <h2>${escapeHTML(decodeURIComponent(r.q))}</h2>
+                <div class="meta"><span>When: <strong>${new Date(r.t).toLocaleString()}</strong></span></div>
+              </div>
+            </div>
+          </div>`;
+      }
+      html += `</div></div>`;
+      // Insert recent above current result if there is no result yet
+      if(!$('#result').innerHTML.trim()) $('#result').innerHTML = html;
+    }
+    function restoreSearch(qEnc, mode){
+      setMode(mode);
+      const q = decodeURIComponent(qEnc);
+      $('#input').value = q;
+      lookup();
+    }
+    function clearRecent(){
+      localStorage.removeItem(RECENT_KEY);
+      renderRecent();
+      $('#result').innerHTML = '';
+    }
+
+    function syncURL(q = $('#input').value.trim()){
+      const params = new URLSearchParams(location.search);
+      if (q) params.set('q', q); else params.delete('q');
+      params.set('mode', MODE);
+      history.replaceState(null, '', `${location.pathname}?${params.toString()}`);
+    }
+    function readURL(){
+      const params = new URLSearchParams(location.search);
+      const mode = params.get('mode'); if (mode==='user' || mode==='game') setMode(mode);
+      const q = params.get('q'); if (q){ $('#input').value = q; lookup(); }
+    }
+    function copyShareLink(targetIdOrName=null, forcedMode=null){
+      // Build link from current query/mode or passed item
+      const params = new URLSearchParams();
+      const mode = forcedMode || MODE;
+      params.set('mode', mode);
+      if (targetIdOrName){
+        params.set('q', targetIdOrName);
+      }else{
+        const q = $('#input').value.trim();
+        if (q) params.set('q', q);
+      }
+      const link = `${location.origin}${location.pathname}?${params.toString()}`;
+      navigator.clipboard.writeText(link).then(()=>{
+        $('#shareBtn').textContent = 'Link copied!';
+        setTimeout(()=> $('#shareBtn').textContent = 'Copy shareable link', 1200);
+      }).catch(()=> alert(link));
+    }
+
+    // Trending display (non‑API, safe seeds)
+    function renderTrending(){
+      const el = $('#trending');
+      const picks = TRENDING.slice().sort(()=>Math.random()-0.5).slice(0,3);
+      el.innerHTML = picks.map(p=>`<a href="#" onclick="$('#input').value='${p}'; setMode('game'); lookup(); return false;">${p}</a>`).join(' · ');
+    }
+
+    // ================= ACCESSIBILITY / SECURITY HELPERS =================
+    function escapeHTML(s){ return s.replace(/[&<>"']/g, m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m])); }
+    function sanitize(s){ return escapeHTML(String(s)).replace(/\n/g,'<br/>'); }
+
+    // ================= CONTACT FORM =================
+    function composeMail(e){
+      e.preventDefault();
+      const email = $('#c-email').value.trim();
+      const subj = encodeURIComponent($('#c-subj').value.trim());
+      const body = encodeURIComponent($('#c-msg').value.trim() + `\n\n— sent from Roblox Lookup`);
+      if (!email) return false;
+      window.location.href = `mailto:${email}?subject=${subj}&body=${body}`;
+      return false;
+    }
+
+    // ================= KEYBOARD SHORTCUTS =================
+    document.addEventListener('keydown', (e)=>{
+      if (e.key === '/' && document.activeElement !== $('#input')){ e.preventDefault(); $('#input').focus(); }
+      if (e.key === 'Enter' && document.activeElement === $('#input')) lookup();
+      if (e.key.toLowerCase() === 'g'){ setMode('game'); }
+      if (e.key.toLowerCase() === 'u'){ setMode('user'); }
+      if (e.key === '1'){ setMode('game'); }
+      if (e.key === '2'){ setMode('user'); }
+    });
+
+    // Init
     setMode('game');
     showPromo();
+    renderTrending();
+    renderRecent();
+    readURL();
   </script>
 </body>
 </html>
