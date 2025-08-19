@@ -4,27 +4,25 @@
   <meta charset="UTF-8" />
   <title>Roblox Lookup — Player & Game Search</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <!-- SEO -->
-  <meta name="description" content="Roblox Lookup is a fast, privacy‑friendly search for Roblox games and users. See likes, visits, avatars, online status, and more." />
-  <meta name="keywords" content="roblox search, roblox player search, roblox game search, roblox username finder, roblox lookup" />
+  <meta name="description" content="Fast Roblox games & users lookup. Likes, visits, avatars, presence, bookmarks, deep links, and more." />
   <link rel="canonical" href="https://sea-search.vercel.app/" />
 
-  <!-- Social -->
+  <!-- OG/Twitter -->
   <meta property="og:title" content="Roblox Lookup — Player & Game Search" />
-  <meta property="og:description" content="Find Roblox games and users. Clean UI, no sign‑in, instant results." />
+  <meta property="og:description" content="Find Roblox games and users. Clean UI, instant results, no login." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://sea-search.vercel.app/" />
   <meta property="og:image" content="https://static.wikia.nocookie.net/roblox/images/8/8b/Roblox_2019_Logo_Black.svg" />
   <meta name="twitter:card" content="summary_large_image" />
 
-  <!-- Structured data: WebSite + SearchAction -->
+  <!-- JSON-LD -->
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
     "@type":"WebSite",
     "name":"Roblox Lookup",
     "url":"https://sea-search.vercel.app/",
+    "publisher":{"@type":"Organization","name":"Roblox Lookup"},
     "potentialAction":{
       "@type":"SearchAction",
       "target":"https://sea-search.vercel.app/?q={query}&mode=game",
@@ -38,18 +36,18 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet" />
 
-  <!-- Google AdSense (kept as‑is; loads once) -->
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#0b0f1e"/>
+
+  <!-- AdSense (unchanged, loads once) -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6941574746900426" crossorigin="anonymous"></script>
 
   <style>
-    :root{
-      --bg:#0b0f1e; --bg2:#0e1328; --card:#121737; --card2:#171d45;
-      --text:#eaf0ff; --muted:#b8c0ff; --accentA:#7aa2ff; --accentB:#7af1ff;
-      --good:#35e0a1; --warn:#ffd166; --bad:#ff6b91; --outline:#283063;
-      --shadow:rgba(0,0,0,.55); --radius:16px;
-    }
-    *{ box-sizing:border-box; }
-    html,body{ height:100%; }
+    :root{ --bg:#0b0f1e; --card:#121737; --text:#eaf0ff; --muted:#b8c0ff;
+      --accentA:#7aa2ff; --accentB:#7af1ff; --good:#35e0a1; --warn:#ffd166; --bad:#ff6b91; --outline:#283063; --shadow:rgba(0,0,0,.55); --radius:16px; }
+    *{box-sizing:border-box}
+    html,body{height:100%}
     body{
       margin:0;
       background:
@@ -57,148 +55,82 @@
         radial-gradient(900px 600px at 110% 10%, #00d4ffa8, transparent 50%),
         linear-gradient(180deg, #0a0e1b, #0b0f1e 40%, #0b0f1e);
       color:var(--text);
-      font-family:'Outfit','Montserrat',system-ui,Segoe UI,Roboto,Ubuntu,Cantarell,'Helvetica Neue',Arial;
+      font-family:'Outfit','Montserrat',system-ui,Segoe UI,Roboto;
       padding:52px 18px 92px;
       display:flex; flex-direction:column; align-items:center; gap:18px;
       min-height:100vh;
     }
-    a{ color:#b7d2ff; }
-    header{
-      width:min(1000px,94vw);
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
-    }
-    .brand{ display:flex; align-items:center; gap:10px; }
-    .logo{
-      width:36px;height:36px;border-radius:10px; background:linear-gradient(135deg,var(--accentA),var(--accentB));
-      box-shadow:0 6px 18px rgba(122,241,255,.35);
-    }
-    nav a{
-      text-decoration:none; font-weight:800; font-size:13px; padding:8px 10px; border-radius:10px; color:#dfe6ff;
-      border:1px solid #1b2356; background:#0c1230;
-    }
-    h1{ margin:4px 0 0; font-weight:800; font-size:30px; letter-spacing:.2px;
-      background: linear-gradient(90deg, #d7dcff, #7af1ff, #b3ffda);
-      -webkit-background-clip:text; background-clip:text; color:transparent; text-align:left;
-    }
-    .sub{ margin:4px 0 10px; color:var(--muted); opacity:.95; font-size:14px; }
+    a{color:#b7d2ff}
+    header{width:min(1000px,94vw);display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .brand{display:flex;align-items:center;gap:10px}
+    .logo{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--accentA),var(--accentB));box-shadow:0 6px 18px rgba(122,241,255,.35)}
+    h1{margin:4px 0 0;font-weight:800;font-size:30px;letter-spacing:.2px;background:linear-gradient(90deg,#d7dcff,#7af1ff,#b3ffda);
+      -webkit-background-clip:text;background-clip:text;color:transparent}
+    .sub{margin:4px 0 10px;color:var(--muted);opacity:.95;font-size:14px}
+    nav a{ text-decoration:none; font-weight:800; font-size:13px; padding:8px 10px; border-radius:10px; color:#dfe6ff; border:1px solid #1b2356; background:#0c1230; }
 
-    /* Top search panel */
-    .shell{
-      width:min(1000px, 94vw);
-      background:linear-gradient(180deg, #101634aa, #0e1430aa);
-      border:1px solid var(--outline); border-radius: var(--radius);
-      box-shadow: 0 18px 44px var(--shadow); padding:14px; backdrop-filter: blur(10px);
-    }
-    .tabs{
-      display:flex; gap:8px; padding:6px; background:#0c1230; border-radius:999px; width:max-content; margin:6px 6px 12px;
-      border:1px solid #1b2356;
-    }
-    .tab{
-      border:none; background:transparent; color:#c9d1ff; font-weight:800; padding:10px 16px; border-radius:999px; cursor:pointer; letter-spacing:.2px;
-      transition: all .18s ease;
-    }
-    .tab.active{ background: linear-gradient(90deg,var(--accentA),var(--accentB)); color:#071127; box-shadow: 0 6px 18px rgba(122,241,255,.35); }
-    .search-row{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; padding:0 6px 6px; }
-    .input{
-      flex:1 1 520px; min-width:240px; background:#0c1230; color:#fff; border:1px solid #1b2356;
-      padding:14px; border-radius:12px; font-size:16px; outline:none;
-      transition: border-color .2s ease, box-shadow .2s ease;
-    }
-    .input:focus{ border-color:var(--accentA); box-shadow:0 0 0 4px rgba(106,162,255,.2); }
-    .btn{
-      background: linear-gradient(90deg,var(--accentA),var(--accentB)); color:#08122a; border:none; font-weight:900; letter-spacing:.3px;
-      padding:14px 18px; border-radius:12px; cursor:pointer; box-shadow: 0 12px 28px rgba(106,162,255,.35);
-      transition: transform .12s ease, filter .12s ease, box-shadow .12s ease;
-    }
-    .btn:hover{ filter:brightness(1.06); transform: translateY(-1px); box-shadow: 0 16px 36px rgba(122,241,255,.35); }
-    .btn:disabled{ opacity:.6; cursor:not-allowed; transform:none; box-shadow:none; }
+    /* Search shell */
+    .shell{width:min(1000px,94vw);background:linear-gradient(180deg,#101634aa,#0e1430aa);border:1px solid var(--outline);border-radius:var(--radius);box-shadow:0 18px 44px var(--shadow);padding:14px;backdrop-filter:blur(10px)}
+    .tabs{display:flex;gap:8px;padding:6px;background:#0c1230;border-radius:999px;width:max-content;margin:6px 6px 12px;border:1px solid #1b2356}
+    .tab{border:none;background:transparent;color:#c9d1ff;font-weight:800;padding:10px 16px;border-radius:999px;cursor:pointer;letter-spacing:.2px;transition:all .18s ease}
+    .tab.active{background:linear-gradient(90deg,var(--accentA),var(--accentB));color:#071127;box-shadow:0 6px 18px rgba(122,241,255,.35)}
+    .search-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:0 6px 6px}
+    .input{flex:1 1 520px;min-width:240px;background:#0c1230;color:#fff;border:1px solid #1b2356;padding:14px;border-radius:12px;font-size:16px;outline:none;transition:border-color .2s,box-shadow .2s}
+    .input:focus{border-color:var(--accentA);box-shadow:0 0 0 4px rgba(106,162,255,.2)}
+    .btn{background:linear-gradient(90deg,var(--accentA),var(--accentB));color:#08122a;border:none;font-weight:900;letter-spacing:.3px;padding:14px 18px;border-radius:12px;cursor:pointer;box-shadow:0 12px 28px rgba(106,162,255,.35);transition:transform .12s,filter .12s,box-shadow .12s}
+    .btn:hover{filter:brightness(1.06);transform:translateY(-1px);box-shadow:0 16px 36px rgba(122,241,255,.35)}
+    .btn:disabled{opacity:.6;cursor:not-allowed;transform:none;box-shadow:none}
 
     /* Cards */
-    .card{
-      width:min(1000px, 94vw);
-      background:linear-gradient(180deg,#12173a,#0f1433);
-      border:1px solid var(--outline);
-      border-radius: var(--radius);
-      padding:18px;
-      box-shadow: 0 16px 36px var(--shadow);
-      position:relative; margin-top: 22px;
-    }
-    .header{ display:flex; align-items:center; gap:16px; }
-    .avatar, .game-thumb{ width:110px; height:110px; border-radius: 14px; background:#22306a; object-fit:cover; flex:0 0 auto; border:1px solid #2a3b7f; }
-    .info{ flex:1; min-width:0; }
-    .info h2{ margin:0 0 8px; font-size:22px; }
-    .info p{ margin:3px 0; color:#d7dcff; }
-    .chips{ display:flex; gap:8px; flex-wrap:wrap; margin-top:6px; }
-    .chip{ padding:6px 10px; border-radius:999px; font-size:12px; font-weight:900; background:#0b1234; border:1px solid #273578; color:#dce2ff; }
-    .pill{ padding:7px 12px; border-radius:999px; font-size:12px; font-weight:900; }
-    .offline{ background:#8b93af; color:#0c1126; }
-    .online{ background:var(--accentA); color:#081127; }
-    .playing{ background:var(--good); color:#041016; }
-    .studio{ background:var(--warn); color:#2d1a00; }
+    .card{width:min(1000px,94vw);background:linear-gradient(180deg,#12173a,#0f1433);border:1px solid var(--outline);border-radius:var(--radius);padding:18px;box-shadow:0 16px 36px var(--shadow);position:relative;margin-top:22px}
+    .header{display:flex;align-items:center;gap:16px}
+    .avatar,.game-thumb{width:110px;height:110px;border-radius:14px;background:#22306a;object-fit:cover;flex:0 0 auto;border:1px solid #2a3b7f}
+    .info{flex:1;min-width:0}
+    .info h2{margin:0 0 8px;font-size:22px}
+    .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+    .chip{padding:6px 10px;border-radius:999px;font-size:12px;font-weight:900;background:#0b1234;border:1px solid #273578;color:#dce2ff}
+    .pill{padding:7px 12px;border-radius:999px;font-size:12px;font-weight:900}
+    .offline{background:#8b93af;color:#0c1126}.online{background:var(--accentA);color:#081127}.playing{background:var(--good);color:#041016}.studio{background:var(--warn);color:#2d1a00}
+    .list{display:grid;grid-template-columns:1fr;gap:10px;margin-top:10px}
+    .item{background:#12183e;border:1px solid #2a3676;border-radius:12px;padding:12px;cursor:pointer;transition:transform .12s,border-color .2s,background .2s}
+    .item:hover{transform:translateY(-1px);border-color:#3b4caa;background:#141c48}
+    .meta{display:flex;gap:12px;flex-wrap:wrap;font-size:13px;color:#cdd5ff}
+    .tag{padding:3px 8px;border-radius:999px;background:#0d1437;border:1px solid #2c3d8b;font-weight:800;font-size:12px;color:#d6e4ff}
+    .ratio-good{color:#9bffd0}.ratio-mid{color:#ffe29b}.ratio-bad{color:#ff9aa8}
+    .loader{display:flex;align-items:center;gap:10px;color:#dce2ff;font-size:14px;padding:6px 2px}
+    .spinner{width:18px;height:18px;border:2px solid var(--accentB);border-top-color:transparent;border-radius:50%;animation:spin .8s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .skeleton{position:relative;overflow:hidden;border-radius:var(--radius);background:#11173a;border:1px solid #283063;padding:18px;width:min(1000px,94vw);margin-top:12px}
+    .shimmer{position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.06),transparent);transform:translateX(-100%);animation:shimmer 1.6s infinite}
+    @keyframes shimmer{to{transform:translateX(100%)}}
+    .sk-row{display:flex;gap:16px}.sk-ava{width:110px;height:110px;background:#171e49;border-radius:14px}
+    .sk-lines{flex:1;display:grid;gap:10px;padding-top:6px}
+    .sk-line{height:14px;background:#171e49;border-radius:8px}.sk-line.short{width:40%}.sk-line.med{width:70%}.sk-line.long{width:90%}
+    .error{color:var(--bad);font-weight:800;margin-top:10px;text-align:center}
+    .muted{color:var(--muted)}
+    .adsense-box{margin-top:26px;max-width:1000px;width:100%;text-align:center}
+    .promo-wrap{width:100%;max-width:1000px}
+    .promo-card{display:flex;gap:16px;align-items:center;background:#0e1539;border:1px solid #27306b;border-radius:var(--radius);padding:16px;margin-top:18px;box-shadow:0 12px 28px var(--shadow)}
+    .promo-thumb img{width:100px;height:100px;border-radius:12px;object-fit:cover;border:1px solid #33407a}
+    .promo-content h3{margin:0 0 6px;color:#e8ecff}.promo-content p{margin:0 0 10px;color:#cdd4ff;font-size:14px}
+    .promo-content a{display:inline-block;background:linear-gradient(90deg,var(--accentA),var(--accentB));padding:8px 14px;color:#0a0d1f;border-radius:8px;text-decoration:none;font-weight:900;box-shadow:0 10px 26px rgba(106,162,255,.35)}
 
-    /* Game list */
-    .list{ display:grid; grid-template-columns: 1fr; gap:10px; margin-top:10px; }
-    .item{
-      background: #12183e; border:1px solid #2a3676; border-radius: 12px; padding:12px; cursor:pointer;
-      transition: transform .12s ease, border-color .2s ease, background .2s ease;
-    }
-    .item:hover{ transform: translateY(-1px); border-color:#3b4caa; background:#141c48; }
-    .row2{ display:flex; align-items:center; gap:14px; }
-    .meta{ display:flex; gap:12px; flex-wrap:wrap; font-size:13px; color:#cdd5ff; }
-    .tag{ padding:3px 8px; border-radius:999px; background:#0d1437; border:1px solid #2c3d8b; font-weight:800; font-size:12px; color:#d6e4ff; }
-    .ratio-good{ color:#9bffd0; } .ratio-mid{ color:#ffe29b; } .ratio-bad{ color:#ff9aa8; }
+    .section{width:min(1000px,94vw);margin-top:28px}
+    .section h3{margin:0 0 8px}
+    .section p,.section li{color:#dbe3ff;line-height:1.6}
+    .grid-2{display:grid;grid-template-columns:1fr;gap:14px}
+    @media(min-width:860px){.grid-2{grid-template-columns:1fr 1fr}}
+    .kbd{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;padding:2px 6px;border:1px solid #33407a;border-radius:6px;background:#0d1436}
+    .tools{width:min(1000px,94vw);display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+    .tool{padding:8px 12px;border-radius:999px;border:1px solid #273578;background:#0b1234;font-size:13px;font-weight:800;color:#dce2ff;cursor:pointer}
+    .tool[disabled]{opacity:.6;cursor:not-allowed}
+    footer{width:min(1000px,94vw);margin-top:34px;padding:16px;font-size:13px;border-top:1px solid #24306a;color:#bcd3ff}
+    .notice{font-size:12px;color:#a9b7e6;margin-top:6px}
+    .badge{font-size:11px;padding:4px 8px;border:1px solid #33407a;border-radius:999px;background:#0c1230;color:#cfe2ff}
 
-    /* Loader & skeletons */
-    .loader{ display:flex; align-items:center; gap:10px; color:#dce2ff; font-size:14px; padding:6px 2px; }
-    .spinner{ width:18px; height:18px; border:2px solid var(--accentB); border-top-color:transparent; border-radius:50%; animation:spin .8s linear infinite; }
-    @keyframes spin{ to{ transform: rotate(360deg); } }
-    .skeleton{ position:relative; overflow:hidden; border-radius:var(--radius); background:#11173a; border:1px solid #283063; padding:18px; width:min(1000px, 94vw); margin-top:12px; }
-    .shimmer{ position:absolute; inset:0; background: linear-gradient(90deg, transparent, rgba(255,255,255,.06), transparent); transform: translateX(-100%); animation: shimmer 1.6s infinite; }
-    @keyframes shimmer{ to{ transform: translateX(100%);} }
-    .sk-row{ display:flex; gap:16px; }
-    .sk-ava{ width:110px; height:110px; background:#171e49; border-radius:14px; }
-    .sk-lines{ flex:1; display:grid; gap:10px; padding-top:6px; }
-    .sk-line{ height:14px; background:#171e49; border-radius:8px; }
-    .sk-line.short{ width:40%; } .sk-line.med{ width:70%; } .sk-line.long{ width:90%; }
-
-    .error{ color:var(--bad); font-weight:800; margin-top:10px; text-align:center; }
-    .muted{ color:var(--muted); }
-
-    /* AdSense */
-    .adsense-box { margin-top: 26px; max-width:1000px; width:100%; text-align:center; }
-
-    /* Promo */
-    .promo-wrap { width:100%; max-width:1000px; }
-    .promo-card{
-      display:flex; gap:16px; align-items:center; background:#0e1539; border:1px solid #27306b;
-      border-radius: var(--radius); padding:16px; margin-top: 18px; box-shadow: 0 12px 28px var(--shadow);
-    }
-    .promo-thumb img{ width:100px; height:100px; border-radius:12px; object-fit:cover; border:1px solid #33407a; }
-    .promo-content h3{ margin:0 0 6px; color:#e8ecff; }
-    .promo-content p{ margin:0 0 10px; color:#cdd4ff; font-size:14px; }
-    .promo-content a{
-      display:inline-block; background: linear-gradient(90deg,var(--accentA),var(--accentB)); padding:8px 14px; color:#0a0d1f; border-radius:8px; text-decoration:none; font-weight:900;
-      box-shadow: 0 10px 26px rgba(106,162,255,.35);
-    }
-
-    /* Utility sections */
-    .section{ width:min(1000px,94vw); margin-top:28px; }
-    .section h3{ margin:0 0 8px; }
-    .section p, .section li{ color:#dbe3ff; line-height:1.6; }
-    .grid-2{ display:grid; grid-template-columns:1fr; gap:14px; }
-    @media (min-width:860px){ .grid-2{ grid-template-columns:1fr 1fr; } }
-
-    .kbd{ font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; padding:2px 6px; border:1px solid #33407a; border-radius:6px; background:#0d1436; }
-
-    footer{ width:min(1000px,94vw); margin-top:34px; padding:16px; font-size:13px; border-top:1px solid #24306a; color:#bcd3ff; }
-    .footer-links a{ margin-right:10px; }
-    .notice{ font-size:12px; color:#a9b7e6; margin-top:6px; }
-    .badge{ font-size:11px; padding:4px 8px; border:1px solid #33407a; border-radius:999px; background:#0c1230; color:#cfe2ff; }
-
-    /* Chips row above results */
-    .tools{ width:min(1000px,94vw); display:flex; flex-wrap:wrap; gap:8px; margin-top:4px; }
-    .tool{ padding:8px 12px; border-radius:999px; border:1px solid #273578; background:#0b1234; font-size:13px; font-weight:800; color:#dce2ff; cursor:pointer; }
-    .tool[disabled]{ opacity:.6; cursor:not-allowed; }
+    /* Cookie / consent */
+    .cookie{position:fixed;z-index:9999;left:12px;right:12px;bottom:12px;max-width:1000px;margin:auto;padding:12px 14px;border-radius:12px;border:1px solid #2b346f;background:#0e1436;box-shadow:0 10px 24px rgba(0,0,0,.45);display:none}
+    .cookie p{margin:0 0 8px;color:#d8e1ff;font-size:13px}
   </style>
 </head>
 <body>
@@ -213,62 +145,61 @@
     <nav aria-label="Site">
       <a href="#about">About</a>
       <a href="#guide">Guide</a>
-      <a href="#faq">FAQ</a>
+      <a href="#tools">Tools</a>
+      <a href="#safety">Safety</a>
       <a href="#privacy">Privacy</a>
       <a href="#contact">Contact</a>
     </nav>
   </header>
 
-  <!-- Top search shell -->
+  <!-- Search -->
   <div class="shell" role="search">
     <div class="tabs" role="tablist" aria-label="Search Type">
-      <button class="tab active" id="tab-game" role="tab" aria-selected="true" onclick="setMode('game')" title="Press G to switch">Game Search</button>
-      <button class="tab" id="tab-user" role="tab" aria-selected="false" onclick="setMode('user')" title="Press U to switch">User Search</button>
+      <button class="tab active" id="tab-game" role="tab" aria-selected="true" onclick="setMode('game')" title="Press G">Game Search</button>
+      <button class="tab" id="tab-user" role="tab" aria-selected="false" onclick="setMode('user')" title="Press U">User Search</button>
     </div>
     <div class="search-row">
-      <label for="input" class="visually-hidden" style="position:absolute;left:-9999px">Search query</label>
+      <label for="input" style="position:absolute;left:-9999px">Search query</label>
       <input class="input" id="input" placeholder="Search a Game (e.g., Brookhaven) or a Username/User ID" aria-label="Search Roblox" />
       <button class="btn" id="btn" onclick="lookup()" aria-label="Run search">Search</button>
     </div>
     <p class="muted" style="margin:6px 8px 0">
-      Tips: press <span class="kbd">/</span> to focus, <span class="kbd">Enter</span> to search, <span class="kbd">G</span>/<span class="kbd">U</span> to toggle Game/User.
+      Tips: <span class="kbd">/</span> focus · <span class="kbd">Enter</span> search · <span class="kbd">G</span>/<span class="kbd">U</span> toggle.
       <span class="badge" id="badge-mode">Mode: Game</span>
     </p>
   </div>
 
-  <!-- Quick tools -->
+  <!-- Quick utilities -->
   <div class="tools" aria-label="Utilities">
     <button class="tool" onclick="copyShareLink()" id="shareBtn">Copy shareable link</button>
     <button class="tool" onclick="clearRecent()">Clear recent searches</button>
+    <button class="tool" onclick="showBookmarks()">My bookmarks</button>
     <span class="tool" style="cursor:default" aria-hidden="true">Trending: <span id="trending"></span></span>
   </div>
 
-  <!-- Results (aria-live for accessibility) -->
+  <!-- Results -->
   <div id="result" aria-live="polite" aria-busy="false"></div>
 
-  <!-- AdSense block (unchanged) -->
+  <!-- AdSense -->
   <div class="adsense-box">
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-6941574746900426"
-         data-ad-slot="5368161496"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
+    <ins class="adsbygoogle" style="display:block"
+         data-ad-client="ca-pub-6941574746900426" data-ad-slot="5368161496"
+         data-ad-format="auto" data-full-width-responsive="true"></ins>
     <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
   </div>
 
-  <!-- Custom promo -->
+  <!-- Promo -->
   <div class="promo-wrap" id="promo"></div>
 
-  <!-- Rich content sections (useful for quality signals / AdSense) -->
+  <!-- About / Guide -->
   <section class="section" id="about">
     <h3>About Roblox Lookup</h3>
     <div class="grid-2">
-      <p>Roblox Lookup is a lightweight web app that helps you discover <strong>popular games</strong>, check <strong>player profiles</strong>, and quickly jump into experiences. It uses official public endpoints for thumbnails, users, presence, and votes. No login required.</p>
+      <p>Discover <strong>popular games</strong>, check <strong>player profiles</strong>, and jump into experiences instantly. We use public Roblox endpoints for thumbnails, users, presence, and votes. No login required.</p>
       <ul>
-        <li>Fast game search with fallback crawling for better coverage.</li>
-        <li>User search by username or ID with avatars and live status.</li>
-        <li>Clean interface, keyboard shortcuts, shareable links, and recent history.</li>
+        <li>Game search with a smart fallback for better coverage.</li>
+        <li>User search by name or ID with avatars & live status.</li>
+        <li>Bookmarks, shareable links, recent history, keyboard shortcuts.</li>
       </ul>
     </div>
   </section>
@@ -277,194 +208,174 @@
     <h3>Quick Guide</h3>
     <div class="grid-2">
       <div>
-        <p><strong>Find a Game:</strong> switch to <em>Game Search</em>, type part of the title (e.g., “doors”, “brookhaven rp”), then press Enter. Click a result to see likes, visits, and a direct play link.</p>
-        <p><strong>Find a Player:</strong> switch to <em>User Search</em>, type a username (or numeric ID), and press Enter. You’ll see avatar, bio, counts, and online status.</p>
+        <p><strong>Find a Game:</strong> stay on <em>Game</em>, type a title (e.g., “doors”), press Enter. Click a result to see likes, visits, and a direct play button.</p>
+        <p><strong>Find a Player:</strong> switch to <em>User</em>, enter a username (or numeric ID), press Enter to see avatar, bio, counts, and status.</p>
       </div>
       <div>
-        <p><strong>Deep Links:</strong> You can link directly with <span class="kbd">?q=&lt;term&gt;&amp;mode=game|user</span>. Example: <span class="kbd">?q=brookhaven&amp;mode=game</span>.</p>
-        <p><strong>Shortcuts:</strong> <span class="kbd">/</span> focus · <span class="kbd">Enter</span> search · <span class="kbd">G</span>/<span class="kbd">U</span> toggle · <span class="kbd">1</span>/<span class="kbd">2</span> tabs.</p>
+        <p><strong>Deep links:</strong> <span class="kbd">?q=&lt;term&gt;&amp;mode=game|user</span> — perfect for sharing.</p>
+        <p><strong>Shortcuts:</strong> <span class="kbd">/</span> focus · <span class="kbd">Enter</span> search · <span class="kbd">G</span>/<span class="kbd">U</span> toggle.</p>
       </div>
     </div>
   </section>
 
-  <section class="section" id="faq">
-    <h3>FAQ</h3>
+  <!-- Mini Tools (more content & utility) -->
+  <section class="section" id="tools">
+    <h3>Lookup Tools</h3>
     <div class="grid-2">
-      <div>
-        <p><strong>Is this an official Roblox site?</strong><br/>No. This is a community tool that links to roblox.com. All trademarks belong to their respective owners.</p>
-        <p><strong>Why can’t I find some games?</strong><br/>Some titles may not appear in autocomplete; the app falls back to web results and converts to universe IDs to improve coverage.</p>
+      <div class="card">
+        <h4 style="margin:0 0 8px">Username → User ID</h4>
+        <div class="search-row">
+          <input id="u2i" class="input" placeholder="e.g. roblox" />
+          <button class="btn" onclick="usernameToId()">Convert</button>
+        </div>
+        <p class="muted" id="u2i-out"></p>
       </div>
-      <div>
-        <p><strong>Do you store my data?</strong><br/>Recent searches are saved locally on your device only. No account, no tracking beyond AdSense ads which are subject to Google’s policies.</p>
-        <p><strong>How do I report an issue?</strong><br/>Use the contact section below and include the query you tried and your browser.</p>
+      <div class="card">
+        <h4 style="margin:0 0 8px">User ID → Username</h4>
+        <div class="search-row">
+          <input id="i2u" class="input" placeholder="e.g. 1" />
+          <button class="btn" onclick="idToUsername()">Convert</button>
+        </div>
+        <p class="muted" id="i2u-out"></p>
       </div>
     </div>
   </section>
 
+  <!-- Safety article (unique content) -->
+  <section class="section" id="safety">
+    <h3>Roblox Safety Tips</h3>
+    <ul>
+      <li>Only trade or purchase items through official Roblox features.</li>
+      <li>Never share passwords or 2‑step codes. Moderators will never ask for them.</li>
+      <li>Use a strong PIN and enable 2‑Step Verification in your Roblox account settings.</li>
+      <li>Report suspicious links and users from the in‑game menu or profile page.</li>
+    </ul>
+  </section>
+
+  <!-- Privacy/Contact -->
   <section class="section" id="privacy">
     <h3>Privacy</h3>
-    <p>We don’t run our own analytics. The page displays Google AdSense, which may use cookies to serve ads; you can manage ad personalization in your Google settings. Searches happen client‑side and are not sent to our server except for standard static hosting logs.</p>
+    <p>We don’t run our own analytics. This site displays Google AdSense, which may use cookies to serve ads. Searches run client‑side and aren’t stored on our server. Your recent history & bookmarks stay on your device (LocalStorage).</p>
   </section>
 
   <section class="section" id="contact">
     <h3>Contact</h3>
-    <p>Questions, feature requests, or takedown notices? Send an email using the form below.</p>
+    <p>Feedback, DMCA, or business? Send us an email. The form opens your email app addressed to us.</p>
     <form onsubmit="return composeMail(event)" class="card" style="margin-top:10px">
       <div class="grid-2">
         <div>
-          <label for="c-email">Your Email</label><br/>
-          <input id="c-email" class="input" type="email" placeholder="you@example.com" required />
+          <label for="c-name">Your Name</label><br/>
+          <input id="c-name" class="input" placeholder="Display name" required />
         </div>
         <div>
-          <label for="c-subj">Subject</label><br/>
-          <input id="c-subj" class="input" placeholder="Feedback for Roblox Lookup" required />
+          <label for="c-from">Your Email</label><br/>
+          <input id="c-from" class="input" type="email" placeholder="you@example.com" required />
         </div>
+      </div>
+      <div style="margin-top:10px">
+        <label for="c-subj">Subject</label><br/>
+        <input id="c-subj" class="input" placeholder="Feedback for Roblox Lookup" required />
       </div>
       <div style="margin-top:10px">
         <label for="c-msg">Message</label><br/>
         <textarea id="c-msg" class="input" rows="4" placeholder="Write your message…" required></textarea>
       </div>
       <div style="margin-top:10px; display:flex; gap:8px; align-items:center">
-        <button class="btn" type="submit">Open email draft</button>
-        <span class="muted">This uses <span class="kbd">mailto:</span>; no data is stored here.</span>
+        <button class="btn" type="submit">Email supp.roxzy@gmail.com</button>
+        <button type="button" class="btn" style="background:linear-gradient(90deg,#9cff9c,#7af1ff)" onclick="reportAbuse()">Quick Report</button>
+        <span class="muted">No server storage — uses <span class="kbd">mailto:</span>.</span>
       </div>
     </form>
   </section>
 
   <footer>
-    <div class="footer-links">
-      <a href="#about">About</a> · <a href="#guide">Guide</a> · <a href="#faq">FAQ</a> · <a href="#privacy">Privacy</a> · <a href="#contact">Contact</a>
-    </div>
-    <div class="notice">Not affiliated with Roblox Corporation. Game data &amp; images are fetched from public Roblox endpoints and are © their respective owners.</div>
+    <div>© Roblox Lookup — community tool (not affiliated with Roblox). | <a href="/privacy.html">Privacy Policy</a> | <a href="/terms.html">Terms</a></div>
+    <div class="notice">Contact: <a href="mailto:supp.roxzy@gmail.com">supp.roxzy@gmail.com</a></div>
   </footer>
 
+  <!-- Cookie / consent -->
+  <div id="cookie" class="cookie">
+    <p>We use cookies only via Google AdSense to show ads. By using this site you agree to AdSense policies. <a href="/privacy.html">Learn more</a>.</p>
+    <button class="btn" onclick="acceptCookie()">OK</button>
+  </div>
+
   <script>
-    // ================= CONFIG =================
-    const PROXY = "https://corsproxy.io/?"; // CORS helper for browser testing
-    let MODE = 'game'; // 'game' | 'user'
+    // ---------- CONFIG ----------
+    const PROXY = "https://corsproxy.io/?";
+    let MODE = 'game';
     const GAME_CACHE = new Map();
     const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-    // Recent searches / trending seeds
+    // Storage keys
     const RECENT_KEY = 'rbx_lookup_recent_v1';
+    const BOOK_KEY = 'rbx_lookup_bookmarks_v1';
     const TRENDING = ["Brookhaven","DOORS","Blox Fruits","Pet Simulator","Arsenal","Adopt Me","Murder Mystery 2"];
 
-    // ================= UTIL =================
-    async function fetchJSON(url, opts = {}) {
-      const res = await fetch(url, opts);
-      if (!res.ok) {
-        const t = await res.text().catch(()=> "");
-        throw new Error("HTTP " + res.status + " " + t.slice(0,180));
-      }
-      return res.json();
-    }
+    // ---------- Helpers ----------
+    const $ = s => document.querySelector(s);
     function formatInt(n){ return typeof n === 'number' ? n.toLocaleString() : 'N/A'; }
-    function likeRatio(up, down){
-      const u = Number(up)||0, d = Number(down)||0; const t = u+d; if(!t) return {pct:0, cls:'ratio-mid', label:'0%'};
-      const p = Math.round((u/t)*100); const cls = p>=80?'ratio-good':p>=60?'ratio-mid':'ratio-bad';
-      return {pct:p, cls, label:p+'%'}; }
-    const $ = sel => document.querySelector(sel);
+    function likeRatio(up,down){ const u=+up||0,d=+down||0,t=u+d; if(!t) return {cls:'ratio-mid',label:'0%'}; const p=Math.round((u/t)*100); return {cls:p>=80?'ratio-good':p>=60?'ratio-mid':'ratio-bad',label:p+'%'} }
+    async function fetchJSON(url,opts={}){ const res=await fetch(url,opts); if(!res.ok){const t=await res.text().catch(()=> ""); throw new Error("HTTP "+res.status+" "+t.slice(0,180));} return res.json(); }
+    function escapeHTML(s){ return String(s).replace(/[&<>"']/g,m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m])); }
+    function sanitize(s){ return escapeHTML(s).replace(/\n/g,'<br/>'); }
 
-    // ================= TABS =================
+    // ---------- Tabs ----------
     function setMode(mode){
       MODE = mode;
       $('#tab-game').classList.toggle('active', mode==='game');
       $('#tab-user').classList.toggle('active', mode==='user');
       $('#tab-game').setAttribute('aria-selected', mode==='game');
       $('#tab-user').setAttribute('aria-selected', mode==='user');
-      const input = $('#input');
-      input.placeholder = mode==='game' ? "Search a Game (e.g., Brookhaven)" : "Search a Username or User ID";
-      input.focus();
+      $('#input').placeholder = mode==='game' ? "Search a Game (e.g., Brookhaven)" : "Search a Username or User ID";
       $('#badge-mode').textContent = 'Mode: ' + (mode==='game'?'Game':'User');
       syncURL();
+      $('#input').focus();
     }
 
-    // ================= UNIFIED LOADERS =================
-    function renderLoader(container, text){
-      container.innerHTML = `<div class="card"><div class="loader"><div class="spinner"></div><div>${text}</div></div></div>`;
-    }
+    // ---------- Loaders ----------
     function skeletonCard(){
-      return `
-        <div class="skeleton">
-          <div class="shimmer"></div>
-          <div class="sk-row">
-            <div class="sk-ava"></div>
-            <div class="sk-lines">
-              <div class="sk-line long"></div>
-              <div class="sk-line med"></div>
-              <div class="sk-line med"></div>
-              <div class="sk-line short"></div>
-            </div>
-          </div>
-        </div>`;
+      return `<div class="skeleton"><div class="shimmer"></div><div class="sk-row"><div class="sk-ava"></div><div class="sk-lines"><div class="sk-line long"></div><div class="sk-line med"></div><div class="sk-line med"></div><div class="sk-line short"></div></div></div></div>`;
     }
     function skeletonList(n=4){
-      let s = '';
-      for(let i=0;i<n;i++){
-        s += `
-        <div class="skeleton" style="padding:14px">
-          <div class="shimmer"></div>
-          <div class="sk-row">
-            <div class="sk-ava" style="width:95px;height:95px;"></div>
-            <div class="sk-lines">
-              <div class="sk-line long"></div>
-              <div class="sk-line med"></div>
-              <div class="sk-line short"></div>
-            </div>
-          </div>
-        </div>`;
-      }
-      return s;
+      let s=''; for(let i=0;i<n;i++){ s+=`<div class="skeleton" style="padding:14px"><div class="shimmer"></div><div class="sk-row"><div class="sk-ava" style="width:95px;height:95px;"></div><div class="sk-lines"><div class="sk-line long"></div><div class="sk-line med"></div><div class="sk-line short"></div></div></div></div>`; } return s;
     }
 
-    // ================= GAME SEARCH (robust) =================
+    // ---------- Game APIs ----------
     async function getAutocompleteUniverseIds(keyword){
       const url = PROXY + encodeURIComponent(`https://apis.roblox.com/games-autocomplete/v1/get-suggestion/${encodeURIComponent(keyword)}`);
       const data = await fetchJSON(url);
-      const ids = [], more = [];
-      if (Array.isArray(data.entries)) {
-        for (const e of data.entries) {
-          if (e?.universeId > 0) ids.push(e.universeId);
-          else if (e?.searchQuery) more.push(e.searchQuery);
-        }
+      const ids=[], more=[];
+      if(Array.isArray(data.entries)){
+        for(const e of data.entries){ if(e?.universeId>0) ids.push(e.universeId); else if(e?.searchQuery) more.push(e.searchQuery); }
       }
-      return { universeIds: [...new Set(ids)], extraQueries: [...new Set(more)] };
+      return { universeIds:[...new Set(ids)], extraQueries:[...new Set(more)] };
     }
     async function getPlaceIdsViaDuckDuckGo(keyword, limit=20){
       const ddg = PROXY + encodeURIComponent(`https://html.duckduckgo.com/html/?q=${encodeURIComponent('site:roblox.com/games ' + keyword)}`);
       const html = await fetch(ddg).then(r=>r.text());
-      const ids = new Set(); const re = /\/games\/(\d+)\//g; let m;
-      while((m=re.exec(html)) && ids.size<limit){ ids.add(m[1]); }
-      return [...ids];
+      const ids=new Set(); const re=/\/games\/(\d+)\//g; let m; while((m=re.exec(html)) && ids.size<limit){ ids.add(m[1]); } return [...ids];
     }
     async function placeToUniverse(placeId){
-      const url = PROXY + encodeURIComponent(`https://apis.roblox.com/universes/v1/places/${placeId}/universe`);
-      try{
-        const data = await fetchJSON(url);
-        return data.universeId || data.id || data?.data?.universeId || data?.data?.[0]?.universeId || null;
-      }catch{ return null; }
+      try{ const data=await fetchJSON(PROXY + encodeURIComponent(`https://apis.roblox.com/universes/v1/places/${placeId}/universe`)); return data.universeId||data.id||data?.data?.universeId||data?.data?.[0]?.universeId||null; }catch{ return null }
     }
     async function getGamesDetails(universeIds){
-      if (!universeIds.length) return [];
+      if(!universeIds.length) return [];
       const chunks=[]; for(let i=0;i<universeIds.length;i+=50) chunks.push(universeIds.slice(i,i+50));
       const all=[];
       for(const group of chunks){
-        const idsCSV = group.join(',');
-        const [games, thumbs, votes] = await Promise.all([
+        const idsCSV=group.join(',');
+        const [games,thumbs,votes]=await Promise.all([
           fetchJSON(PROXY + encodeURIComponent(`https://games.roblox.com/v1/games?universeIds=${idsCSV}`)).catch(()=>({data:[]})),
           fetchJSON(PROXY + encodeURIComponent(`https://thumbnails.roblox.com/v1/games/icons?universeIds=${idsCSV}&size=150x150&format=Png&isCircular=false`)).catch(()=>({data:[]})),
           fetchJSON(PROXY + encodeURIComponent(`https://games.roblox.com/v1/games/votes?universeIds=${idsCSV}`)).catch(()=>({data:[]}))
         ]);
         const tmap=new Map(); (thumbs.data||[]).forEach(t=>tmap.set(String(t.targetId), t.imageUrl));
-        const vmap=new Map(); (votes.data||[]).forEach(v=>vmap.set(String(v.id||v.universeId||v.targetId), {up:v.upVotes??0, down:v.downVotes??0}));
+        const vmap=new Map(); (votes.data||[]).forEach(v=>vmap.set(String(v.id||v.universeId||v.targetId), {up:v.upVotes??0,down:v.downVotes??0}));
         (games.data||[]).forEach(g=>{
-          const key=String(g.id); const vv = vmap.get(key)||{up:g.totalUpVotes??0, down:g.totalDownVotes??0};
-          all.push({
-            id:g.id, rootPlaceId:g.rootPlaceId, name:g.name,
-            creator:g.creator?.name || "Unknown",
-            visits:g.visits??0, playing:g.playing??0, favorites:g.favoritedCount??0,
-            up:vv.up||0, down:vv.down||0, thumb: tmap.get(key)||""
-          });
+          const key=String(g.id); const vv=vmap.get(key)||{up:g.totalUpVotes??0,down:g.totalDownVotes??0};
+          all.push({ id:g.id, rootPlaceId:g.rootPlaceId, name:g.name,
+            creator:g.creator?.name||"Unknown", visits:g.visits??0, playing:g.playing??0, favorites:g.favoritedCount??0,
+            up:vv.up||0, down:vv.down||0, thumb:tmap.get(key)||"" });
         });
         await sleep(90);
       }
@@ -473,70 +384,74 @@
     }
 
     function renderGameList(games){
-      const res = $('#result');
-      if(!games.length){ res.innerHTML = `<div class="card"><p class="error">No games found.</p></div>`; return; }
-      let html = `<div class="card"><h2 style="margin:2px 0 8px">Search Results</h2><div class="list">`;
+      const res=$('#result');
+      if(!games.length){ res.innerHTML=`<div class="card"><p class="error">No games found.</p></div>`; return; }
+      let html=`<div class="card"><h2 style="margin:2px 0 8px">Search Results</h2><div class="list">`;
       for(const g of games){
-        GAME_CACHE.set(g.id, g);
-        const lr = likeRatio(g.up,g.down);
-        html += `
-          <div class="item" onclick="viewGame(${g.id})" title="Open details">
-            <div class="row2">
-              <img class="game-thumb" src="${g.thumb}" alt="">
-              <div class="info">
-                <h2>${g.name}</h2>
-                <div class="meta">
-                  <span class="tag">Creator: ${g.creator}</span>
-                  <span>Visits: <strong>${formatInt(g.visits)}</strong></span>
-                  <span>Playing: <strong>${formatInt(g.playing)}</strong></span>
-                  <span>Likes: <strong class="${lr.cls}">${lr.label}</strong></span>
-                </div>
-              </div>
-            </div>
-          </div>`;
-      }
-      html += `</div></div>`;
-      res.innerHTML = html;
-    }
-    function renderGameDetails(g){
-      const lr = likeRatio(g.up,g.down);
-      $('#result').innerHTML = `
-        <div class="card">
-          <div class="header">
+        GAME_CACHE.set(g.id,g);
+        const lr=likeRatio(g.up,g.down);
+        html+=`
+        <div class="item" onclick="viewGame(${g.id})" title="Open details">
+          <div class="header" style="gap:14px">
             <img class="game-thumb" src="${g.thumb}" alt="">
             <div class="info">
               <h2>${g.name}</h2>
-              <div class="chips">
-                <span class="chip">Creator: ${g.creator}</span>
-                <span class="chip">Visits: ${formatInt(g.visits)}</span>
-                <span class="chip">Playing: ${formatInt(g.playing)}</span>
-                <span class="chip">Favorites: ${formatInt(g.favorites)}</span>
+              <div class="meta">
+                <span class="tag">Creator: ${g.creator}</span>
+                <span>Visits: <strong>${formatInt(g.visits)}</strong></span>
+                <span>Playing: <strong>${formatInt(g.playing)}</strong></span>
+                <span>Likes: <strong class="${lr.cls}">${lr.label}</strong></span>
               </div>
-              <p style="margin-top:6px"><strong>Likes:</strong> <span class="${lr.cls}">${lr.label}</span> <span class="muted">(${formatInt(g.up)} up / ${formatInt(g.down)} down)</span></p>
-              <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap">
-                <a class="btn" href="https://www.roblox.com/games/${g.rootPlaceId}" target="_blank" rel="noopener">Play Game</a>
-                <button class="btn" onclick="copyShareLink(${g.id})" title="Copy a link to this result">Share</button>
-              </div>
+            </div>
+            <div style="margin-left:auto;display:flex;gap:6px">
+              <button class="tool" onclick="event.stopPropagation(); bookmark('game', ${g.id})">★</button>
+              <button class="tool" onclick="event.stopPropagation(); copyShareLink('${g.name}','game')">Link</button>
             </div>
           </div>
         </div>`;
+      }
+      html+=`</div></div>`;
+      res.innerHTML=html;
+    }
+    function renderGameDetails(g){
+      const lr=likeRatio(g.up,g.down);
+      $('#result').innerHTML=`
+      <div class="card">
+        <div class="header">
+          <img class="game-thumb" src="${g.thumb}" alt="">
+          <div class="info">
+            <h2>${g.name}</h2>
+            <div class="chips">
+              <span class="chip">Creator: ${g.creator}</span>
+              <span class="chip">Visits: ${formatInt(g.visits)}</span>
+              <span class="chip">Playing: ${formatInt(g.playing)}</span>
+              <span class="chip">Favorites: ${formatInt(g.favorites)}</span>
+            </div>
+            <p style="margin-top:6px"><strong>Likes:</strong> <span class="${lr.cls}">${lr.label}</span> <span class="muted">(${formatInt(g.up)} up / ${formatInt(g.down)} down)</span></p>
+            <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap">
+              <a class="btn" href="https://www.roblox.com/games/${g.rootPlaceId}" target="_blank" rel="noopener">Play Game</a>
+              <button class="btn" onclick="copyShareLink(${g.id})">Share</button>
+              <button class="btn" onclick="bookmark('game', ${g.id})">Bookmark</button>
+            </div>
+          </div>
+        </div>
+      </div>`;
     }
 
-    // ================= USER LOOKUP =================
+    // ---------- User Lookup ----------
     async function userLookup(query){
-      const res = $('#result');
-      res.setAttribute('aria-busy', 'true');
+      const res=$('#result');
+      res.setAttribute('aria-busy','true');
       res.innerHTML = `<div class="card"><div class="loader"><div class="spinner"></div><div>Looking up user…</div></div></div>` + skeletonCard();
 
-      // Resolve userId
-      let userId = query;
-      if (isNaN(Number(query))) {
+      let userId=query;
+      if(isNaN(Number(query))){
         const data = await fetchJSON(PROXY + encodeURIComponent('https://users.roblox.com/v1/usernames/users'), {
           method:'POST', headers:{'Content-Type':'application/json'},
           body: JSON.stringify({usernames:[query.toLowerCase()], excludeBannedUsers:false})
         });
         if(!data?.data?.[0]) throw new Error("User not found");
-        userId = data.data[0].id;
+        userId=data.data[0].id;
       }
 
       const [ userData, avatarData, friends, followers, following, presence ] = await Promise.all([
@@ -545,263 +460,188 @@
         fetchJSON(PROXY + encodeURIComponent(`https://friends.roblox.com/v1/users/${userId}/friends/count`)),
         fetchJSON(PROXY + encodeURIComponent(`https://friends.roblox.com/v1/users/${userId}/followers/count`)),
         fetchJSON(PROXY + encodeURIComponent(`https://friends.roblox.com/v1/users/${userId}/followings/count`)),
-        fetchJSON(PROXY + encodeURIComponent(`https://presence.roblox.com/v1/presence/users`), {
-          method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({userIds:[userId]})
-        })
+        fetchJSON(PROXY + encodeURIComponent(`https://presence.roblox.com/v1/presence/users`), { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({userIds:[userId]}) })
       ]);
 
-      const avatarUrl = avatarData?.data?.[0]?.imageUrl || '';
-      const created = userData.created ? new Date(userData.created).toLocaleString() : 'Unavailable';
-      const pType = presence?.userPresences?.[0]?.userPresenceType;
+      const avatarUrl=avatarData?.data?.[0]?.imageUrl||'';
+      const created=userData.created?new Date(userData.created).toLocaleString():'Unavailable';
+      const pType=presence?.userPresences?.[0]?.userPresenceType;
       let sClass='offline', sText='Offline';
-      if (pType===1){ sClass='online'; sText='Online'; }
-      else if (pType===2){ sClass='playing'; sText='In Game'; }
-      else if (pType===3){ sClass='studio'; sText='In Studio'; }
+      if(pType===1){sClass='online';sText='Online'}
+      else if(pType===2){sClass='playing';sText='In Game'}
+      else if(pType===3){sClass='studio';sText='In Studio'}
 
-      res.innerHTML = `
-        <div class="card">
-          <div class="header">
-            <img class="avatar" src="${avatarUrl}" alt="Avatar">
-            <div class="info">
-              <h2>${userData.name || 'Unknown'} <span class="muted">(${userData.displayName || 'Unknown'})</span></h2>
-              <div class="chips">
-                <span class="chip">Created: ${created}</span>
-                <span class="chip">Friends: ${friends.count}</span>
-                <span class="chip">Followers: ${followers.count}</span>
-                <span class="chip">Following: ${following.count}</span>
-              </div>
-              <p style="margin-top:6px"><strong>Bio:</strong> ${userData.description ? sanitize(userData.description) : '<span class="muted">None</span>'}</p>
-              <div style="margin-top:10px">
-                <a class="btn" target="_blank" rel="noopener" href="https://www.roblox.com/users/${userData.id}/profile">Open Profile</a>
-                <button class="btn" onclick="copyShareLink('${userData.name||userId}', 'user')">Share</button>
-              </div>
+      res.innerHTML=`
+      <div class="card">
+        <div class="header">
+          <img class="avatar" src="${avatarUrl}" alt="Avatar">
+          <div class="info">
+            <h2>${userData.name||'Unknown'} <span class="muted">(${userData.displayName||'Unknown'})</span></h2>
+            <div class="chips">
+              <span class="chip">Created: ${created}</span>
+              <span class="chip">Friends: ${friends.count}</span>
+              <span class="chip">Followers: ${followers.count}</span>
+              <span class="chip">Following: ${following.count}</span>
+            </div>
+            <p style="margin-top:6px"><strong>Bio:</strong> ${userData.description ? sanitize(userData.description) : '<span class="muted">None</span>'}</p>
+            <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap">
+              <a class="btn" target="_blank" rel="noopener" href="https://www.roblox.com/users/${userData.id}/profile">Open Profile</a>
+              <button class="btn" onclick="copyShareLink('${userData.name||userId}','user')">Share</button>
+              <button class="btn" onclick="bookmark('user','${userData.id}')">Bookmark</button>
             </div>
           </div>
-          <div class="pill ${sClass}" style="position:absolute; top:16px; right:16px">${sText}</div>
-        </div>`;
+        </div>
+        <div class="pill ${sClass}" style="position:absolute; top:16px; right:16px">${sText}</div>
+      </div>`;
       res.setAttribute('aria-busy','false');
     }
 
-    // ================= GAME LOOKUP =================
-    async function gameLookup(keyword){
-      const res = $('#result');
-      res.setAttribute('aria-busy','true');
-      res.innerHTML = `<div class="card"><div class="loader"><div class="spinner"></div><div>Searching games…</div></div></div>` + skeletonList(4);
-
-      // 1) Autocomplete for universe IDs
-      let uniIds = [];
-      try {
-        const { universeIds, extraQueries } = await getAutocompleteUniverseIds(keyword);
-        uniIds = [...universeIds];
-        for (const q of extraQueries.slice(0, 3)) {
-          const nested = await getAutocompleteUniverseIds(q).catch(()=>({universeIds:[]}));
-          uniIds.push(...nested.universeIds);
-          if (uniIds.length >= 12) break;
-          await sleep(90);
-        }
-        uniIds = [...new Set(uniIds)];
-      } catch { /* ignore */ }
-
-      // 2) Fallback via DuckDuckGo -> placeIds -> universeIds
-      if (uniIds.length < 5) {
-        try {
-          const placeIds = await getPlaceIdsViaDuckDuckGo(keyword, 20);
-          const conv = [];
-          for (const pid of placeIds) {
-            const uid = await placeToUniverse(pid);
-            if (uid) conv.push(uid);
-            await sleep(70);
-          }
-          uniIds = [...new Set([...uniIds, ...conv])];
-        } catch { /* ignore */ }
-      }
-
-      if (!uniIds.length) {
-        res.innerHTML = `<div class="card"><p class="error">No games found. Try another keyword (e.g., “brookhaven rp”).</p></div>`;
-        res.setAttribute('aria-busy','false');
-        return;
-      }
-
-      const games = await getGamesDetails(uniIds);
-      if (!games.length) {
-        res.innerHTML = `<div class="card"><p class="error">Couldn’t load game details. Please try again.</p></div>`;
-        res.setAttribute('aria-busy','false');
-        return;
-      }
-      renderGameList(games);
-      res.setAttribute('aria-busy','false');
+    // ---------- Primary search ----------
+    async function lookup(){
+      showPromo();
+      const btn=$('#btn'); const res=$('#result'); const q=$('#input').value.trim();
+      if(!q){ res.innerHTML=`<div class="card"><p class="error">Please type something to search.</p></div>`; return; }
+      addRecent(q);
+      btn.disabled=true;
+      try{ if(MODE==='user') await userLookup(q); else await gameLookup(q); }
+      catch(err){ console.error(err); res.innerHTML=`<div class="card"><p class="error">Failed to load ${MODE}. ${err?.message?'Error: '+err.message:''}</p></div>`; }
+      finally{ btn.disabled=false; syncURL(q); renderRecent(); }
     }
 
-    // ================= PUBLIC ACTIONS =================
-    async function lookup() {
-      showPromo(); // rotates each search
-      const btn = $('#btn');
-      const res = $('#result');
-      const query = $('#input').value.trim();
-
-      if (!query) {
-        res.innerHTML = `<div class="card"><p class="error">Please type something to search.</p></div>`;
-        return;
-      }
-
-      // Store to recent (local only)
-      addRecent(query);
-
-      btn.disabled = true;
-      try {
-        if (MODE === 'user') await userLookup(query);
-        else await gameLookup(query);
-      } catch (err) {
-        console.error(err);
-        res.innerHTML = `<div class="card"><p class="error">Failed to load ${MODE}. ${err?.message ? 'Error: ' + err.message : ''}</p></div>`;
-      } finally {
-        btn.disabled = false;
-        syncURL(query);
-        renderRecent();
-      }
-    }
-
-    async function viewGame(universeId) {
-      let g = GAME_CACHE.get(universeId);
-      if (!g) {
-        const arr = await getGamesDetails([universeId]).catch(()=>[]);
-        g = arr[0];
-      }
-      if (!g) {
-        $('#result').innerHTML = `<div class="card"><p class="error">Could not load that game.</p></div>`;
-        return;
-      }
+    async function viewGame(universeId){
+      let g=GAME_CACHE.get(universeId);
+      if(!g){ const arr=await getGamesDetails([universeId]).catch(()=>[]); g=arr[0]; }
+      if(!g){ $('#result').innerHTML=`<div class="card"><p class="error">Could not load that game.</p></div>`; return; }
       renderGameDetails(g);
     }
 
-    // ================= PROMO =================
-    const promos = [
+    // ---------- Promo ----------
+    const promos=[
       { title:"Featured Game: Obby Rush", desc:"Try the most addictive obby on Roblox! 500+ levels of fun.", img:"https://tr.rbxcdn.com/93b11cc2e65b58a6a4e587cd8b4e9821/420/420/Image/Png", link:"https://www.roblox.com/games/1234567890/Obby-Rush" },
       { title:"Join the Ultimate Tycoon", desc:"Build your empire and become the richest tycoon on Roblox.", img:"https://tr.rbxcdn.com/6b4302c5a0e201ab1d3cba0a7a41421d/420/420/Image/Png", link:"https://www.roblox.com/games/9876543210/Tycoon-Legends" },
-      { title:"Follow Me on YouTube", desc:"Get Roblox tutorials, gameplay, and devlogs every week!", img:"https://yt3.ggpht.com/yti/AGOGRCqfTz7VnA6eBR5Q1Rno5RoOeBozktMAI2ktVA=s88-c-k-c0x00ffffff-no-rj", link:"https://www.youtube.com/" }
+      { title:"Follow Us on YouTube", desc:"Roblox tutorials, gameplay, and devlogs every week!", img:"https://yt3.ggpht.com/yti/AGOGRCqfTz7VnA6eBR5Q1Rno5RoOeBozktMAI2ktVA=s88-c-k-c0x00ffffff-no-rj", link:"https://www.youtube.com/" }
     ];
-    function showPromo() {
-      const c = $('#promo');
-      const p = promos[Math.floor(Math.random() * promos.length)];
-      c.innerHTML = `
-        <div class="promo-card">
-          <div class="promo-thumb"><img src="${p.img}" alt="Promo"></div>
-          <div class="promo-content">
-            <h3>${p.title}</h3>
-            <p>${p.desc}</p>
-            <a href="${p.link}" target="_blank" rel="noopener">Check it out</a>
-          </div>
-        </div>`;
+    function showPromo(){
+      const c=$('#promo'); const p=promos[Math.floor(Math.random()*promos.length)];
+      c.innerHTML=`<div class="promo-card"><div class="promo-thumb"><img src="${p.img}" alt="Promo"></div><div class="promo-content"><h3>${p.title}</h3><p>${p.desc}</p><a href="${p.link}" target="_blank" rel="noopener">Check it out</a></div></div>`;
     }
 
-    // ================= QUALITY FEATURES: Recent, Deep Links, Share =================
+    // ---------- Quality: recent, bookmarks, deep links, share ----------
     function addRecent(q){
-      const arr = JSON.parse(localStorage.getItem(RECENT_KEY)||'[]');
-      const existing = arr.filter(x=>x.q.toLowerCase()!==q.toLowerCase());
-      existing.unshift({q, t:Date.now(), mode:MODE});
-      localStorage.setItem(RECENT_KEY, JSON.stringify(existing.slice(0,10)));
+      const arr=JSON.parse(localStorage.getItem(RECENT_KEY)||'[]').filter(x=>x.q.toLowerCase()!==q.toLowerCase());
+      arr.unshift({q,t:Date.now(),mode:MODE}); localStorage.setItem(RECENT_KEY, JSON.stringify(arr.slice(0,12)));
     }
     function renderRecent(){
-      const arr = JSON.parse(localStorage.getItem(RECENT_KEY)||'[]');
-      if (!arr.length) return;
-      let html = `<div class="card"><h2 style="margin:2px 0 8px">Recent Searches</h2><div class="list">`;
+      const arr=JSON.parse(localStorage.getItem(RECENT_KEY)||'[]'); if(!arr.length) return;
+      let html=`<div class="card"><h2 style="margin:2px 0 8px">Recent Searches</h2><div class="list">`;
       for(const r of arr){
-        html += `
-          <div class="item" onclick="restoreSearch('${encodeURIComponent(r.q)}','${r.mode}')">
-            <div class="row2">
-              <div class="game-thumb" style="display:flex;align-items:center;justify-content:center;background:#121a49;border:1px dashed #33407a;">
-                <span class="muted">${r.mode==='user'?'User':'Game'}</span>
-              </div>
-              <div class="info">
-                <h2>${escapeHTML(decodeURIComponent(r.q))}</h2>
-                <div class="meta"><span>When: <strong>${new Date(r.t).toLocaleString()}</strong></span></div>
-              </div>
-            </div>
-          </div>`;
+        html+=`<div class="item" onclick="restoreSearch('${encodeURIComponent(r.q)}','${r.mode}')"><div class="header" style="gap:14px">
+          <div class="game-thumb" style="display:flex;align-items:center;justify-content:center;background:#121a49;border:1px dashed #33407a;"><span class="muted">${r.mode==='user'?'User':'Game'}</span></div>
+          <div class="info"><h2>${decodeURIComponent(r.q)}</h2><div class="meta"><span>When: <strong>${new Date(r.t).toLocaleString()}</strong></span></div></div></div></div>`;
       }
-      html += `</div></div>`;
-      // Insert recent above current result if there is no result yet
-      if(!$('#result').innerHTML.trim()) $('#result').innerHTML = html;
+      html+=`</div></div>`;
+      if(!$('#result').innerHTML.trim()) $('#result').innerHTML=html;
     }
-    function restoreSearch(qEnc, mode){
-      setMode(mode);
-      const q = decodeURIComponent(qEnc);
-      $('#input').value = q;
-      lookup();
+    function restoreSearch(qEnc,mode){ setMode(mode); $('#input').value=decodeURIComponent(qEnc); lookup(); }
+    function clearRecent(){ localStorage.removeItem(RECENT_KEY); $('#result').innerHTML=''; }
+
+    function bookmark(type,id){
+      const data=JSON.parse(localStorage.getItem(BOOK_KEY)||'{}');
+      if(!data[type]) data[type]=[];
+      if(!data[type].includes(String(id))) data[type].unshift(String(id));
+      localStorage.setItem(BOOK_KEY, JSON.stringify(data));
+      alert('Saved to bookmarks!');
     }
-    function clearRecent(){
-      localStorage.removeItem(RECENT_KEY);
-      renderRecent();
-      $('#result').innerHTML = '';
+    async function showBookmarks(){
+      const data=JSON.parse(localStorage.getItem(BOOK_KEY)||'{}');
+      const gIds=(data.game||[]).slice(0,20).map(Number);
+      const uIds=(data.user||[]).slice(0,20).map(Number);
+      let html=`<div class="card"><h2>My Bookmarks</h2>`;
+      if(gIds.length){
+        const games=await getGamesDetails(gIds);
+        html+=`<h3>Games</h3><div class="list">`+games.map(g=>`<div class="item" onclick="viewGame(${g.id})"><div class="header" style="gap:14px"><img class="game-thumb" src="${g.thumb}"/><div class="info"><h2>${g.name}</h2><div class="meta"><span>Visits: ${formatInt(g.visits)}</span></div></div></div></div>`).join('')+`</div>`;
+      }
+      if(uIds.length){
+        html+=`<h3 style="margin-top:12px">Users</h3><div class="list">`+uIds.map(uid=>`<div class="item" onclick="setMode('user'); $('#input').value='${uid}'; lookup();"><div class="info"><h2>User ID ${uid}</h2><div class="meta"><span>Click to open</span></div></div></div>`).join('')+`</div>`;
+      }
+      if(!gIds.length && !uIds.length) html+=`<p class="muted">No bookmarks yet. Click ★ on a result.</p>`;
+      html+=`</div>`;
+      $('#result').innerHTML=html;
     }
 
-    function syncURL(q = $('#input').value.trim()){
-      const params = new URLSearchParams(location.search);
-      if (q) params.set('q', q); else params.delete('q');
-      params.set('mode', MODE);
-      history.replaceState(null, '', `${location.pathname}?${params.toString()}`);
+    function syncURL(q=$('#input').value.trim()){
+      const p=new URLSearchParams(location.search); if(q) p.set('q',q); else p.delete('q'); p.set('mode',MODE);
+      history.replaceState(null,'',`${location.pathname}?${p.toString()}`);
     }
     function readURL(){
-      const params = new URLSearchParams(location.search);
-      const mode = params.get('mode'); if (mode==='user' || mode==='game') setMode(mode);
-      const q = params.get('q'); if (q){ $('#input').value = q; lookup(); }
+      const p=new URLSearchParams(location.search);
+      const mode=p.get('mode'); if(mode==='user'||mode==='game') setMode(mode);
+      const q=p.get('q'); if(q){ $('#input').value=q; lookup(); }
     }
-    function copyShareLink(targetIdOrName=null, forcedMode=null){
-      // Build link from current query/mode or passed item
-      const params = new URLSearchParams();
-      const mode = forcedMode || MODE;
-      params.set('mode', mode);
-      if (targetIdOrName){
-        params.set('q', targetIdOrName);
-      }else{
-        const q = $('#input').value.trim();
-        if (q) params.set('q', q);
-      }
-      const link = `${location.origin}${location.pathname}?${params.toString()}`;
-      navigator.clipboard.writeText(link).then(()=>{
-        $('#shareBtn').textContent = 'Link copied!';
-        setTimeout(()=> $('#shareBtn').textContent = 'Copy shareable link', 1200);
-      }).catch(()=> alert(link));
+    function copyShareLink(target=null, forcedMode=null){
+      const params=new URLSearchParams(); params.set('mode', forcedMode||MODE);
+      if(target) params.set('q', target); else{ const q=$('#input').value.trim(); if(q) params.set('q', q); }
+      const link=`${location.origin}${location.pathname}?${params.toString()}`;
+      navigator.clipboard.writeText(link).then(()=>{ $('#shareBtn').textContent='Link copied!'; setTimeout(()=>$('#shareBtn').textContent='Copy shareable link',1200); }).catch(()=> alert(link));
     }
-
-    // Trending display (non‑API, safe seeds)
     function renderTrending(){
-      const el = $('#trending');
-      const picks = TRENDING.slice().sort(()=>Math.random()-0.5).slice(0,3);
-      el.innerHTML = picks.map(p=>`<a href="#" onclick="$('#input').value='${p}'; setMode('game'); lookup(); return false;">${p}</a>`).join(' · ');
+      const el=$('#trending'); const picks=TRENDING.slice().sort(()=>Math.random()-0.5).slice(0,3);
+      el.innerHTML=picks.map(p=>`<a href="#" onclick="$('#input').value='${p}'; setMode('game'); lookup(); return false;">${p}</a>`).join(' · ');
     }
 
-    // ================= ACCESSIBILITY / SECURITY HELPERS =================
-    function escapeHTML(s){ return s.replace(/[&<>"']/g, m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m])); }
-    function sanitize(s){ return escapeHTML(String(s)).replace(/\n/g,'<br/>'); }
+    // ---------- Tools (username/id converters) ----------
+    async function usernameToId(){
+      const name=$('#u2i').value.trim(); if(!name) return;
+      try{
+        const data=await fetchJSON(PROXY + encodeURIComponent('https://users.roblox.com/v1/usernames/users'),{
+          method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({usernames:[name],excludeBannedUsers:false})
+        });
+        const id=data?.data?.[0]?.id; $('#u2i-out').textContent = id ? `User ID: ${id}` : 'Not found';
+      }catch{ $('#u2i-out').textContent='Error converting'; }
+    }
+    async function idToUsername(){
+      const id=$('#i2u').value.trim(); if(!id) return;
+      try{
+        const data=await fetchJSON(PROXY + encodeURIComponent(`https://users.roblox.com/v1/users/${id}`));
+        $('#i2u-out').textContent = data?.name ? `Username: ${data.name}` : 'Not found';
+      }catch{ $('#i2u-out').textContent='Error converting'; }
+    }
 
-    // ================= CONTACT FORM =================
+    // ---------- Contact ----------
     function composeMail(e){
       e.preventDefault();
-      const email = $('#c-email').value.trim();
-      const subj = encodeURIComponent($('#c-subj').value.trim());
-      const body = encodeURIComponent($('#c-msg').value.trim() + `\n\n— sent from Roblox Lookup`);
-      if (!email) return false;
-      window.location.href = `mailto:${email}?subject=${subj}&body=${body}`;
+      const from=$('#c-from').value.trim();
+      const name=$('#c-name').value.trim();
+      const subj=encodeURIComponent($('#c-subj').value.trim());
+      const body=encodeURIComponent(`${$('#c-msg').value.trim()}\n\nFrom: ${name} <${from}>\nSent via Roblox Lookup`);
+      window.location.href=`mailto:supp.roxzy@gmail.com?subject=${subj}&body=${body}`;
       return false;
     }
+    function reportAbuse(){
+      const subj=encodeURIComponent('Report/DMCA — Roblox Lookup');
+      const body=encodeURIComponent('Describe the issue and include any Roblox links:\n\n• URL / Game / User:\n• What happened:\n• Proof (links):\n\nThanks!');
+      window.location.href=`mailto:supp.roxzy@gmail.com?subject=${subj}&body=${body}`;
+    }
 
-    // ================= KEYBOARD SHORTCUTS =================
+    // ---------- Cookie consent ----------
+    function acceptCookie(){ localStorage.setItem('rbx_cc', '1'); $('#cookie').style.display='none'; }
+    function maybeShowCookie(){ if(!localStorage.getItem('rbx_cc')) $('#cookie').style.display='block'; }
+
+    // ---------- Keyboard shortcuts ----------
     document.addEventListener('keydown', (e)=>{
-      if (e.key === '/' && document.activeElement !== $('#input')){ e.preventDefault(); $('#input').focus(); }
-      if (e.key === 'Enter' && document.activeElement === $('#input')) lookup();
-      if (e.key.toLowerCase() === 'g'){ setMode('game'); }
-      if (e.key.toLowerCase() === 'u'){ setMode('user'); }
-      if (e.key === '1'){ setMode('game'); }
-      if (e.key === '2'){ setMode('user'); }
+      if(e.key==='/' && document.activeElement!==$('#input')){ e.preventDefault(); $('#input').focus(); }
+      if(e.key==='Enter' && document.activeElement===$('#input')) lookup();
+      if(e.key.toLowerCase()==='g') setMode('game');
+      if(e.key.toLowerCase()==='u') setMode('user');
+      if(e.key==='1') setMode('game');
+      if(e.key==='2') setMode('user');
     });
 
+    // ---------- PWA ----------
+    if('serviceWorker' in navigator){ window.addEventListener('load', ()=> navigator.serviceWorker.register('/service-worker.js').catch(()=>{})); }
+
     // Init
-    setMode('game');
-    showPromo();
-    renderTrending();
-    renderRecent();
-    readURL();
+    setMode('game'); showPromo(); renderTrending(); renderRecent(); readURL(); maybeShowCookie();
   </script>
 </body>
 </html>
