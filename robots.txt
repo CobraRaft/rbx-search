@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://sea-search.vercel.app/sitemap.xml
