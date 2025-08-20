@@ -2,377 +2,309 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Roblox Lookup — Player & Game Search</title>
+  <title>Roblox Lookup — Players & Games</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Fast Roblox games & users lookup. Likes, visits, avatars, presence, and more." />
-  <link rel="canonical" href="https://sea-search.vercel.app/" />
-  <meta property="og:title" content="Roblox Lookup — Player & Game Search" />
-  <meta property="og:description" content="Find Roblox games and users. Clean UI, instant results, no login." />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://sea-search.vercel.app/" />
-  <meta property="og:image" content="https://static.wikia.nocookie.net/roblox/images/8/8b/Roblox_2019_Logo_Black.svg" />
-  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="description" content="Find Roblox games and users by name or ID. Clean UI, fast results." />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
 
   <!-- AdSense (unchanged) -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6941574746900426" crossorigin="anonymous"></script>
 
   <style>
     :root{
-      --bg:#0a0d22;
-      --bg2:#0e1433;
-      --card:#121946;
-      --card2:#161f56;
-      --text:#f1f4ff;
-      --muted:#bfc7ff;
-      --accentA:#8aa7ff;
-      --accentB:#7df3ff;
-      --accentC:#c48aff;
-      --good:#36e6a7;
+      --bg:#0b0f1b;
+      --panel:#0f1526;
+      --card:#151c33;
+      --ink:#edf1ff;
+      --ink-2:#c9d2ff;
+      --ink-3:#9aa7ff;
+      --line:#253059;
+      --accent:#7fb7ff;
+      --accent-2:#7af1ff;
+      --ok:#38e3ab;
       --warn:#ffd36a;
-      --bad:#ff7694;
-      --outline:#2a3576;
-      --shadow:rgba(0,0,0,.6);
-      --radius:18px;
+      --bad:#ff7c99;
+      --radius:16px;
+      --shadow:0 16px 40px rgba(0,0,0,.45);
     }
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
       margin:0;
       background:
-        radial-gradient(1200px 800px at 10% -10%, rgba(123, 243, 255, .18), transparent 55%),
-        radial-gradient(1200px 800px at 90% 0%, rgba(196, 138, 255, .18), transparent 55%),
-        linear-gradient(180deg,#090c1c,#0a0d22 40%,#0a0d22);
-      color:var(--text);
-      font-family:'Outfit','Montserrat',system-ui,Segoe UI,Roboto,Ubuntu;
-      display:flex; flex-direction:column; min-height:100vh;
-      align-items:center; gap:22px; padding:36px 18px 80px;
+        radial-gradient(1200px 800px at 0% -10%, rgba(127,183,255,.12), transparent 55%),
+        radial-gradient(1200px 800px at 100% 0%, rgba(122,241,255,.12), transparent 55%),
+        linear-gradient(180deg,#0a0e1c,#0b0f1b 40%,#0b0f1b);
+      color:var(--ink);
+      font-family:'Outfit','Inter',system-ui,Segoe UI,Roboto,Ubuntu;
+      display:flex; flex-direction:column; align-items:center; gap:22px;
+      min-height:100vh; padding:36px 16px 80px;
       text-align:center;
     }
-    header, .shell, .card, .section, .adsense-box, .promo-wrap, .tools, footer { width:min(980px, 96vw); margin-inline:auto; }
-    a{ color:#b7d2ff; }
 
-    /* Title area */
-    .logo{
-      width:54px;height:54px;border-radius:14px;
-      background: linear-gradient(135deg,var(--accentA),var(--accentB) 50%, var(--accentC));
-      box-shadow:0 12px 28px rgba(125,243,255,.35);
-      margin-inline:auto;
-    }
-    h1{
-      margin:10px 0 6px; font-weight:800; font-size:34px; letter-spacing:.3px;
-      background: linear-gradient(90deg,#e6ebff,#7df3ff,#c0ffea);
-      -webkit-background-clip:text; background-clip:text; color:transparent;
-    }
-    .sub{ color:var(--muted); margin:0; font-size:14px; }
+    /* Layout */
+    .wrap{ width:min(980px, 96vw); margin-inline:auto; }
+    header{ display:flex; flex-direction:column; align-items:center; gap:8px; }
+    .logo{ width:54px; height:54px; border-radius:14px; background:linear-gradient(135deg,#7fb7ff,#7af1ff); box-shadow:0 14px 28px rgba(127,183,255,.35); }
+    h1{ margin:6px 0 2px; font-size:34px; letter-spacing:.2px; font-weight:800; }
+    .sub{ margin:0; color:var(--ink-2); font-size:14px; }
 
-    /* Search card (centered) */
-    .shell{
-      background:linear-gradient(180deg,#11184bba,#0f1542ba);
-      border:1px solid var(--outline); border-radius:var(--radius);
-      box-shadow:0 22px 48px var(--shadow); padding:16px 16px 12px;
-      backdrop-filter: blur(10px);
+    /* Search panel */
+    .panel{
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:18px;
     }
-    .tabs{
-      display:inline-flex; gap:8px; padding:6px; background:#0d1340; border-radius:999px; border:1px solid #1d2866;
-      margin:6px auto 14px;
-    }
-    .tab{
-      border:none; background:transparent; color:#d9e1ff; font-weight:900;
-      padding:10px 16px; border-radius:999px; cursor:pointer; letter-spacing:.2px; transition:.18s;
-    }
-    .tab.active{ background:linear-gradient(90deg,var(--accentA),var(--accentB)); color:#06122c; box-shadow:0 8px 20px rgba(125,243,255,.35); }
-    .search-row{ display:flex; gap:10px; align-items:center; justify-content:center; flex-wrap:wrap; }
+    .tabs{ display:inline-flex; gap:6px; padding:6px; border:1px solid #1d2650; border-radius:999px; background:#0c1330; margin:6px 0 12px; }
+    .tab{ border:0; background:transparent; color:#dfe6ff; font-weight:800; padding:10px 16px; border-radius:999px; cursor:pointer; }
+    .tab.active{ background:linear-gradient(90deg,#7fb7ff,#7af1ff); color:#051124; }
+    .search-row{ display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap; }
     .input{
-      width:min(640px, 92vw); background:#0d1340; color:#fff; border:1px solid #1d2866;
-      padding:14px 16px; border-radius:12px; font-size:16px; outline:none; transition:.2s;
-      text-align:center;
+      width:min(640px, 92vw); background:#0c1330; color:#fff; border:1px solid #223068;
+      padding:14px 16px; border-radius:12px; font-size:16px; outline:none; text-align:center;
     }
-    .input:focus{ border-color:var(--accentA); box-shadow:0 0 0 4px rgba(138,167,255,.22); }
+    .input:focus{ border-color:#7fb7ff; box-shadow:0 0 0 4px rgba(127,183,255,.22); }
     .btn{
-      background:linear-gradient(90deg,var(--accentA),var(--accentB)); color:#08122a; border:none; font-weight:900; letter-spacing:.3px;
-      padding:14px 18px; border-radius:12px; cursor:pointer; box-shadow:0 14px 32px rgba(138,167,255,.35);
-      transition: transform .12s ease, filter .12s ease, box-shadow .12s ease;
+      border:0; cursor:pointer; font-weight:900; padding:14px 18px; border-radius:12px;
+      background:linear-gradient(90deg,#7fb7ff,#7af1ff); color:#071127; box-shadow:0 14px 32px rgba(127,183,255,.35);
     }
-    .btn:hover{ filter:brightness(1.06); transform: translateY(-1px); box-shadow:0 18px 40px rgba(125,243,255,.35); }
-    .btn:disabled{ opacity:.6; cursor:not-allowed; transform:none; box-shadow:none; }
+    .btn:disabled{ opacity:.6; cursor:not-allowed; box-shadow:none; }
 
-    /* Results cards (centered items) */
+    /* Cards / list */
     .card{
-      background:linear-gradient(180deg,#121948,#0f1641);
-      border:1px solid var(--outline); border-radius:var(--radius); padding:18px;
-      box-shadow:0 18px 40px var(--shadow); position:relative; margin-top:18px; text-align:left;
+      background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+      box-shadow:var(--shadow); padding:18px; margin-top:18px; text-align:left;
     }
-    .header{ display:flex; align-items:center; gap:16px; justify-content:center; }
-    .avatar,.game-thumb{ width:120px; height:120px; border-radius:16px; background:#22306a; object-fit:cover; border:1px solid #334189; }
+    .header-row{ display:flex; align-items:center; justify-content:center; gap:16px; }
+    .thumb,.avatar{ width:120px; height:120px; border-radius:16px; border:1px solid #2a3973; background:#22306a; object-fit:cover; }
     .info{ flex:1; min-width:0; text-align:left; }
     .info h2{ margin:0 0 8px; font-size:22px; }
-    .chips{ display:flex; gap:8px; flex-wrap:wrap; margin-top:6px; }
-    .chip{ padding:6px 10px; border-radius:999px; font-size:12px; font-weight:900; background:#0d1544; border:1px solid #2a3a86; color:#dfe6ff; }
-    .pill{ padding:7px 12px; border-radius:999px; font-size:12px; font-weight:900; }
-    .offline{ background:#8b93af; color:#0c1126; } .online{ background:var(--accentA); color:#081127; } .playing{ background:var(--good); color:#041016; } .studio{ background:var(--warn); color:#2d1a00; }
+    .chips{ display:flex; gap:8px; flex-wrap:wrap; margin-top:6px; justify-content:center; }
+    .chip{ padding:6px 10px; border-radius:999px; font-size:12px; font-weight:900; background:#0e173e; border:1px solid #2a3a80; color:#dfe6ff; }
+    .pill{ padding:6px 10px; border-radius:999px; font-size:12px; font-weight:900; }
+    .online{ background:#7fb7ff; color:#06122a; } .playing{ background:#38e3ab; color:#06131b; } .studio{ background:#ffd36a; color:#2d1a00; } .offline{ background:#8b93af; color:#0c1126; }
+
     .list{ display:grid; grid-template-columns:1fr; gap:12px; margin-top:12px; }
-    .item{ background:#121a4f; border:1px solid #2a3676; border-radius:14px; padding:12px; cursor:pointer; transition:.15s; }
-    .item:hover{ transform:translateY(-1px); border-color:#3b4caa; background:#162063; }
+    .item{ background:#131c38; border:1px solid #2c3d86; border-radius:14px; padding:12px; cursor:pointer; transition:.15s; }
+    .item:hover{ transform:translateY(-1px); border-color:#3b4caa; background:#17234f; }
     .row2{ display:flex; gap:14px; align-items:center; justify-content:center; }
-    .meta{ display:flex; gap:12px; flex-wrap:wrap; font-size:13px; color:#cdd5ff; }
-    .tag{ padding:3px 8px; border-radius:999px; background:#10185a; border:1px solid #3347a6; font-weight:800; font-size:12px; color:#d6e4ff; }
+    .meta{ display:flex; gap:12px; flex-wrap:wrap; color:#cfd7ff; font-size:13px; justify-content:center; }
+    .tag{ padding:3px 8px; border-radius:999px; background:#0f1a49; border:1px solid #374ca6; }
+
     .ratio-good{ color:#9bffd0; } .ratio-mid{ color:#ffe29b; } .ratio-bad{ color:#ff9aa8; }
-    .error{ color:var(--bad); font-weight:800; margin-top:10px; text-align:center; }
-    .muted{ color:var(--muted); }
+    .muted{ color:var(--ink-3); }
+    .error{ color:var(--bad); font-weight:800; text-align:center; }
 
-    /* Loader + skeletons */
-    .loader{ display:flex; align-items:center; gap:10px; color:#dce2ff; font-size:14px; padding:6px 2px; justify-content:center; }
-    .spinner{ width:18px; height:18px; border:2px solid var(--accentB); border-top-color:transparent; border-radius:50%; animation:spin .8s linear infinite; }
-    @keyframes spin{ to{ transform: rotate(360deg); } }
-
-    .skeleton{ position:relative; overflow:hidden; border-radius:var(--radius); background:#10164a; border:1px solid #283063; padding:18px; margin-top: 12px; }
-    .shimmer{ position:absolute; inset:0; background: linear-gradient(90deg, transparent, rgba(255,255,255,.06), transparent); transform: translateX(-100%); animation: shimmer 1.6s infinite; }
-    @keyframes shimmer{ to{ transform: translateX(100%);} }
+    /* Loader / skeleton */
+    .loader{ display:flex; align-items:center; justify-content:center; gap:10px; color:#dce2ff; }
+    .spinner{ width:18px; height:18px; border:2px solid var(--accent-2); border-top-color:transparent; border-radius:50%; animation:spin .8s linear infinite; }
+    @keyframes spin{ to{ transform:rotate(360deg); } }
+    .skeleton{ position:relative; overflow:hidden; border-radius:var(--radius); background:#11183a; border:1px solid #283063; padding:18px; margin-top:12px; }
+    .shimmer{ position:absolute; inset:0; background:linear-gradient(90deg,transparent,rgba(255,255,255,.06),transparent); transform:translateX(-100%); animation:shimmer 1.6s infinite; }
+    @keyframes shimmer{ to{ transform:translateX(100%);} }
     .sk-row{ display:flex; gap:16px; align-items:center; justify-content:center; }
-    .sk-ava{ width:120px; height:120px; background:#171e49; border-radius:16px; }
-    .sk-lines{ flex:1; display:grid; gap:10px; padding-top:6px; }
-    .sk-line{ height:14px; background:#171e49; border-radius:8px; }
-    .sk-line.short{ width:40%; } .sk-line.med{ width:70%; } .sk-line.long{ width:90%; }
+    .sk-ava{ width:120px; height:120px; background:#17204a; border-radius:16px; }
+    .sk-lines{ flex:1; display:grid; gap:10px; }
+    .sk-line{ height:14px; background:#17204a; border-radius:8px; }
+    .sk-line.short{ width:40% } .sk-line.med{ width:70% } .sk-line.long{ width:90% }
 
-    /* Utility bar */
-    .tools{ display:flex; justify-content:center; flex-wrap:wrap; gap:8px; }
-    .tool{ padding:8px 12px; border-radius:999px; border:1px solid #273578; background:#0b123f; font-size:13px; font-weight:800; color:#dce2ff; cursor:pointer; }
-
-    /* Footer */
-    footer{ margin-top:30px; padding:10px; font-size:13px; color:#bcd3ff; border-top:1px solid #24306a; }
+    /* Utilities + footer */
+    .tools{ display:flex; justify-content:center; gap:8px; flex-wrap:wrap; }
+    .tool{ padding:8px 12px; border-radius:999px; border:1px solid #273578; background:#0b1340; color:#dfe6ff; font-size:13px; font-weight:800; cursor:pointer; }
+    footer{ width:min(980px,96vw); margin-top:34px; padding-top:12px; border-top:1px solid var(--line); color:#bcd3ff; font-size:13px; text-align:center; }
   </style>
 </head>
 <body>
-  <div class="logo" aria-hidden="true"></div>
-  <h1>Roblox Lookup</h1>
-  <p class="sub">Find <strong>Games</strong> & <strong>Users</strong>. Centered. Clean. Fast.</p>
+  <div class="wrap">
+    <header>
+      <div class="logo" aria-hidden="true"></div>
+      <h1>Roblox Lookup</h1>
+      <p class="sub">A small tool to explore Roblox games & users. Built with love, not buzzwords.</p>
+    </header>
 
-  <!-- Search -->
-  <div class="shell" role="search" aria-label="Roblox Lookup">
-    <div class="tabs" role="tablist" aria-label="Search Type">
-      <button class="tab active" id="tab-game" role="tab" aria-selected="true" onclick="setMode('game')" title="G">Game</button>
-      <button class="tab" id="tab-user" role="tab" aria-selected="false" onclick="setMode('user')" title="U">User</button>
+    <!-- Search -->
+    <section class="panel" role="search" aria-label="Roblox search">
+      <div class="tabs" role="tablist" aria-label="Type">
+        <button class="tab active" id="tab-game" role="tab" aria-selected="true" onclick="setMode('game')" title="G">Game</button>
+        <button class="tab" id="tab-user" role="tab" aria-selected="false" onclick="setMode('user')" title="U">User</button>
+      </div>
+
+      <div class="search-row">
+        <input class="input" id="q" placeholder="Type a game name / universe ID / place ID • or a username / user ID" />
+        <button class="btn" id="go" onclick="lookup()">Search</button>
+      </div>
+
+      <p class="muted" style="margin:10px 0 0">/ to focus • Enter to search • G/U to switch • Cooldown stops spam. <span class="chip" id="badge">Mode: Game</span></p>
+    </section>
+
+    <!-- Utilities -->
+    <div class="tools">
+      <button class="tool" onclick="copyLink()" id="copyBtn">Copy link</button>
+      <button class="tool" onclick="showBookmarks()">Bookmarks</button>
+      <button class="tool" onclick="clearResults()">Clear</button>
     </div>
 
-    <div class="search-row">
-      <label for="input" style="position:absolute;left:-9999px">Search query</label>
-      <input class="input" id="input" placeholder="Type a game name or ID · a username or ID" />
-      <button class="btn" id="btn" onclick="lookup()">Search</button>
+    <!-- Results -->
+    <div id="out" aria-live="polite" aria-busy="false"></div>
+
+    <!-- Ads -->
+    <div class="adsense-box">
+      <ins class="adsbygoogle" style="display:block"
+           data-ad-client="ca-pub-6941574746900426" data-ad-slot="5368161496"
+           data-ad-format="auto" data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
     </div>
 
-    <p class="muted" style="margin:8px 0 0">
-      Shortcuts: / focus · Enter search · G/U toggle · Cooldown prevents spam. <span class="tag" id="badge-mode">Mode: Game</span>
-    </p>
-  </div>
+    <!-- Contact -->
+    <section class="card" id="contact" style="text-align:center;">
+      <h2 style="margin:0 0 6px">Contact</h2>
+      <p class="muted" style="margin:0 0 12px">This form sends to <strong>supp.roxzy@gmail.com</strong>. If the mail service blocks the first try, you’ll get a big button to send via <em>Gmail Web</em> (no Outlook).</p>
 
-  <!-- Utilities -->
-  <div class="tools">
-    <button class="tool" onclick="copyShareLink()" id="shareBtn">Copy link</button>
-    <button class="tool" onclick="clearRecent()">Clear recent</button>
-    <button class="tool" onclick="showBookmarks()">Bookmarks</button>
-  </div>
-
-  <!-- Results -->
-  <div id="result" aria-live="polite" aria-busy="false"></div>
-
-  <!-- AdSense -->
-  <div class="adsense-box">
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-6941574746900426"
-         data-ad-slot="5368161496"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
-  </div>
-
-  <!-- Contact (sends without Outlook/desktop mail) -->
-  <div class="section" id="contact">
-    <div class="card" style="text-align:center;">
-      <h2 style="margin:0 0 8px;">Contact</h2>
-      <p class="muted" style="margin:0 0 12px">This form <strong>sends directly</strong> to <em>supp.roxzy@gmail.com</em> via FormSubmit (no backend needed).</p>
-      <form action="https://formsubmit.co/supp.roxzy@gmail.com" method="POST" style="display:grid; gap:10px; place-items:center;">
-        <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="_subject" value="Roblox Lookup — New message">
-        <input type="hidden" name="_template" value="table">
-        <input type="hidden" name="_autoresponse" value="Thanks! We received your message and will reply soon.">
-        <input class="input" style="max-width:600px" name="name" placeholder="Your name" required>
-        <input class="input" style="max-width:600px" type="email" name="email" placeholder="Your email" required>
-        <textarea class="input" style="max-width:600px; height:120px" name="message" placeholder="Your message…" required></textarea>
-        <button class="btn" type="submit">Send message</button>
+      <form id="contactForm" style="display:grid; place-items:center; gap:10px;">
+        <input class="input" style="max-width:620px" name="name" id="cName" placeholder="Your name" required>
+        <input class="input" style="max-width:620px" type="email" name="email" id="cEmail" placeholder="you@example.com" required>
+        <input class="input" style="max-width:620px" name="subject" id="cSubject" placeholder="Subject" required>
+        <textarea class="input" style="max-width:620px; height:120px" name="message" id="cMessage" placeholder="Your message…" required></textarea>
+        <div id="sendRow" style="display:flex; gap:8px; align-items:center; justify-content:center;">
+          <button class="btn" type="submit" id="sendBtn">Send message</button>
+          <button class="btn" type="button" id="gmailBtn" style="display:none; background:linear-gradient(90deg,#9cff9c,#7af1ff)">Send via Gmail Web</button>
+        </div>
+        <div id="sendNote" class="muted" style="min-height:18px"></div>
       </form>
-    </div>
-  </div>
+    </section>
 
-  <footer>
-    <div>© Roblox Lookup — community tool (not affiliated with Roblox).</div>
-  </footer>
+    <footer>© Roblox Lookup — not affiliated with Roblox.</footer>
+  </div>
 
   <script>
-    // ================= CONFIG =================
+    // ---------- Config & helpers ----------
     const PROXY = "https://corsproxy.io/?";
     let MODE = 'game';
-    const GAME_CACHE = new Map();
-    const sleep = ms => new Promise(r => setTimeout(r, ms));
-
-    // Cooldown
     const COOLDOWN_MS = 4000;
-    let lastSearchAt = 0;
-    let cooldownTimer = null;
+    let lastSearchAt = 0, cooldownTick = null;
 
-    // Storage
-    const RECENT_KEY = 'rbx_lookup_recent_v1';
+    const GAME_CACHE = new Map();
     const BOOK_KEY = 'rbx_lookup_bookmarks_v1';
 
-    // Helpers
     const $ = s => document.querySelector(s);
-    function formatInt(n){ return typeof n === 'number' ? n.toLocaleString() : 'N/A'; }
+    const sleep = ms => new Promise(r=>setTimeout(r,ms));
+
     function likeRatio(up,down){
-      const u=+up||0, d=+down||0, t=u+d; if(!t) return {cls:'ratio-mid',label:'0%'};
-      const p=Math.round((u/t)*100); return {cls:p>=80?'ratio-good':p>=60?'ratio-mid':'ratio-bad', label:p+'%'};
+      const u=+up||0,d=+down||0,t=u+d; if(!t) return {cls:'ratio-mid',label:'0%'};
+      const p=Math.round((u/t)*100); return {cls:p>=80?'ratio-good':p>=60?'ratio-mid':'ratio-bad',label:p+'%'}
     }
-    async function fetchJSON(url, opts={}){
-      const res = await fetch(url, opts);
-      if(!res.ok){
-        const t = await res.text().catch(()=> "");
-        throw new Error("HTTP "+res.status+" "+t.slice(0,160));
-      }
-      return res.json();
-    }
+    function n(x){ return typeof x==='number' ? x.toLocaleString() : 'N/A' }
+    async function j(url,opt={}){ const r=await fetch(url,opt); if(!r.ok){throw new Error('HTTP '+r.status)} return r.json(); }
 
-    // Tabs
-    function setMode(mode){
-      MODE = mode;
-      $('#tab-game').classList.toggle('active', mode==='game');
-      $('#tab-user').classList.toggle('active', mode==='user');
-      $('#tab-game').setAttribute('aria-selected', mode==='game');
-      $('#tab-user').setAttribute('aria-selected', mode==='user');
-      $('#badge-mode').textContent = 'Mode: ' + (mode==='game'?'Game':'User');
-      $('#input').focus();
+    // ---------- UI ----------
+    function setMode(m){
+      MODE=m;
+      $('#tab-game').classList.toggle('active', m==='game');
+      $('#tab-user').classList.toggle('active', m==='user');
+      $('#tab-game').setAttribute('aria-selected', m==='game');
+      $('#tab-user').setAttribute('aria-selected', m==='user');
+      $('#badge').textContent='Mode: ' + (m==='game'?'Game':'User');
+      $('#q').focus();
     }
+    function clearResults(){ $('#out').innerHTML=''; }
 
-    // Skeletons
-    function skeletonCard(){
-      return `
-        <div class="skeleton"><div class="shimmer"></div>
-          <div class="sk-row">
-            <div class="sk-ava"></div>
-            <div class="sk-lines">
-              <div class="sk-line long"></div>
-              <div class="sk-line med"></div>
-              <div class="sk-line med"></div>
-              <div class="sk-line short"></div>
-            </div>
+    // ---------- Skeleton ----------
+    const sk = () => `
+      <div class="skeleton"><div class="shimmer"></div>
+        <div class="sk-row">
+          <div class="sk-ava"></div>
+          <div class="sk-lines">
+            <div class="sk-line long"></div>
+            <div class="sk-line med"></div>
+            <div class="sk-line short"></div>
           </div>
-        </div>`;
-    }
-    function skeletonList(n=4){
-      let s=''; for(let i=0;i<n;i++){
-        s+=`<div class="skeleton"><div class="shimmer"></div>
-              <div class="sk-row">
-                <div class="sk-ava"></div>
-                <div class="sk-lines">
-                  <div class="sk-line long"></div>
-                  <div class="sk-line med"></div>
-                  <div class="sk-line short"></div>
-                </div>
-              </div>
-            </div>`;
-      } return s;
-    }
+        </div>
+      </div>`;
 
-    // ======== GAME SEARCH (name or ID; universe or place) ========
-    async function getAutocompleteUniverseIds(keyword){
-      const url = PROXY + encodeURIComponent(`https://apis.roblox.com/games-autocomplete/v1/get-suggestion/${encodeURIComponent(keyword)}`);
-      const data = await fetchJSON(url);
-      const ids = new Set();
-      if (Array.isArray(data.entries)) {
-        for (const e of data.entries) if (e?.universeId > 0) ids.add(e.universeId);
-      }
+    // ---------- Game search (name or universe/place ID) ----------
+    async function autoUniverses(q){
+      const url=PROXY+encodeURIComponent(`https://apis.roblox.com/games-autocomplete/v1/get-suggestion/${encodeURIComponent(q)}`);
+      const data=await j(url); const ids=new Set();
+      (data.entries||[]).forEach(e=>{ if(e?.universeId>0) ids.add(e.universeId) });
       return [...ids];
     }
-    async function placeToUniverse(placeId){
+    async function placeToUniverse(pid){
       try{
-        const data = await fetchJSON(PROXY + encodeURIComponent(`https://apis.roblox.com/universes/v1/places/${placeId}/universe`));
-        return data.universeId || data.id || data?.data?.universeId || data?.data?.[0]?.universeId || null;
-      }catch{ return null; }
+        const data=await j(PROXY+encodeURIComponent(`https://apis.roblox.com/universes/v1/places/${pid}/universe`));
+        return data.universeId||data?.data?.universeId||data?.data?.[0]?.universeId||null;
+      }catch{ return null }
     }
-    async function getGamesDetails(universeIds){
+    async function gameDetails(universeIds){
       if(!universeIds.length) return [];
       const chunks=[]; for(let i=0;i<universeIds.length;i+=50) chunks.push(universeIds.slice(i,i+50));
       const all=[];
       for(const group of chunks){
-        const idsCSV = group.join(',');
+        const ids=group.join(',');
         const [games, thumbs, votes] = await Promise.all([
-          fetchJSON(PROXY + encodeURIComponent(`https://games.roblox.com/v1/games?universeIds=${idsCSV}`)).catch(()=>({data:[]})),
-          fetchJSON(PROXY + encodeURIComponent(`https://thumbnails.roblox.com/v1/games/icons?universeIds=${idsCSV}&size=150x150&format=Png&isCircular=false`)).catch(()=>({data:[]})),
-          fetchJSON(PROXY + encodeURIComponent(`https://games.roblox.com/v1/games/votes?universeIds=${idsCSV}`)).catch(()=>({data:[]}))
+          j(PROXY+encodeURIComponent(`https://games.roblox.com/v1/games?universeIds=${ids}`)).catch(()=>({data:[]})),
+          j(PROXY+encodeURIComponent(`https://thumbnails.roblox.com/v1/games/icons?universeIds=${ids}&size=150x150&format=Png&isCircular=false`)).catch(()=>({data:[]})),
+          j(PROXY+encodeURIComponent(`https://games.roblox.com/v1/games/votes?universeIds=${ids}`)).catch(()=>({data:[]}))
         ]);
-        const tmap=new Map(); (thumbs.data||[]).forEach(t=>tmap.set(String(t.targetId), t.imageUrl));
-        const vmap=new Map(); (votes.data||[]).forEach(v=>vmap.set(String(v.id||v.universeId||v.targetId), {up:v.upVotes??0, down:v.downVotes??0}));
+        const t=new Map(); (thumbs.data||[]).forEach(a=>t.set(String(a.targetId), a.imageUrl));
+        const v=new Map(); (votes.data||[]).forEach(x=>v.set(String(x.id||x.universeId||x.targetId),{up:x.upVotes??0,down:x.downVotes??0}));
         (games.data||[]).forEach(g=>{
-          const key=String(g.id); const vv = vmap.get(key)||{up:g.totalUpVotes??0, down:g.totalDownVotes??0};
-          all.push({
-            id:g.id, rootPlaceId:g.rootPlaceId, name:g.name,
-            creator:g.creator?.name || "Unknown",
+          const key=String(g.id), vv=v.get(key)||{up:g.totalUpVotes??0,down:g.totalDownVotes??0};
+          all.push({ id:g.id, rootPlaceId:g.rootPlaceId, name:g.name, creator:g.creator?.name||'Unknown',
             visits:g.visits??0, playing:g.playing??0, favorites:g.favoritedCount??0,
-            up:vv.up||0, down:vv.down||0, thumb: tmap.get(key)||""
-          });
+            up:vv.up||0, down:vv.down||0, thumb:t.get(key)||'' });
         });
-        await sleep(90);
+        await sleep(80);
       }
       all.sort((a,b)=>(b.visits||0)-(a.visits||0));
       return all;
     }
-    function renderGameList(games){
-      const res = $('#result');
-      if(!games.length){ res.innerHTML = `<div class="card"><p class="error">No games found.</p></div>`; return; }
-      let html = `<div class="card"><h2 style="margin:2px 0 8px; text-align:center">Games</h2><div class="list">`;
-      for(const g of games){
-        GAME_CACHE.set(g.id, g);
-        const lr = likeRatio(g.up,g.down);
-        html += `
-          <div class="item" onclick="viewGame(${g.id})" title="Open details">
-            <div class="row2">
-              <img class="game-thumb" loading="lazy" src="${g.thumb}" alt="" onerror="this.src='https://placehold.co/150x150?text=Game'">
-              <div class="info">
-                <h2>${g.name}</h2>
-                <div class="meta" style="justify-content:center">
-                  <span class="tag">Creator: ${g.creator}</span>
-                  <span>Visits: <strong>${formatInt(g.visits)}</strong></span>
-                  <span>Playing: <strong>${formatInt(g.playing)}</strong></span>
-                  <span>Likes: <strong class="${lr.cls}">${lr.label}</strong></span>
-                </div>
-              </div>
-            </div>
-          </div>`;
-      }
-      html += `</div></div>`;
-      res.innerHTML = html;
-    }
-    function renderGameDetails(g){
-      const lr = likeRatio(g.up,g.down);
-      $('#result').innerHTML = `
-        <div class="card">
-          <div class="header">
-            <img class="game-thumb" src="${g.thumb}" alt="" onerror="this.src='https://placehold.co/150x150?text=Game'">
+    function paintGames(arr){
+      const res=$('#out'); if(!arr.length){ res.innerHTML=`<div class="card"><p class="error">No games found.</p></div>`; return; }
+      let html=`<div class="card"><h2 style="text-align:center;margin:0 0 8px">Games</h2><div class="list">`;
+      for(const g of arr){
+        GAME_CACHE.set(g.id,g);
+        const lr=likeRatio(g.up,g.down);
+        html+=`<div class="item" onclick="viewGame(${g.id})">
+          <div class="row2">
+            <img class="thumb" loading="lazy" src="${g.thumb}" onerror="this.src='https://placehold.co/150x150?text=Game'">
             <div class="info">
               <h2>${g.name}</h2>
-              <div class="chips" style="justify-content:center">
-                <span class="chip">Creator: ${g.creator}</span>
-                <span class="chip">Visits: ${formatInt(g.visits)}</span>
-                <span class="chip">Playing: ${formatInt(g.playing)}</span>
-                <span class="chip">Favorites: ${formatInt(g.favorites)}</span>
+              <div class="meta">
+                <span class="tag">Creator: ${g.creator}</span>
+                <span>Visits: <b>${n(g.visits)}</b></span>
+                <span>Playing: <b>${n(g.playing)}</b></span>
+                <span>Likes: <b class="${lr.cls}">${lr.label}</b></span>
               </div>
-              <p style="margin-top:6px;text-align:center"><strong>Likes:</strong> <span class="${lr.cls}">${lr.label}</span> <span class="muted">(${formatInt(g.up)} up / ${formatInt(g.down)} down)</span></p>
-              <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap; justify-content:center">
-                <a class="btn" href="https://www.roblox.com/games/${g.rootPlaceId}" target="_blank" rel="noopener">Play Game</a>
-                <button class="btn" onclick="copyShareLink(${g.id})">Share</button>
+            </div>
+          </div>
+        </div>`;
+      }
+      html+=`</div></div>`;
+      res.innerHTML=html;
+    }
+    function paintGame(g){
+      const lr=likeRatio(g.up,g.down);
+      $('#out').innerHTML=`
+        <div class="card">
+          <div class="header-row">
+            <img class="thumb" src="${g.thumb}" onerror="this.src='https://placehold.co/150x150?text=Game'">
+            <div class="info">
+              <h2 style="text-align:center">${g.name}</h2>
+              <div class="chips">
+                <span class="chip">Creator: ${g.creator}</span>
+                <span class="chip">Visits: ${n(g.visits)}</span>
+                <span class="chip">Playing: ${n(g.playing)}</span>
+                <span class="chip">Favorites: ${n(g.favorites)}</span>
+              </div>
+              <p style="text-align:center;margin-top:6px"><b>Likes</b> <span class="${lr.cls}">${lr.label}</span> <span class="muted">(${n(g.up)} / ${n(g.down)})</span></p>
+              <div style="display:flex;justify-content:center;gap:8px;margin-top:8px;flex-wrap:wrap">
+                <a class="btn" target="_blank" rel="noopener" href="https://www.roblox.com/games/${g.rootPlaceId}">Play</a>
                 <button class="btn" onclick="bookmark('game', ${g.id})">Bookmark</button>
               </div>
             </div>
@@ -380,148 +312,116 @@
         </div>`;
     }
 
-    // ======== USER LOOKUP (name or ID) ========
-    async function userLookup(query){
-      const res = $('#result');
-      res.setAttribute('aria-busy','true');
-      res.innerHTML = `<div class="card"><div class="loader"><div class="spinner"></div><div>Looking up user…</div></div></div>` + skeletonCard();
+    // ---------- User search (name or ID) ----------
+    async function userLookup(q){
+      const out=$('#out');
+      out.innerHTML=`<div class="card"><div class="loader"><div class="spinner"></div><div>Looking up user…</div></div></div>${sk()}`;
 
-      let userId = query.trim();
-
-      // If not a pure number, resolve name -> id
-      if (!/^\d+$/.test(userId)) {
-        const data = await fetchJSON(PROXY + encodeURIComponent('https://users.roblox.com/v1/usernames/users'), {
-          method:'POST', headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({usernames:[userId.toLowerCase()], excludeBannedUsers:false})
+      let id=q.trim();
+      if(!/^\d+$/.test(id)){
+        const r=await j(PROXY+encodeURIComponent('https://users.roblox.com/v1/usernames/users'),{
+          method:'POST',headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({usernames:[id.toLowerCase()],excludeBannedUsers:false})
         });
-        if(!data?.data?.[0]) throw new Error("User not found");
-        userId = String(data.data[0].id);
+        if(!r?.data?.[0]) throw new Error('User not found');
+        id=String(r.data[0].id);
       }
 
-      const [ userData, avatarData, friends, followers, following, presence ] = await Promise.all([
-        fetchJSON(PROXY + encodeURIComponent(`https://users.roblox.com/v1/users/${userId}`)),
-        fetchJSON(PROXY + encodeURIComponent(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${userId}&size=180x180&format=Png&isCircular=false`)),
-        fetchJSON(PROXY + encodeURIComponent(`https://friends.roblox.com/v1/users/${userId}/friends/count`)),
-        fetchJSON(PROXY + encodeURIComponent(`https://friends.roblox.com/v1/users/${userId}/followers/count`)),
-        fetchJSON(PROXY + encodeURIComponent(`https://friends.roblox.com/v1/users/${userId}/followings/count`)),
-        fetchJSON(PROXY + encodeURIComponent(`https://presence.roblox.com/v1/presence/users`), { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({userIds:[Number(userId)]}) })
+      const [u,ava,fri,fol,folw,pre]=await Promise.all([
+        j(PROXY+encodeURIComponent(`https://users.roblox.com/v1/users/${id}`)),
+        j(PROXY+encodeURIComponent(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${id}&size=180x180&format=Png&isCircular=false`)),
+        j(PROXY+encodeURIComponent(`https://friends.roblox.com/v1/users/${id}/friends/count`)),
+        j(PROXY+encodeURIComponent(`https://friends.roblox.com/v1/users/${id}/followers/count`)),
+        j(PROXY+encodeURIComponent(`https://friends.roblox.com/v1/users/${id}/followings/count`)),
+        j(PROXY+encodeURIComponent(`https://presence.roblox.com/v1/presence/users`),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userIds:[Number(id)]})})
       ]);
 
-      const avatarUrl = avatarData?.data?.[0]?.imageUrl || 'https://placehold.co/180x180?text=Avatar';
-      const created = userData.created ? new Date(userData.created).toLocaleString() : 'Unavailable';
-      const pType = presence?.userPresences?.[0]?.userPresenceType;
-      let sClass='offline', sText='Offline';
-      if (pType===1){ sClass='online'; sText='Online'; }
-      else if (pType===2){ sClass='playing'; sText='In Game'; }
-      else if (pType===3){ sClass='studio'; sText='In Studio'; }
+      const url=ava?.data?.[0]?.imageUrl||'https://placehold.co/180x180?text=Avatar';
+      const created=u.created?new Date(u.created).toLocaleString():'Unavailable';
+      const pt=pre?.userPresences?.[0]?.userPresenceType;
+      let sClass='offline', sText='Offline'; if(pt===1){sClass='online';sText='Online'} else if(pt===2){sClass='playing';sText='In Game'} else if(pt===3){sClass='studio';sText='In Studio'}
 
-      res.innerHTML = `
+      out.innerHTML=`
         <div class="card">
-          <div class="header">
-            <img class="avatar" src="${avatarUrl}" alt="Avatar" onerror="this.src='https://placehold.co/180x180?text=Avatar'">
+          <div class="header-row">
+            <img class="avatar" src="${url}" onerror="this.src='https://placehold.co/180x180?text=Avatar'">
             <div class="info">
-              <h2 style="text-align:center">${userData.name || 'Unknown'} <span class="muted">(${userData.displayName || 'Unknown'})</span></h2>
-              <div class="chips" style="justify-content:center">
+              <h2 style="text-align:center">${u.name||'Unknown'} <span class="muted">(${u.displayName||'Unknown'})</span></h2>
+              <div class="chips">
                 <span class="chip">Created: ${created}</span>
-                <span class="chip">Friends: ${friends.count}</span>
-                <span class="chip">Followers: ${followers.count}</span>
-                <span class="chip">Following: ${following.count}</span>
+                <span class="chip">Friends: ${n(fri.count)}</span>
+                <span class="chip">Followers: ${n(fol.count)}</span>
+                <span class="chip">Following: ${n(folw.count)}</span>
               </div>
-              <p style="margin-top:6px;text-align:center"><strong>Bio:</strong> ${userData.description ? escapeHTML(userData.description).replace(/\n/g,'<br>') : '<span class="muted">None</span>'}</p>
-              <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap; justify-content:center">
-                <a class="btn" target="_blank" rel="noopener" href="https://www.roblox.com/users/${userData.id}/profile">Open Profile</a>
-                <button class="btn" onclick="bookmark('user','${userData.id}')">Bookmark</button>
+              <p style="text-align:center;margin-top:6px"><b>Bio:</b> ${u.description?String(u.description).replace(/[&<>]/g,m=>({ '&':'&amp;','<':'&lt;','>':'&gt;' }[m])).replace(/\n/g,'<br>'):'<span class="muted">None</span>'}</p>
+              <div style="display:flex;justify-content:center;gap:8px;margin-top:8px;flex-wrap:wrap">
+                <a class="btn" target="_blank" rel="noopener" href="https://www.roblox.com/users/${u.id}/profile">Open Profile</a>
+                <button class="btn" onclick="bookmark('user','${u.id}')">Bookmark</button>
               </div>
             </div>
           </div>
           <div class="pill ${sClass}" style="position:absolute; top:16px; right:16px">${sText}</div>
         </div>`;
-      res.setAttribute('aria-busy','false');
     }
 
-    // ======== PRIMARY LOOKUP (cooldown + name/ID logic for games) ========
+    // ---------- Primary lookup with cooldown ----------
     async function lookup(){
-      const now = Date.now();
-      const remaining = lastSearchAt + COOLDOWN_MS - now;
-      if (remaining > 0) return; // ignore clicks during cooldown
-
-      const btn = $('#btn');
-      const q = $('#input').value.trim();
-      if (!q) { $('#result').innerHTML = `<div class="card"><p class="error">Type something to search.</p></div>`; return; }
-
+      const now=Date.now();
+      if(now < lastSearchAt + COOLDOWN_MS) return;
       lastSearchAt = now;
+
+      const q=$('#q').value.trim();
+      if(!q){ $('#out').innerHTML=`<div class="card"><p class="error">Type something to search.</p></div>`; return; }
+
       startCooldown();
 
-      try {
-        if (MODE === 'user') {
-          await userLookup(q);
-        } else {
-          const res = $('#result');
-          res.innerHTML = `<div class="card"><div class="loader"><div class="spinner"></div><div>Searching games…</div></div></div>` + skeletonList(4);
+      try{
+        if(MODE==='user') { await userLookup(q); return; }
 
-          let uniIds = [];
+        // game mode
+        $('#out').innerHTML=`<div class="card"><div class="loader"><div class="spinner"></div><div>Searching games…</div></div></div>${sk()}${sk()}`;
 
-          if (/^\d+$/.test(q)) {
-            // Numeric: try as universeId, then placeId→universe
-            const asUni = await getGamesDetails([Number(q)]);
-            if (asUni.length) {
-              renderGameList(asUni);
-              return;
-            }
-            const conv = await placeToUniverse(q);
-            if (conv) uniIds = [conv];
-          } else {
-            // Text search
-            uniIds = await getAutocompleteUniverseIds(q);
-          }
-
-          if (!uniIds.length) {
-            $('#result').innerHTML = `<div class="card"><p class="error">No games found. Try a different name or a game ID.</p></div>`;
-            return;
-          }
-
-          const games = await getGamesDetails(uniIds);
-          renderGameList(games);
+        let ids=[];
+        if(/^\d+$/.test(q)){
+          // Try universe id straight
+          const asUni = await gameDetails([Number(q)]);
+          if(asUni.length){ paintGames(asUni); return; }
+          // Maybe it's a place id
+          const uni = await placeToUniverse(q);
+          if(uni) ids=[uni];
+        }else{
+          ids = await autoUniverses(q);
         }
-      } catch (err) {
-        console.error(err);
-        $('#result').innerHTML = `<div class="card"><p class="error">Failed to load ${MODE}. ${err?.message ? 'Error: ' + err.message : ''}</p></div>`;
+
+        if(!ids.length){ $('#out').innerHTML=`<div class="card"><p class="error">No games found. Try another name or an ID.</p></div>`; return; }
+        const games = await gameDetails(ids);
+        paintGames(games);
+      }catch(e){
+        console.error(e);
+        $('#out').innerHTML=`<div class="card"><p class="error">Search failed. ${e.message||''}</p></div>`;
       }
     }
-
     function startCooldown(){
-      const btn = $('#btn');
-      btn.disabled = true;
-      let msLeft = COOLDOWN_MS;
-      updateBtn(msLeft);
-      cooldownTimer = setInterval(()=>{
-        msLeft -= 1000;
-        updateBtn(msLeft);
-        if (msLeft <= 0) {
-          clearInterval(cooldownTimer);
-          btn.disabled = false;
-          btn.textContent = 'Search';
-        }
-      }, 1000);
-      function updateBtn(ms){ btn.textContent = `Search ${Math.ceil(ms/1000)}s`; }
+      const b=$('#go'); b.disabled=true;
+      let left=COOLDOWN_MS;
+      b.textContent=`Search ${Math.ceil(left/1000)}s`;
+      cooldownTick=setInterval(()=>{
+        left-=1000;
+        if(left<=0){ clearInterval(cooldownTick); b.disabled=false; b.textContent='Search'; }
+        else b.textContent=`Search ${Math.ceil(left/1000)}s`;
+      },1000);
     }
 
-    async function viewGame(universeId){
-      let g = GAME_CACHE.get(universeId);
-      if (!g) {
-        const arr = await getGamesDetails([universeId]).catch(()=>[]);
-        g = arr[0];
-      }
-      if (!g) {
-        $('#result').innerHTML = `<div class="card"><p class="error">Could not load that game.</p></div>`;
-        return;
-      }
-      renderGameDetails(g);
+    async function viewGame(id){
+      let g=GAME_CACHE.get(id);
+      if(!g){ const arr=await gameDetails([id]).catch(()=>[]); g=arr[0]; }
+      if(!g){ $('#out').innerHTML=`<div class="card"><p class="error">Couldn’t load that game.</p></div>`; return; }
+      paintGame(g);
     }
 
-    // ==== Bookmarks & Share (centered site still supports) ====
+    // ---------- Bookmarks / share ----------
     function bookmark(type,id){
-      const data = JSON.parse(localStorage.getItem(BOOK_KEY)||'{}');
+      const data=JSON.parse(localStorage.getItem(BOOK_KEY)||'{}');
       if(!data[type]) data[type]=[];
       if(!data[type].includes(String(id))) data[type].unshift(String(id));
       localStorage.setItem(BOOK_KEY, JSON.stringify(data));
@@ -531,44 +431,93 @@
       const data=JSON.parse(localStorage.getItem(BOOK_KEY)||'{}');
       const gIds=(data.game||[]).slice(0,20).map(Number);
       const uIds=(data.user||[]).slice(0,20).map(Number);
-      let html=`<div class="card"><h2 style="text-align:center">My Bookmarks</h2>`;
+      let html=`<div class="card"><h2 style="text-align:center;margin:0 0 8px">My Bookmarks</h2>`;
       if(gIds.length){
-        const games=await getGamesDetails(gIds);
+        const games=await gameDetails(gIds);
         html+=`<h3 style="text-align:center">Games</h3><div class="list">`+
-          games.map(g=>`<div class="item" onclick="viewGame(${g.id})"><div class="row2"><img class="game-thumb" src="${g.thumb}" onerror="this.src='https://placehold.co/150x150?text=Game'"/><div class="info"><h2>${g.name}</h2><div class="meta" style="justify-content:center"><span>Visits: ${formatInt(g.visits)}</span></div></div></div></div>`).join('')+
+          games.map(g=>`<div class="item" onclick="viewGame(${g.id})"><div class="row2"><img class="thumb" src="${g.thumb}" onerror="this.src='https://placehold.co/150x150?text=Game'"><div class="info"><h2>${g.name}</h2><div class="meta"><span>Visits: ${n(g.visits)}</span></div></div></div></div>`).join('')+
           `</div>`;
       }
       if(uIds.length){
         html+=`<h3 style="text-align:center;margin-top:12px">Users</h3><div class="list">`+
-          uIds.map(uid=>`<div class="item" onclick="setMode('user'); $('#input').value='${uid}'; lookup();"><div class="row2"><div class="info"><h2 style="text-align:center">User ID ${uid}</h2><div class="meta" style="justify-content:center"><span>Click to open</span></div></div></div></div>`).join('')+
+          uIds.map(uid=>`<div class="item" onclick="setMode('user'); $('#q').value='${uid}'; lookup();"><div class="row2"><div class="info"><h2 style="text-align:center">User ID ${uid}</h2><div class="meta"><span>Click to open</span></div></div></div></div>`).join('')+
           `</div>`;
       }
-      if(!gIds.length && !uIds.length) html+=`<p class="muted" style="text-align:center">No bookmarks yet. Use the Bookmark buttons.</p>`;
+      if(!gIds.length && !uIds.length) html+=`<p class="muted" style="text-align:center">No bookmarks yet.</p>`;
       html+=`</div>`;
-      $('#result').innerHTML=html;
+      $('#out').innerHTML=html;
     }
-    function copyShareLink(){
-      const params = new URLSearchParams();
-      params.set('mode', MODE);
-      const q = $('#input').value.trim(); if (q) params.set('q', q);
-      const link = `${location.origin}${location.pathname}?${params.toString()}`;
-      navigator.clipboard.writeText(link).then(()=>{
-        $('#shareBtn').textContent = 'Copied!';
-        setTimeout(()=> $('#shareBtn').textContent = 'Copy link', 1200);
-      }).catch(()=> alert(link));
+    function copyLink(){
+      const p=new URLSearchParams(); p.set('mode',MODE);
+      const q=$('#q').value.trim(); if(q) p.set('q',q);
+      const link=`${location.origin}${location.pathname}?${p.toString()}`;
+      navigator.clipboard.writeText(link).then(()=>{ $('#copyBtn').textContent='Copied!'; setTimeout(()=>$('#copyBtn').textContent='Copy link',1200); });
     }
-    function clearRecent(){ localStorage.removeItem(RECENT_KEY); $('#result').innerHTML=''; }
 
-    // Keyboard shortcuts
-    document.addEventListener('keydown', (e)=>{
-      if (e.key === '/' && document.activeElement !== $('#input')) { e.preventDefault(); $('#input').focus(); }
-      if (e.key === 'Enter' && document.activeElement === $('#input')) lookup();
-      if (e.key.toLowerCase() === 'g') setMode('game');
-      if (e.key.toLowerCase() === 'u') setMode('user');
+    // ---------- Contact: AJAX send + Gmail Web fallback ----------
+    const FORM_ENDPOINT = "https://formsubmit.co/ajax/supp.roxzy@gmail.com";
+    $('#contactForm').addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const btn = $('#sendBtn');
+      const gmailBtn = $('#gmailBtn');
+      const note = $('#sendNote');
+      btn.disabled = true; btn.textContent = 'Sending…'; gmailBtn.style.display='none'; note.textContent='';
+
+      const payload = {
+        name: $('#cName').value.trim(),
+        email: $('#cEmail').value.trim(),
+        subject: $('#cSubject').value.trim(),
+        message: $('#cMessage').value.trim()
+      };
+
+      try{
+        const r = await fetch(FORM_ENDPOINT, {
+          method:'POST',
+          headers:{'Content-Type':'application/json', 'Accept':'application/json'},
+          body: JSON.stringify(payload)
+        });
+        const data = await r.json();
+        if(r.ok && (data.success || data.message)){
+          note.textContent = '✓ Message sent. Watch your inbox for a reply.';
+          btn.textContent = 'Sent'; setTimeout(()=>{ btn.disabled=false; btn.textContent='Send message'; }, 2000);
+          (e.target).reset();
+        }else{
+          throw new Error('Service error');
+        }
+      }catch(err){
+        // Fallback: Gmail Web compose (no Outlook)
+        note.textContent = 'Could not send via service. You can send quickly via Gmail Web.';
+        gmailBtn.style.display = 'inline-block';
+        gmailBtn.onclick = ()=>{
+          const u = new URL('https://mail.google.com/mail/');
+          u.searchParams.set('view','cm');
+          u.searchParams.set('to','supp.roxzy@gmail.com');
+          u.searchParams.set('su', payload.subject || 'Roblox Lookup message');
+          u.searchParams.set('body', `${payload.message}\n\nFrom: ${payload.name} <${payload.email}>`);
+          window.open(u.toString(), '_blank');
+        };
+        btn.disabled=false; btn.textContent='Send message';
+      }
     });
 
-    // Init
-    setMode('game');
+    // ---------- Shortcuts ----------
+    document.addEventListener('keydown',(e)=>{
+      if(e.key==='/' && document.activeElement!==$('#q')){ e.preventDefault(); $('#q').focus(); }
+      if(e.key==='Enter' && document.activeElement===$('#q')) lookup();
+      if(e.key.toLowerCase()==='g') setMode('game');
+      if(e.key.toLowerCase()==='u') setMode('user');
+    });
+
+    // Deep link support (optional)
+    (function(){
+      const p=new URLSearchParams(location.search);
+      const m=p.get('mode'); if(m==='user'||m==='game') setMode(m);
+      const q=p.get('q'); if(q){ $('#q').value=q; lookup(); }
+    })();
+
+    // expose for inline handlers
+    window.setMode=setMode; window.viewGame=viewGame; window.lookup=lookup;
+    window.bookmark=bookmark; window.showBookmarks=showBookmarks;
   </script>
 </body>
 </html>
