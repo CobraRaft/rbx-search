@@ -1,148 +1,338 @@
-<script>
-/* ======================= SAFE UTILS (NO CRASH) ======================= */
-// Safe storage shim (won't throw in private mode / sandboxed iframes)
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <title>Roblox Lookup — Players & Games</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Search Roblox games & users by name or ID. Sort, filter, bookmark, compare, and share. Fast and mobile-friendly." />
+  <meta name="robots" content="index,follow" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+
+  <!-- AdSense (kept away from buttons/results to avoid invalid clicks) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6941574746900426" crossorigin="anonymous"></script>
+
+  <style>
+    :root{
+      --bg:#0b0f1b; --panel:#0f1526; --card:#151c33; --ink:#edf1ff; --ink-2:#c9d2ff; --ink-3:#9aa7ff;
+      --line:#253059; --accent:#7fb7ff; --accent-2:#7af1ff; --ok:#38e3ab; --warn:#ffd36a; --bad:#ff7c99;
+      --radius:16px; --shadow:0 16px 40px rgba(0,0,0,.45);
+    }
+    [data-theme="light"]{
+      --bg:#f7f9ff; --panel:#ffffff; --card:#ffffff; --ink:#0b1433; --ink-2:#32406f; --ink-3:#6676b4;
+      --line:#e4ebff; --shadow:0 10px 22px rgba(9,16,44,.08);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:
+        radial-gradient(1200px 800px at 0% -10%, rgba(127,183,255,.12), transparent 55%),
+        radial-gradient(1200px 800px at 100% 0%, rgba(122,241,255,.12), transparent 55%),
+        linear-gradient(180deg,#0a0e1c,#0b0f1b 40%,#0b0f1b);
+      color:var(--ink);
+      font-family:'Outfit','Inter',system-ui,Segoe UI,Roboto,Ubuntu;
+      display:flex; flex-direction:column; align-items:center; gap:22px;
+      min-height:100vh; padding:36px 16px 80px; text-align:center;
+    }
+    [data-theme="light"] body{ background:#f1f5ff; }
+
+    .wrap{ width:min(980px,96vw); margin-inline:auto; }
+    header{ display:flex; flex-direction:column; align-items:center; gap:8px; }
+    .logo{ width:54px; height:54px; border-radius:14px; background:linear-gradient(135deg,#7fb7ff,#7af1ff); box-shadow:0 14px 28px rgba(127,183,255,.35); }
+    h1{ margin:6px 0 2px; font-size:34px; letter-spacing:.2px; font-weight:800; }
+    .sub{ margin:0; color:var(--ink-2); font-size:14px; }
+
+    .panel{ background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:18px; }
+    .tabs{ display:inline-flex; gap:6px; padding:6px; border:1px solid #1d2650; border-radius:999px; background:#0c1330; margin:6px 0 12px; }
+    [data-theme="light"] .tabs{ background:#eef3ff; border-color:#d8e2ff; }
+    .tab{ border:0; background:transparent; color:#dfe6ff; font-weight:800; padding:10px 16px; border-radius:999px; cursor:pointer; }
+    [data-theme="light"] .tab{ color:#233160; }
+    .tab.active{ background:linear-gradient(90deg,#7fb7ff,#7af1ff); color:#051124; }
+    .row{ display:flex; gap:10px; align-items:center; justify-content:center; flex-wrap:wrap; }
+    .input{
+      width:min(640px, 92vw); background:#0c1330; color:#fff; border:1px solid #223068;
+      padding:14px 16px; border-radius:12px; font-size:16px; outline:none; text-align:center;
+    }
+    [data-theme="light"] .input{ background:#f7f9ff; color:#0b1433; border-color:#d5e0ff; }
+    .input:focus{ border-color:#7fb7ff; box-shadow:0 0 0 4px rgba(127,183,255,.22); }
+    .btn{
+      border:0; cursor:pointer; font-weight:900; padding:14px 18px; border-radius:12px;
+      background:linear-gradient(90deg,#7fb7ff,#7af1ff); color:#071127; box-shadow:0 14px 32px rgba(127,183,255,.35);
+    }
+    .btn:disabled{ opacity:.6; cursor:not-allowed; box-shadow:none; }
+
+    .controls{ display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-top:8px; }
+    .select,.num{ background:#0c1330; color:#fff; border:1px solid #223068; padding:10px 12px; border-radius:10px; font-weight:700; }
+    [data-theme="light"] .select,[data-theme="light"] .num{ background:#f7f9ff; color:#0b1433; border-color:#d5e0ff; }
+
+    .card{ background:var(--card); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:18px; margin-top:18px; text-align:left; }
+    .header-row{ display:flex; align-items:center; justify-content:center; gap:16px; position:relative; }
+    .thumb,.avatar{ width:120px; height:120px; border-radius:16px; border:1px solid #2a3973; background:#22306a; object-fit:cover; }
+    [data-theme="light"] .thumb,[data-theme="light"] .avatar{ border-color:#dbe6ff; background:#eef3ff; }
+    .info{ flex:1; min-width:0; text-align:left; }
+    .info h2{ margin:0 0 8px; font-size:22px; }
+    .chips{ display:flex; gap:8px; flex-wrap:wrap; margin-top:6px; justify-content:center; }
+    .chip{ padding:6px 10px; border-radius:999px; font-size:12px; font-weight:900; background:#0e173e; border:1px solid #2a3a80; color:#dfe6ff; }
+    [data-theme="light"] .chip{ background:#f0f4ff; border-color:#dbe6ff; color:#1b2749; }
+    .pill{ padding:6px 10px; border-radius:999px; font-size:12px; font-weight:900; }
+    .online{ background:#7fb7ff; color:#06122a; } .playing{ background:#38e3ab; color:#06131b; } .studio{ background:#ffd36a; color:#2d1a00; } .offline{ background:#8b93af; color:#0c1126; }
+
+    .list{ display:grid; grid-template-columns:1fr; gap:12px; margin-top:12px; }
+    .item{ background:#131c38; border:1px solid #2c3d86; border-radius:14px; padding:12px; cursor:pointer; transition:.15s; }
+    [data-theme="light"] .item{ background:#f7f9ff; border-color:#dbe6ff; }
+    .item:hover{ transform:translateY(-1px); border-color:#3b4caa; background:#17234f; }
+    [data-theme="light"] .item:hover{ background:#eef3ff; }
+    .row2{ display:flex; gap:14px; align-items:center; justify-content:center; }
+    .meta{ display:flex; gap:12px; flex-wrap:wrap; color:#cfd7ff; font-size:13px; justify-content:center; }
+    [data-theme="light"] .meta{ color:#3a4774; }
+    .tag{ padding:3px 8px; border-radius:999px; background:#0f1a49; border:1px solid #374ca6; }
+    [data-theme="light"] .tag{ background:#eef3ff; border-color:#dbe6ff; }
+
+    .muted{ color:var(--ink-3); }
+    .error{ color:var(--bad); font-weight:800; text-align:center; }
+
+    .loader{ display:flex; align-items:center; justify-content:center; gap:10px; color:#dce2ff; }
+    .spinner{ width:18px; height:18px; border:2px solid var(--accent-2); border-top-color:transparent; border-radius:50%; animation:spin .8s linear infinite; }
+    @keyframes spin{ to{ transform:rotate(360deg);} }
+
+    .skeleton{ position:relative; overflow:hidden; border-radius:var(--radius); background:#11183a; border:1px solid #283063; padding:18px; margin-top:12px; }
+    .shimmer{ position:absolute; inset:0; background:linear-gradient(90deg,transparent,rgba(255,255,255,.06),transparent); transform:translateX(-100%); animation:shimmer 1.6s infinite; }
+    @keyframes shimmer{ to{ transform:translateX(100%);} }
+    .sk-row{ display:flex; gap:16px; align-items:center; justify-content:center; }
+    .sk-ava{ width:120px; height:120px; background:#17204a; border-radius:16px; }
+    .sk-lines{ flex:1; display:grid; gap:10px; }
+    .sk-line{ height:14px; background:#17204a; border-radius:8px; }
+    .sk-line.short{ width:40% } .sk-line.med{ width:70% } .sk-line.long{ width:90% }
+
+    .tools{ display:flex; justify-content:center; gap:8px; flex-wrap:wrap; }
+    .tool{ padding:8px 12px; border-radius:999px; border:1px solid #273578; background:#0b1340; color:#dfe6ff; font-size:13px; font-weight:800; cursor:pointer; }
+    [data-theme="light"] .tool{ background:#eef3ff; color:#1b2749; border-color:#dbe6ff; }
+
+    .adsense-box{ margin-top:16px; }
+
+    footer{ width:min(980px,96vw); margin-top:34px; padding-top:12px; border-top:1px solid var(--line); color:#6b79c2; font-size:13px; text-align:center; }
+    footer a{ color:inherit }
+  </style>
+  <noscript><style>html,body{background:#0b0f1b;color:#edf1ff}</style></noscript>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="logo" aria-hidden="true"></div>
+      <h1>Roblox Lookup</h1>
+      <p class="sub">Search games & users. Sort, filter, bookmark, compare — fast and mobile-friendly.</p>
+    </header>
+
+    <!-- Search -->
+    <section class="panel" role="search" aria-label="Roblox search">
+      <div class="tabs" role="tablist" aria-label="Type">
+        <button class="tab active" id="tab-game" role="tab" aria-selected="true" title="G">Game</button>
+        <button class="tab" id="tab-user" role="tab" aria-selected="false" title="U">User</button>
+      </div>
+
+      <div class="row">
+        <input class="input" id="q" placeholder="Type a game name / universe ID / place ID • or a username / user ID" />
+        <button class="btn" id="go">Search</button>
+      </div>
+
+      <!-- controls -->
+      <div class="controls" aria-label="Result controls">
+        <select class="select" id="sortSel">
+          <option value="visits">Sort: Visits</option>
+          <option value="playing">Sort: Playing</option>
+          <option value="favorites">Sort: Favorites</option>
+          <option value="likes">Sort: Likes %</option>
+          <option value="name">Sort: Name</option>
+        </select>
+        <input class="num" id="minPlayers" type="number" min="0" step="1" placeholder="Min playing"/>
+        <input class="num" id="minVisits" type="number" min="0" step="1000" placeholder="Min visits"/>
+        <button class="tool" id="applyBtn">Apply</button>
+        <button class="tool" id="randBtn">🎲 Surprise me</button>
+        <button class="tool" id="themeBtn">Light/Dark</button>
+      </div>
+
+      <p class="muted" style="margin:10px 0 0">/ focus • Enter search • G/U switch • Cooldown stops spam. <span class="chip" id="badge">Mode: Game</span></p>
+    </section>
+
+    <!-- Utilities -->
+    <div class="tools">
+      <button class="tool" id="copyBtn">Copy link</button>
+      <button class="tool" id="booksBtn">Bookmarks</button>
+      <button class="tool" id="exportBtn">Export</button>
+      <label class="tool" style="cursor:pointer">
+        Import <input type="file" id="importFile" accept=".json" style="display:none" />
+      </label>
+      <button class="tool" id="recentBtn">Recent</button>
+      <button class="tool" id="clearBtn">Clear</button>
+    </div>
+
+    <!-- Results -->
+    <div id="out" aria-live="polite" aria-busy="false"></div>
+
+    <!-- Ads -->
+    <div class="adsense-box">
+      <ins class="adsbygoogle" style="display:block"
+           data-ad-client="ca-pub-6941574746900426" data-ad-slot="5368161496"
+           data-ad-format="auto" data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
+    </div>
+
+    <!-- Compare -->
+    <section class="card" id="compare" aria-label="Compare users">
+      <h2 style="text-align:center;margin:0 0 8px">Quick Compare (Users)</h2>
+      <div class="row">
+        <input class="input" id="cmpA" placeholder="Username or ID A">
+        <input class="input" id="cmpB" placeholder="Username or ID B">
+        <button class="btn" id="cmpBtn">Compare</button>
+      </div>
+      <div id="cmpOut" class="muted" style="margin-top:8px;text-align:center">Enter two users to compare basic stats.</div>
+    </section>
+
+    <!-- Contact -->
+    <section class="card" id="contact" style="text-align:center;">
+      <h2 style="margin:0 0 6px">Contact</h2>
+      <p class="muted" style="margin:0 0 12px">This form sends to <strong>supp.roxzy@gmail.com</strong>. If the mail service blocks the first try, you’ll get a button to send via <em>Gmail Web</em>.</p>
+
+      <form id="contactForm" style="display:grid; place-items:center; gap:10px;">
+        <input class="input" style="max-width:620px" name="name" id="cName" placeholder="Your name" required>
+        <input class="input" style="max-width:620px" type="email" name="email" id="cEmail" placeholder="you@example.com" required>
+        <input class="input" style="max-width:620px" name="subject" id="cSubject" placeholder="Subject" required>
+        <textarea class="input" style="max-width:620px; height:120px" name="message" id="cMessage" placeholder="Your message…" required></textarea>
+        <div id="sendRow" style="display:flex; gap:8px; align-items:center; justify-content:center;">
+          <button class="btn" type="submit" id="sendBtn">Send message</button>
+          <button class="btn" type="button" id="gmailBtn" style="display:none; background:linear-gradient(90deg,#9cff9c,#7af1ff)">Send via Gmail Web</button>
+        </div>
+        <div id="sendNote" class="muted" style="min-height:18px"></div>
+      </form>
+    </section>
+
+    <!-- How it works / FAQ -->
+    <section class="card" id="how">
+      <h2 style="margin:0 0 8px; text-align:center">How Roblox Lookup Works</h2>
+      <p>Enter a game name, universe ID, or place ID to discover experiences. For users, type a username or user ID. Data comes from publicly available endpoints and is shown with tools like sorting, filtering, bookmarks, share links, and a basic compare view. No login required.</p>
+      <h3>Tips</h3>
+      <ul>
+        <li>Press <b>G</b>/<b>U</b> to switch modes.</li>
+        <li>Sort by <i>Visits</i>, <i>Playing</i>, <i>Favorites</i>, <i>Likes %</i>, or <i>Name</i>. Use filters to hide low-traffic games.</li>
+        <li>Use Bookmarks (and Export/Import) to keep favorites across devices.</li>
+        <li>“🎲 Surprise me” opens a random item from your last results.</li>
+      </ul>
+      <h3>FAQ</h3>
+      <p><b>Is this official?</b> No, this fansite isn’t affiliated with Roblox.</p>
+      <p><b>Do you track me?</b> Bookmarks and recent searches are stored locally in your browser.</p>
+    </section>
+
+    <section class="card" id="policy" style="text-align:left">
+      <h2 style="margin:0 0 8px; text-align:center">Privacy & Terms (Short)</h2>
+      <p><b>Privacy:</b> We use local storage for bookmarks/recent searches. Advertising cookies may be used by ad partners (consent may appear depending on region). Contact form data is only what you submit.</p>
+      <p><b>Terms:</b> Use the site as-is. All Roblox content and trademarks belong to their owners. Abusive traffic may be limited.</p>
+    </section>
+
+    <footer>© Roblox Lookup — not affiliated with Roblox. • <a href="#how">How it works</a> • <a href="#policy">Privacy & Terms</a></footer>
+  </div>
+
+  <script>
+/* ======================= SAFE CORE ======================= */
+// Safe localStorage shim (no crashes in private mode/iframes)
 const LS = (() => {
   try {
-    const t = "__rbx_test__";
-    window.localStorage.setItem(t, "1");
-    window.localStorage.removeItem(t);
-    return {
-      get: (k) => window.localStorage.getItem(k),
-      set: (k, v) => window.localStorage.setItem(k, v),
-      remove: (k) => window.localStorage.removeItem(k),
-    };
-  } catch {
-    const mem = {};
-    return {
-      get: (k) => (k in mem ? mem[k] : null),
-      set: (k, v) => { mem[k] = String(v); },
-      remove: (k) => { delete mem[k]; },
-    };
-  }
+    const t="__t"; localStorage.setItem(t,"1"); localStorage.removeItem(t);
+    return {get:(k)=>localStorage.getItem(k), set:(k,v)=>localStorage.setItem(k,v), remove:(k)=>localStorage.removeItem(k)};
+  } catch { const m={}; return {get:(k)=>m[k]??null, set:(k,v)=>{m[k]=String(v)}, remove:(k)=>{delete m[k]}}; }
 })();
+const hasMM = typeof matchMedia==="function";
+const prefersLight = hasMM && matchMedia("(prefers-color-scheme: light)").matches;
 
-// Safe matchMedia
-const hasMM = typeof window.matchMedia === "function";
-const prefersLight = hasMM ? !!window.matchMedia("(prefers-color-scheme: light)").matches : false;
+const $ = (s)=>document.querySelector(s);
+function on(sel,evt,fn){ const el=$(sel); if(!el){ console.warn("[bind] missing:",sel); return; } el.addEventListener(evt,fn,{passive:true}); }
+const sleep=(ms)=>new Promise(r=>setTimeout(r,ms));
 
-// Tiny helper
-const $ = (s) => document.querySelector(s);
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-
-// Global, but only after DOM ready to avoid null refs
-let MODE = "game";
-let lastSearchAt = 0;
-let cooldownTimer = null;
-
-const COOLDOWN_MS = 3500;
-const BOOK_KEY = "rbx_lookup_bookmarks_v1";
-const RECENT_KEY = "rbx_lookup_recent_v1";
-const THEME_KEY = "rbx_lookup_theme";
-
-const GAME_CACHE = new Map();
-const LAST_RESULTS = { games: [] };
-
-// Roblox proxied endpoints (CORS-friendly)
+/* ======================= CONFIG ======================= */
 const RBX = {
-  apis: "https://apis.roproxy.com",
-  games: "https://games.roproxy.com",
-  thumbs: "https://thumbnails.roproxy.com",
-  users: "https://users.roproxy.com",
-  friends: "https://friends.roproxy.com",
-  presence: "https://presence.roproxy.com",
+  apis: 'https://apis.roproxy.com',
+  games: 'https://games.roproxy.com',
+  thumbs:'https://thumbnails.roproxy.com',
+  users: 'https://users.roproxy.com',
+  friends:'https://friends.roproxy.com',
+  presence:'https://presence.roproxy.com'
 };
+const COOLDOWN_MS = 3500;
+const BOOK_KEY='rbx_lookup_bookmarks_v1';
+const RECENT_KEY='rbx_lookup_recent_v1';
+const THEME_KEY='rbx_lookup_theme';
 
-/* ======================= THEME (SAFE) ======================= */
-function applyTheme(theme) {
-  const t = theme === "light" ? "light" : "dark";
-  document.documentElement.setAttribute("data-theme", t);
-  LS.set(THEME_KEY, t);
-  const btn = $("#themeBtn");
-  if (btn) btn.textContent = t === "light" ? "Dark mode" : "Light mode";
+let MODE='game', lastSearchAt=0, cooldownTimer=null;
+const GAME_CACHE=new Map();
+const LAST_RESULTS={games:[]};
+
+/* ======================= THEME ======================= */
+function applyTheme(theme){
+  const t = theme==='light'?'light':'dark';
+  document.documentElement.setAttribute('data-theme', t);
+  LS.set(THEME_KEY,t);
+  const b=$("#themeBtn"); if(b) b.textContent = t==='light'?'Dark mode':'Light mode';
 }
-function toggleTheme() {
-  const cur = LS.get(THEME_KEY) || (prefersLight ? "light" : "dark");
-  applyTheme(cur === "dark" ? "light" : "dark");
+function toggleTheme(){
+  const cur = LS.get(THEME_KEY) || (prefersLight?'light':'dark');
+  applyTheme(cur==='dark'?'light':'dark');
 }
 
 /* ======================= HELPERS ======================= */
-async function j(url, opt = {}) {
-  const r = await fetch(url, { ...opt, cache: "no-store" });
-  if (!r.ok) throw new Error("HTTP " + r.status);
-  return r.json();
-}
-function n(x) {
-  return typeof x === "number" ? x.toLocaleString() : "N/A";
-}
-function likeRatio(up, down) {
-  const u = +up || 0, d = +down || 0, t = u + d;
-  if (!t) return { cls: "ratio-mid", label: "0%" };
-  const p = Math.round((u / t) * 100);
-  return { cls: p >= 80 ? "ratio-good" : p >= 60 ? "ratio-mid" : "ratio-bad", label: p + "%" };
-}
+async function j(url,opt={}){ const r=await fetch(url,{...opt,cache:'no-store'}); if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); }
+function n(x){ return typeof x==='number'? x.toLocaleString() : 'N/A'; }
+function likeRatio(up,down){ const u=+up||0,d=+down||0,t=u+d; if(!t) return {cls:'ratio-mid',label:'0%'}; const p=Math.round((u/t)*100); return {cls:p>=80?'ratio-good':p>=60?'ratio-mid':'ratio-bad',label:p+'%'}; }
 
 /* ======================= SKELETON ======================= */
-const sk = () => `
-  <div class="skeleton"><div class="shimmer"></div>
-    <div class="sk-row">
-      <div class="sk-ava"></div>
-      <div class="sk-lines">
-        <div class="sk-line long"></div>
-        <div class="sk-line med"></div>
-        <div class="sk-line short"></div>
-      </div>
-    </div>
-  </div>`;
+const sk=()=>`<div class="skeleton"><div class="shimmer"></div>
+  <div class="sk-row"><div class="sk-ava"></div><div class="sk-lines">
+    <div class="sk-line long"></div><div class="sk-line med"></div><div class="sk-line short"></div>
+  </div></div></div>`;
 
 /* ======================= GAME LOOKUP ======================= */
-async function autoUniverses(q) {
+async function autoUniverses(q){
   const url = `${RBX.apis}/games-autocomplete/v1/get-suggestion/${encodeURIComponent(q)}`;
-  const data = await j(url).catch(() => ({ entries: [] }));
-  const ids = new Set();
-  (data.entries || []).forEach((e) => { if (e?.universeId > 0) ids.add(e.universeId); });
+  const data = await j(url).catch(()=>({entries:[]}));
+  const ids=new Set(); (data.entries||[]).forEach(e=>{ if(e?.universeId>0) ids.add(e.universeId); });
   return [...ids];
 }
-async function placeToUniverse(placeId) {
-  try {
-    const u = await j(`${RBX.apis}/universes/v1/places/${placeId}/universe`);
-    return u.universeId || u?.data?.universeId || u?.data?.[0]?.universeId || null;
-  } catch { return null; }
+async function placeToUniverse(placeId){
+  try{ const u = await j(`${RBX.apis}/universes/v1/places/${placeId}/universe`); return u.universeId||u?.data?.universeId||u?.data?.[0]?.universeId||null; }
+  catch{ return null; }
 }
-async function gameDetails(universeIds) {
-  if (!universeIds.length) return [];
-  const chunks = [];
-  for (let i = 0; i < universeIds.length; i += 50) chunks.push(universeIds.slice(i, i + 50));
-  const all = [];
-  for (const group of chunks) {
-    const ids = group.join(",");
-    const [games, thumbs, votes] = await Promise.all([
-      j(`${RBX.games}/v1/games?universeIds=${ids}`).catch(() => ({ data: [] })),
-      j(`${RBX.thumbs}/v1/games/icons?universeIds=${ids}&size=150x150&format=Png&isCircular=false`).catch(() => ({ data: [] })),
-      j(`${RBX.games}/v1/games/votes?universeIds=${ids}`).catch(() => ({ data: [] })),
+async function gameDetails(universeIds){
+  if(!universeIds.length) return [];
+  const chunks=[]; for(let i=0;i<universeIds.length;i+=50) chunks.push(universeIds.slice(i,i+50));
+  const all=[];
+  for(const group of chunks){
+    const ids=group.join(',');
+    const [games,thumbs,votes]=await Promise.all([
+      j(`${RBX.games}/v1/games?universeIds=${ids}`).catch(()=>({data:[]})),
+      j(`${RBX.thumbs}/v1/games/icons?universeIds=${ids}&size=150x150&format=Png&isCircular=false`).catch(()=>({data:[]})),
+      j(`${RBX.games}/v1/games/votes?universeIds=${ids}`).catch(()=>({data:[]}))
     ]);
-    const t = new Map(); (thumbs.data || []).forEach((a) => t.set(String(a.targetId), a.imageUrl));
-    const v = new Map(); (votes.data || []).forEach((x) =>
-      v.set(String(x.id || x.universeId || x.targetId), { up: x.upVotes ?? 0, down: x.downVotes ?? 0 })
-    );
-    (games.data || []).forEach((g) => {
-      const key = String(g.id), vv = v.get(key) || { up: g.totalUpVotes ?? 0, down: g.totalDownVotes ?? 0 };
-      all.push({
-        id: g.id, rootPlaceId: g.rootPlaceId, name: g.name, creator: g.creator?.name || "Unknown",
-        visits: g.visits ?? 0, playing: g.playing ?? 0, favorites: g.favoritedCount ?? 0,
-        up: vv.up || 0, down: vv.down || 0, thumb: t.get(key) || "",
-      });
+    const t=new Map(); (thumbs.data||[]).forEach(a=>t.set(String(a.targetId),a.imageUrl));
+    const v=new Map(); (votes.data||[]).forEach(x=>v.set(String(x.id||x.universeId||x.targetId),{up:x.upVotes??0,down:x.downVotes??0}));
+    (games.data||[]).forEach(g=>{
+      const key=String(g.id), vv=v.get(key)||{up:g.totalUpVotes??0,down:g.totalDownVotes??0};
+      all.push({ id:g.id, rootPlaceId:g.rootPlaceId, name:g.name, creator:g.creator?.name||'Unknown',
+        visits:g.visits??0, playing:g.playing??0, favorites:g.favoritedCount??0,
+        up:vv.up||0, down:vv.down||0, thumb:t.get(key)||'' });
     });
     await sleep(60);
   }
   return all;
 }
-function paintGames(arr) {
-  const res = $("#out");
-  if (!arr.length) { res.innerHTML = `<div class="card"><p class="error">No games found.</p></div>`; return; }
-  let html = `<div class="card"><h2 style="text-align:center;margin:0 0 8px">Games</h2><div class="list">`;
-  for (const g of arr) {
-    GAME_CACHE.set(g.id, g);
-    const lr = likeRatio(g.up, g.down);
+function paintGames(arr){
+  const res=$("#out");
+  if(!arr.length){ res.innerHTML=`<div class="card"><p class="error">No games found.</p></div>`; return; }
+  let html=`<div class="card"><h2 style="text-align:center;margin:0 0 8px">Games</h2><div class="list">`;
+  for(const g of arr){
+    GAME_CACHE.set(g.id,g);
+    const lr=likeRatio(g.up,g.down);
     html += `
       <div class="item" data-view-game="${g.id}">
         <div class="row2">
@@ -161,12 +351,10 @@ function paintGames(arr) {
   }
   html += `</div></div>`;
   res.innerHTML = html;
-  res.querySelectorAll("[data-view-game]").forEach((el) => {
-    el.addEventListener("click", () => viewGame(el.getAttribute("data-view-game")));
-  });
+  res.querySelectorAll('[data-view-game]').forEach(el=>el.addEventListener('click', ()=>viewGame(el.getAttribute('data-view-game'))));
 }
-function paintGame(g) {
-  const lr = likeRatio(g.up, g.down);
+function paintGame(g){
+  const lr=likeRatio(g.up,g.down);
   $("#out").innerHTML = `
     <div class="card">
       <div class="header-row">
@@ -188,46 +376,43 @@ function paintGame(g) {
         </div>
       </div>
     </div>`;
-  $("#bmGame").addEventListener("click", () => bookmark("game", g.id));
-  $("#copyUni").addEventListener("click", () => navigator.clipboard?.writeText(String(g.id)));
+  on('#bmGame','click', ()=>bookmark('game', g.id));
+  on('#copyUni','click', ()=>navigator.clipboard?.writeText(String(g.id)));
 }
 
 /* ======================= USER LOOKUP ======================= */
-async function userLookup(q) {
-  const out = $("#out");
+async function userLookup(q){
+  const out=$("#out");
   out.innerHTML = `<div class="card"><div class="loader"><div class="spinner"></div><div>Looking up user…</div></div></div>` + sk();
   let id = q.trim();
-  if (!/^\d+$/.test(id)) {
-    const r = await j(`${RBX.users}/v1/usernames/users`, {
-      method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ usernames: [id.toLowerCase()], excludeBannedUsers: false }),
+  if(!/^\d+$/.test(id)){
+    const r = await j(`${RBX.users}/v1/usernames/users`,{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({usernames:[id.toLowerCase()], excludeBannedUsers:false})
     });
-    if (!r?.data?.[0]) throw new Error("User not found");
+    if(!r?.data?.[0]) throw new Error('User not found');
     id = String(r.data[0].id);
   }
-  const [u, ava, fri, fol, folw, pre] = await Promise.all([
+  const [u,ava,fri,fol,folw,pre]=await Promise.all([
     j(`${RBX.users}/v1/users/${id}`),
     j(`${RBX.thumbs}/v1/users/avatar-headshot?userIds=${id}&size=180x180&format=Png&isCircular=false`),
     j(`${RBX.friends}/v1/users/${id}/friends/count`),
     j(`${RBX.friends}/v1/users/${id}/followers/count`),
     j(`${RBX.friends}/v1/users/${id}/followings/count`),
-    j(`${RBX.presence}/v1/presence/users`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ userIds: [Number(id)] }) }),
+    j(`${RBX.presence}/v1/presence/users`, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({userIds:[Number(id)]})})
   ]);
-
-  const url = ava?.data?.[0]?.imageUrl || "https://placehold.co/180x180?text=Avatar";
-  const created = u.created ? new Date(u.created).toLocaleString() : "Unavailable";
-  const pt = pre?.userPresences?.[0]?.userPresenceType;
-  let sClass = "offline", sText = "Offline";
-  if (pt === 1) { sClass = "online"; sText = "Online"; }
-  else if (pt === 2) { sClass = "playing"; sText = "In Game"; }
-  else if (pt === 3) { sClass = "studio"; sText = "In Studio"; }
+  const url=ava?.data?.[0]?.imageUrl||'https://placehold.co/180x180?text=Avatar';
+  const created=u.created?new Date(u.created).toLocaleString():'Unavailable';
+  const pt=pre?.userPresences?.[0]?.userPresenceType;
+  let sClass='offline', sText='Offline';
+  if(pt===1){sClass='online';sText='Online'} else if(pt===2){sClass='playing';sText='In Game'} else if(pt===3){sClass='studio';sText='In Studio'}
 
   out.innerHTML = `
     <div class="card">
       <div class="header-row">
         <img class="avatar" src="${url}" onerror="this.src='https://placehold.co/180x180?text=Avatar'">
         <div class="info">
-          <h2 style="text-align:center">${u.name || "Unknown"} <span class="muted">(${u.displayName || "Unknown"})</span></h2>
+          <h2 style="text-align:center">${u.name||'Unknown'} <span class="muted">(${u.displayName||'Unknown'})</span></h2>
           <div class="chips">
             <span class="chip">Created: ${created}</span>
             <span class="chip">Friends: ${n(fri.count)}</span>
@@ -235,9 +420,8 @@ async function userLookup(q) {
             <span class="chip">Following: ${n(folw.count)}</span>
           </div>
           <p style="text-align:center;margin-top:6px"><b>Bio:</b> ${
-            u.description
-              ? String(u.description).replace(/[&<>]/g, m => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[m])).replace(/\n/g, "<br>")
-              : '<span class="muted">None</span>'
+            u.description ? String(u.description).replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m])).replace(/\n/g,'<br>')
+                          : '<span class="muted">None</span>'
           }</p>
           <div style="display:flex;justify-content:center;gap:8px;margin-top:8px;flex-wrap:wrap">
             <a class="btn" target="_blank" rel="noopener" href="https://www.roblox.com/users/${u.id}/profile">Open Profile</a>
@@ -248,347 +432,257 @@ async function userLookup(q) {
       </div>
       <div class="pill ${sClass}" style="position:absolute; top:16px; right:16px">${sText}</div>
     </div>`;
-  $("#bmUser").addEventListener("click", () => bookmark("user", String(u.id)));
-  $("#copyUid").addEventListener("click", () => navigator.clipboard?.writeText(String(u.id)));
+  on('#bmUser','click', ()=>bookmark('user', String(u.id)));
+  on('#copyUid','click', ()=>navigator.clipboard?.writeText(String(u.id)));
 }
 
 /* ======================= CONTROLS / SEARCH ======================= */
-function startCooldown() {
-  const b = $("#go");
-  b.disabled = true;
-  let left = COOLDOWN_MS;
-  b.textContent = `Search ${Math.ceil(left / 1000)}s`;
-  cooldownTimer = setInterval(() => {
-    left -= 1000;
-    if (left <= 0) {
-      clearInterval(cooldownTimer);
-      b.disabled = false;
-      b.textContent = "Search";
-    } else b.textContent = `Search ${Math.ceil(left / 1000)}s`;
-  }, 1000);
+function startCooldown(){
+  const b=$("#go"); if(!b) return;
+  b.disabled=true; let left=COOLDOWN_MS; b.textContent=`Search ${Math.ceil(left/1000)}s`;
+  cooldownTimer=setInterval(()=>{
+    left-=1000;
+    if(left<=0){ clearInterval(cooldownTimer); b.disabled=false; b.textContent='Search'; }
+    else b.textContent=`Search ${Math.ceil(left/1000)}s`;
+  },1000);
 }
-function setMode(m) {
-  MODE = m;
-  $("#tab-game").classList.toggle("active", m === "game");
-  $("#tab-user").classList.toggle("active", m === "user");
-  $("#tab-game").setAttribute("aria-selected", m === "game");
-  $("#tab-user").setAttribute("aria-selected", m === "user");
-  $("#badge").textContent = "Mode: " + (m === "game" ? "Game" : "User");
-  $("#q").focus();
+function setMode(m){
+  MODE=m;
+  const tg=$("#tab-game"), tu=$("#tab-user");
+  if(tg&&tu){
+    tg.classList.toggle('active', m==='game'); tu.classList.toggle('active', m==='user');
+    tg.setAttribute('aria-selected', m==='game'); tu.setAttribute('aria-selected', m==='user');
+  }
+  const badge=$("#badge"); if(badge) badge.textContent='Mode: '+(m==='game'?'Game':'User');
+  $("#q")?.focus();
 }
-function clearResults() { $("#out").innerHTML = ""; }
+function clearResults(){ const o=$("#out"); if(o) o.innerHTML=''; }
 
-async function lookup() {
-  const now = Date.now();
-  if (now < lastSearchAt + COOLDOWN_MS) return;
-  lastSearchAt = now;
-
-  const q = $("#q").value.trim();
-  if (!q) { $("#out").innerHTML = `<div class="card"><p class="error">Type something to search.</p></div>`; return; }
-
-  startCooldown();
-  saveRecent(q);
-
-  try {
-    if (MODE === "user") { await userLookup(q); return; }
-
-    $("#out").innerHTML =
-      `<div class="card"><div class="loader"><div class="spinner"></div><div>Searching games…</div></div></div>` + sk() + sk();
-
-    let ids = [];
-    if (/^\d+$/.test(q)) {
+async function lookup(){
+  const now=Date.now(); if(now < lastSearchAt + COOLDOWN_MS) return; lastSearchAt = now;
+  const q=$("#q")?.value.trim(); if(!q){ $("#out").innerHTML=`<div class="card"><p class="error">Type something to search.</p></div>`; return; }
+  startCooldown(); saveRecent(q);
+  try{
+    if(MODE==='user'){ await userLookup(q); return; }
+    $("#out").innerHTML = `<div class="card"><div class="loader"><div class="spinner"></div><div>Searching games…</div></div></div>` + sk() + sk();
+    let ids=[];
+    if(/^\d+$/.test(q)){
       const uniDirect = await gameDetails([Number(q)]);
-      if (uniDirect.length) { LAST_RESULTS.games = uniDirect; applyControls(); return; }
-      const uni = await placeToUniverse(q);
-      if (uni) ids = [uni];
-    } else {
-      ids = await autoUniverses(q);
-    }
-
-    if (!ids.length) { $("#out").innerHTML = `<div class="card"><p class="error">No games found. Try another name or an ID.</p></div>`; return; }
-    const games = await gameDetails(ids);
-    LAST_RESULTS.games = games.slice();
+      if(uniDirect.length){ LAST_RESULTS.games = uniDirect; applyControls(); return; }
+      const uni=await placeToUniverse(q); if(uni) ids=[uni];
+    }else{ ids=await autoUniverses(q); }
+    if(!ids.length){ $("#out").innerHTML=`<div class="card"><p class="error">No games found. Try another name or an ID.</p></div>`; return; }
+    LAST_RESULTS.games = await gameDetails(ids);
     applyControls();
-  } catch (e) {
+  }catch(e){
     console.error(e);
-    $("#out").innerHTML = `<div class="card"><p class="error">Search failed. ${e.message || ""}</p></div>`;
-    // If we failed instantly, reset the cooldown button so UX isn't stuck
-    if (cooldownTimer) { clearInterval(cooldownTimer); const b = $("#go"); b.disabled = false; b.textContent = "Search"; }
+    $("#out").innerHTML = `<div class="card"><p class="error">Search failed. ${e.message||''}</p></div>`;
+    if(cooldownTimer){ clearInterval(cooldownTimer); const b=$("#go"); if(b){ b.disabled=false; b.textContent='Search'; } }
   }
 }
-
-function applyControls() {
-  if (!LAST_RESULTS.games.length) return;
-  const minP = Number($("#minPlayers").value || 0);
-  const minV = Number($("#minVisits").value || 0);
-  let arr = LAST_RESULTS.games.filter((g) => g.playing >= minP && g.visits >= minV);
-
-  const sort = $("#sortSel").value;
-  const likePct = (g) => { const t = g.up + g.down; return t ? (g.up / t) : 0; };
-  arr.sort((a, b) => {
-    switch (sort) {
-      case "playing": return (b.playing || 0) - (a.playing || 0);
-      case "favorites": return (b.favorites || 0) - (a.favorites || 0);
-      case "likes": return likePct(b) - likePct(a);
-      case "name": return String(a.name).localeCompare(String(b.name));
-      default: return (b.visits || 0) - (a.visits || 0);
+function applyControls(){
+  if(!LAST_RESULTS.games.length) return;
+  const minP=Number($("#minPlayers")?.value||0);
+  const minV=Number($("#minVisits")?.value||0);
+  let arr = LAST_RESULTS.games.filter(g=>g.playing>=minP && g.visits>=minV);
+  const sort=$("#sortSel")?.value || 'visits';
+  const likePct=g=>{ const t=g.up+g.down; return t? (g.up/t):0; };
+  arr.sort((a,b)=>{
+    switch(sort){
+      case 'playing': return (b.playing||0)-(a.playing||0);
+      case 'favorites': return (b.favorites||0)-(a.favorites||0);
+      case 'likes': return likePct(b)-likePct(a);
+      case 'name': return String(a.name).localeCompare(String(b.name));
+      default: return (b.visits||0)-(a.visits||0);
     }
   });
   paintGames(arr);
 }
-
-async function viewGame(id) {
+async function viewGame(id){
   let g = GAME_CACHE.get(Number(id));
-  if (!g) { const arr = await gameDetails([Number(id)]).catch(() => []); g = arr[0]; }
-  if (!g) { $("#out").innerHTML = `<div class="card"><p class="error">Couldn’t load that game.</p></div>`; return; }
+  if(!g){ const arr=await gameDetails([Number(id)]).catch(()=>[]); g=arr[0]; }
+  if(!g){ $("#out").innerHTML = `<div class="card"><p class="error">Couldn’t load that game.</p></div>`; return; }
   paintGame(g);
 }
 
-/* ======================= BOOKMARKS / RECENT / SHARE (SAFE LS) ======================= */
-function bookmark(type, id) {
-  let data;
-  try { data = JSON.parse(LS.get(BOOK_KEY) || "{}"); } catch { data = {}; }
-  if (!data[type]) data[type] = [];
-  if (!data[type].includes(String(id))) data[type].unshift(String(id));
-  LS.set(BOOK_KEY, JSON.stringify(data));
-  alert("Saved to bookmarks!");
+/* ======================= BOOKMARKS / RECENT / SHARE ======================= */
+function bookmark(type,id){
+  let data; try{ data=JSON.parse(LS.get(BOOK_KEY)||'{}'); }catch{ data={}; }
+  if(!data[type]) data[type]=[];
+  if(!data[type].includes(String(id))) data[type].unshift(String(id));
+  LS.set(BOOK_KEY, JSON.stringify(data)); alert('Saved to bookmarks!');
 }
-async function showBookmarks() {
-  let data;
-  try { data = JSON.parse(LS.get(BOOK_KEY) || "{}"); } catch { data = {}; }
-  const gIds = (data.game || []).slice(0, 40).map(Number);
-  const uIds = (data.user || []).slice(0, 40).map(Number);
-  let html = `<div class="card"><h2 style="text-align:center;margin:0 0 8px">My Bookmarks</h2>`;
-  if (gIds.length) {
-    const games = await gameDetails(gIds);
+async function showBookmarks(){
+  let data; try{ data=JSON.parse(LS.get(BOOK_KEY)||'{}'); }catch{ data={}; }
+  const gIds=(data.game||[]).slice(0,40).map(Number);
+  const uIds=(data.user||[]).slice(0,40).map(Number);
+  let html=`<div class="card"><h2 style="text-align:center;margin:0 0 8px">My Bookmarks</h2>`;
+  if(gIds.length){
+    const games=await gameDetails(gIds);
     html += `<h3 style="text-align:center">Games</h3><div class="list">` +
-      games.map(g => `<div class="item" data-view-game="${g.id}"><div class="row2"><img class="thumb" src="${g.thumb}" onerror="this.src='https://placehold.co/150x150?text=Game'"><div class="info"><h2>${g.name}</h2><div class="meta"><span>Visits: ${n(g.visits)}</span></div></div></div></div>`).join("") +
+      games.map(g=>`<div class="item" data-view-game="${g.id}"><div class="row2"><img class="thumb" src="${g.thumb}" onerror="this.src='https://placehold.co/150x150?text=Game'"><div class="info"><h2>${g.name}</h2><div class="meta"><span>Visits: ${n(g.visits)}</span></div></div></div></div>`).join('') +
       `</div>`;
   }
-  if (uIds.length) {
+  if(uIds.length){
     html += `<h3 style="text-align:center;margin-top:12px">Users</h3><div class="list">` +
-      uIds.map(uid => `<div class="item" data-open-user="${uid}"><div class="row2"><div class="info"><h2 style="text-align:center">User ID ${uid}</h2><div class="meta"><span>Click to open</span></div></div></div></div>`).join("") +
+      uIds.map(uid=>`<div class="item" data-open-user="${uid}"><div class="row2"><div class="info"><h2 style="text-align:center">User ID ${uid}</h2><div class="meta"><span>Click to open</span></div></div></div></div>`).join('') +
       `</div>`;
   }
-  if (!gIds.length && !uIds.length) html += `<p class="muted" style="text-align:center">No bookmarks yet.</p>`;
+  if(!gIds.length && !uIds.length) html += `<p class="muted" style="text-align:center">No bookmarks yet.</p>`;
   html += `</div>`;
   $("#out").innerHTML = html;
-
-  $("#out").querySelectorAll("[data-view-game]").forEach(el => {
-    el.addEventListener("click", () => viewGame(el.getAttribute("data-view-game")));
-  });
-  $("#out").querySelectorAll("[data-open-user]").forEach(el => {
-    el.addEventListener("click", () => {
-      setMode("user"); $("#q").value = el.getAttribute("data-open-user"); lookup();
-    });
-  });
+  $("#out").querySelectorAll('[data-view-game]').forEach(el=>el.addEventListener('click', ()=>viewGame(el.getAttribute('data-view-game'))));
+  $("#out").querySelectorAll('[data-open-user]').forEach(el=>el.addEventListener('click', ()=>{
+    setMode('user'); $("#q").value = el.getAttribute('data-open-user'); lookup();
+  }));
 }
-function exportBookmarks() {
-  const data = LS.get(BOOK_KEY) || "{}";
-  const blob = new Blob([data], { type: "application/json" });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "roblox-bookmarks.json";
-  a.click();
-  URL.revokeObjectURL(a.href);
+function exportBookmarks(){
+  const data = LS.get(BOOK_KEY)||'{}';
+  const blob = new Blob([data],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='roblox-bookmarks.json'; a.click(); URL.revokeObjectURL(a.href);
 }
-function importBookmarks(file) {
-  const reader = new FileReader();
-  reader.onload = () => {
-    try {
-      const data = JSON.parse(String(reader.result || "{}"));
-      LS.set(BOOK_KEY, JSON.stringify(data || {}));
-      alert("Imported!");
-    } catch { alert("Invalid JSON file."); }
-  };
+function importBookmarks(file){
+  const reader=new FileReader();
+  reader.onload=()=>{ try{ const data=JSON.parse(String(reader.result||'{}')); LS.set(BOOK_KEY, JSON.stringify(data||{})); alert('Imported!'); }catch{ alert('Invalid JSON file.'); } };
   reader.readAsText(file);
 }
-function saveRecent(q) {
-  let arr;
-  try { arr = JSON.parse(LS.get(RECENT_KEY) || "[]"); } catch { arr = []; }
-  arr = arr.filter(x => x !== q);
-  arr.unshift(q); while (arr.length > 15) arr.pop();
+function saveRecent(q){
+  let arr; try{ arr=JSON.parse(LS.get(RECENT_KEY)||'[]'); }catch{ arr=[]; }
+  arr = arr.filter(x=>x!==q); arr.unshift(q); while(arr.length>15) arr.pop();
   LS.set(RECENT_KEY, JSON.stringify(arr));
 }
-function showRecent() {
-  let arr;
-  try { arr = JSON.parse(LS.get(RECENT_KEY) || "[]"); } catch { arr = []; }
-  if (!arr.length) { alert("No recent searches yet."); return; }
-  $("#out").innerHTML =
-    `<div class="card"><h2 style="text-align:center;margin:0 0 8px">Recent searches</h2><div class="list">` +
-    arr.map(q => `<div class="item" data-re-search="${q.replace(/"/g, "&quot;")}"><div class="row2"><div class="info"><h2 style="text-align:center">${q}</h2><div class="meta"><span>Click to search</span></div></div></div></div>`).join("") +
+function showRecent(){
+  let arr; try{ arr=JSON.parse(LS.get(RECENT_KEY)||'[]'); }catch{ arr=[]; }
+  if(!arr.length){ alert('No recent searches yet.'); return; }
+  $("#out").innerHTML = `<div class="card"><h2 style="text-align:center;margin:0 0 8px">Recent searches</h2><div class="list">` +
+    arr.map(q=>`<div class="item" data-re-search="${q.replace(/"/g,'&quot;')}"><div class="row2"><div class="info"><h2 style="text-align:center">${q}</h2><div class="meta"><span>Click to search</span></div></div></div></div>`).join('') +
     `</div></div>`;
-  $("#out").querySelectorAll("[data-re-search]").forEach(el => {
-    el.addEventListener("click", () => { $("#q").value = el.getAttribute("data-re-search"); lookup(); });
+  $("#out").querySelectorAll('[data-re-search]').forEach(el=>{
+    el.addEventListener('click', ()=>{ $("#q").value = el.getAttribute('data-re-search'); lookup(); });
   });
 }
-function copyLink() {
-  const p = new URLSearchParams(); p.set("mode", MODE);
-  const q = $("#q").value.trim(); if (q) p.set("q", q);
-  const base = (location.origin && location.origin !== "null") ? (location.origin + location.pathname) : location.href.split("?")[0];
-  const link = `${base}?${p.toString()}`;
-  navigator.clipboard?.writeText(link).then(() => {
-    const b = $("#copyBtn"); b.textContent = "Copied!"; setTimeout(() => b.textContent = "Copy link", 1200);
-  });
+function copyLink(){
+  const p=new URLSearchParams(); p.set('mode',MODE);
+  const q=$("#q")?.value.trim(); if(q) p.set('q',q);
+  const base = (location.origin && location.origin!=="null") ? (location.origin+location.pathname) : location.href.split("?")[0];
+  const link=`${base}?${p.toString()}`;
+  navigator.clipboard?.writeText(link).then(()=>{ const b=$("#copyBtn"); if(b){ b.textContent='Copied!'; setTimeout(()=>b.textContent='Copy link',1200); } });
 }
 
 /* ======================= COMPARE ======================= */
-async function idFromNameOrId(x) {
-  let id = String(x).trim();
-  if (/^\d+$/.test(id)) return id;
-  const r = await j(`${RBX.users}/v1/usernames/users`, {
-    method: "POST", headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ usernames: [id.toLowerCase()], excludeBannedUsers: false }),
-  });
-  if (!r?.data?.[0]) throw new Error("User not found: " + x);
+async function idFromNameOrId(x){
+  let id=String(x).trim(); if(/^\d+$/.test(id)) return id;
+  const r=await j(`${RBX.users}/v1/usernames/users`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({usernames:[id.toLowerCase()],excludeBannedUsers:false})});
+  if(!r?.data?.[0]) throw new Error('User not found: '+x);
   return String(r.data[0].id);
 }
-async function getUserLite(id) {
-  const [u, fri, fol, folw] = await Promise.all([
+async function getUserLite(id){
+  const [u,fri,fol,folw]=await Promise.all([
     j(`${RBX.users}/v1/users/${id}`),
     j(`${RBX.friends}/v1/users/${id}/friends/count`),
     j(`${RBX.friends}/v1/users/${id}/followers/count`),
     j(`${RBX.friends}/v1/users/${id}/followings/count`),
   ]);
-  return { id: u.id, name: u.name, displayName: u.displayName, created: u.created, friends: fri.count, followers: fol.count, following: folw.count };
+  return {id:u.id,name:u.name,displayName:u.displayName,created:u.created,friends:fri.count,followers:fol.count,following:folw.count};
 }
-async function compareUsers() {
-  const a = $("#cmpA").value.trim(), b = $("#cmpB").value.trim();
-  if (!a || !b) { $("#cmpOut").textContent = "Enter two usernames or IDs."; return; }
+async function compareUsers(){
+  const a=$("#cmpA")?.value.trim(), b=$("#cmpB")?.value.trim();
+  if(!a||!b){ $("#cmpOut").textContent='Enter two usernames or IDs.'; return; }
   $("#cmpOut").innerHTML = '<div class="loader"><div class="spinner"></div><div>Comparing…</div></div>';
-  try {
-    const [idA, idB] = await Promise.all([idFromNameOrId(a), idFromNameOrId(b)]);
-    const [ua, ub] = await Promise.all([getUserLite(idA), getUserLite(idB)]);
-    const older = new Date(ua.created) < new Date(ub.created) ? ua : ub;
+  try{
+    const [idA,idB]=await Promise.all([idFromNameOrId(a), idFromNameOrId(b)]);
+    const [ua,ub]=await Promise.all([getUserLite(idA), getUserLite(idB)]);
+    const older=new Date(ua.created) < new Date(ub.created) ? ua : ub;
     $("#cmpOut").innerHTML = `
       <div class="list">
-        <div class="item" tabindex="0">
-          <div class="info">
-            <h2 style="text-align:center">${ua.name} <span class="muted">(${ua.displayName})</span></h2>
-            <div class="meta"><span>Friends: <b>${n(ua.friends)}</b></span><span>Followers: <b>${n(ua.followers)}</b></span><span>Following: <b>${n(ua.following)}</b></span><span>Created: ${new Date(ua.created).toLocaleDateString()}</span></div>
-          </div>
-        </div>
-        <div class="item" tabindex="0">
-          <div class="info">
-            <h2 style="text-align:center">${ub.name} <span class="muted">(${ub.displayName})</span></h2>
-            <div class="meta"><span>Friends: <b>${n(ub.friends)}</b></span><span>Followers: <b>${n(ub.followers)}</b></span><span>Following: <b>${n(ub.following)}</b></span><span>Created: ${new Date(ub.created).toLocaleDateString()}</span></div>
-          </div>
-        </div>
+        <div class="item" tabindex="0"><div class="info">
+          <h2 style="text-align:center">${ua.name} <span class="muted">(${ua.displayName})</span></h2>
+          <div class="meta"><span>Friends: <b>${n(ua.friends)}</b></span><span>Followers: <b>${n(ua.followers)}</b></span><span>Following: <b>${n(ua.following)}</b></span><span>Created: ${new Date(ua.created).toLocaleDateString()}</span></div>
+        </div></div>
+        <div class="item" tabindex="0"><div class="info">
+          <h2 style="text-align:center">${ub.name} <span class="muted">(${ub.displayName})</span></h2>
+          <div class="meta"><span>Friends: <b>${n(ub.friends)}</b></span><span>Followers: <b>${n(ub.followers)}</b></span><span>Following: <b>${n(ub.following)}</b></span><span>Created: ${new Date(ub.created).toLocaleDateString()}</span></div>
+        </div></div>
       </div>
-      <p class="muted" style="text-align:center;margin-top:8px">Older account: <b>${older.name}</b></p>
-    `;
-  } catch (e) { $("#cmpOut").textContent = e.message || "Compare failed."; }
+      <p class="muted" style="text-align:center;margin-top:8px">Older account: <b>${older.name}</b></p>`;
+  }catch(e){ $("#cmpOut").textContent = e.message||'Compare failed.'; }
 }
 
 /* ======================= CONTACT FORM ======================= */
 const FORM_ENDPOINT = "https://formsubmit.co/ajax/supp.roxzy@gmail.com";
-async function sendContact(e) {
+async function sendContact(e){
   e.preventDefault();
-  const btn = $("#sendBtn");
-  const gmailBtn = $("#gmailBtn");
-  const note = $("#sendNote");
-  btn.disabled = true; btn.textContent = "Sending…"; gmailBtn.style.display = "none"; note.textContent = "";
-
-  const payload = {
-    name: $("#cName").value.trim(),
-    email: $("#cEmail").value.trim(),
-    subject: $("#cSubject").value.trim(),
-    message: $("#cMessage").value.trim(),
-  };
-  try {
-    const r = await fetch(FORM_ENDPOINT, {
-      method: "POST", headers: { "Content-Type": "application/json", "Accept": "application/json" },
-      body: JSON.stringify(payload),
-    });
-    const data = await r.json().catch(() => ({}));
-    if (r.ok && (data.success || data.message)) {
-      note.textContent = "✓ Message sent. Watch your inbox for a reply.";
-      btn.textContent = "Sent"; setTimeout(() => { btn.disabled = false; btn.textContent = "Send message"; }, 2000);
-      e.target.reset();
-    } else { throw new Error("Service error"); }
-  } catch {
-    note.textContent = "Could not send via service. You can send quickly via Gmail Web.";
-    gmailBtn.style.display = "inline-block";
-    gmailBtn.onclick = () => {
-      const u = new URL("https://mail.google.com/mail/");
-      u.searchParams.set("view", "cm");
-      u.searchParams.set("to", "supp.roxzy@gmail.com");
-      u.searchParams.set("su", payload.subject || "Roblox Lookup message");
-      u.searchParams.set("body", `${payload.message}\n\nFrom: ${payload.name} <${payload.email}>`);
-      window.open(u.toString(), "_blank");
+  const btn=$("#sendBtn"), gmailBtn=$("#gmailBtn"), note=$("#sendNote");
+  btn.disabled=true; btn.textContent='Sending…'; gmailBtn.style.display='none'; note.textContent='';
+  const payload={ name:$("#cName").value.trim(), email:$("#cEmail").value.trim(), subject:$("#cSubject").value.trim(), message:$("#cMessage").value.trim() };
+  try{
+    const r=await fetch(FORM_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(payload)});
+    const data=await r.json().catch(()=>({}));
+    if(r.ok && (data.success||data.message)){ note.textContent='✓ Message sent. Watch your inbox for a reply.'; btn.textContent='Sent'; setTimeout(()=>{ btn.disabled=false; btn.textContent='Send message'; },2000); e.target.reset(); }
+    else throw new Error('Service error');
+  }catch{
+    note.textContent='Could not send via service. You can send quickly via Gmail Web.';
+    gmailBtn.style.display='inline-block';
+    gmailBtn.onclick=()=>{
+      const u=new URL('https://mail.google.com/mail/'); u.searchParams.set('view','cm'); u.searchParams.set('to','supp.roxzy@gmail.com');
+      u.searchParams.set('su', payload.subject || 'Roblox Lookup message'); u.searchParams.set('body', `${payload.message}\n\nFrom: ${payload.name} <${payload.email}>`);
+      window.open(u.toString(), '_blank');
     };
-    btn.disabled = false; btn.textContent = "Send message";
+    btn.disabled=false; btn.textContent='Send message';
   }
 }
 
-/* ======================= INIT (AFTER DOM READY) ======================= */
-function bindEvents() {
-  // tabs
-  $("#tab-game").addEventListener("click", () => setMode("game"));
-  $("#tab-user").addEventListener("click", () => setMode("user"));
+/* ======================= INIT ======================= */
+// Show friendly error on page (debug white-screen)
+window.addEventListener('error',(ev)=>{
+  const out=$("#out"); if(!out) return;
+  out.innerHTML = `<div class="card"><p class="error">A script error occurred: ${ev.message}. If this keeps happening, try toggling Light/Dark or disabling strict privacy mode.</p></div>` + sk();
+});
 
-  // main actions
-  $("#go").addEventListener("click", lookup);
-  $("#applyBtn").addEventListener("click", applyControls);
-  $("#randBtn").addEventListener("click", () => {
-    const list = LAST_RESULTS.games;
-    if (!list.length) { alert("Search first!"); return; }
-    const pick = list[Math.floor(Math.random() * list.length)];
-    viewGame(pick.id);
-  });
-  $("#themeBtn").addEventListener("click", toggleTheme);
+document.addEventListener('DOMContentLoaded', ()=>{
+  const initialTheme = LS.get(THEME_KEY) || (prefersLight?'light':'dark');
+  applyTheme(initialTheme);
 
-  // tools
-  $("#copyBtn").addEventListener("click", copyLink);
-  $("#booksBtn").addEventListener("click", showBookmarks);
-  $("#exportBtn").addEventListener("click", exportBookmarks);
-  $("#recentBtn").addEventListener("click", showRecent);
-  $("#clearBtn").addEventListener("click", clearResults);
-  $("#importFile").addEventListener("change", (e) => { if (e.target.files?.[0]) importBookmarks(e.target.files[0]); });
+  // Binds (defensive)
+  on('#tab-game','click', ()=>setMode('game'));
+  on('#tab-user','click', ()=>setMode('user'));
+  on('#go','click', lookup);
+  on('#applyBtn','click', applyControls);
+  on('#randBtn','click', ()=>{ const list=LAST_RESULTS.games; if(!list.length){ alert('Search first!'); return; } const pick=list[Math.floor(Math.random()*list.length)]; viewGame(pick.id); });
+  on('#themeBtn','click', toggleTheme);
 
-  // compare
-  $("#cmpBtn").addEventListener("click", compareUsers);
+  on('#copyBtn','click', copyLink);
+  on('#booksBtn','click', showBookmarks);
+  on('#exportBtn','click', exportBookmarks);
+  on('#recentBtn','click', showRecent);
+  on('#clearBtn','click', clearResults);
+  const importFile=$("#importFile");
+  if(importFile) importFile.addEventListener('change', (e)=>{ if(e.target.files?.[0]) importBookmarks(e.target.files[0]); });
 
-  // contact
-  $("#contactForm").addEventListener("submit", sendContact);
+  on('#cmpBtn','click', compareUsers);
+  const form=$("#contactForm"); if(form) form.addEventListener('submit', sendContact);
 
   // shortcuts
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "/" && document.activeElement !== $("#q")) { e.preventDefault(); $("#q").focus(); }
-    if (e.key === "Enter" && document.activeElement === $("#q")) lookup();
-    const k = e.key.toLowerCase(); if (k === "g") setMode("game"); if (k === "u") setMode("user");
+  document.addEventListener('keydown',(e)=>{
+    if(e.key==='/' && document.activeElement!==$('#q')){ e.preventDefault(); $('#q')?.focus(); }
+    if(e.key==='Enter' && document.activeElement===$('#q')) lookup();
+    const k=e.key.toLowerCase(); if(k==='g') setMode('game'); if(k==='u') setMode('user');
   });
 
   // deep link
-  const p = new URLSearchParams(location.search);
-  const m = p.get("mode"); if (m === "user" || m === "game") setMode(m);
-  const q = p.get("q"); if (q) { $("#q").value = q; lookup(); }
-}
+  const p=new URLSearchParams(location.search);
+  const m=p.get('mode'); if(m==='user'||m==='game') setMode(m);
+  const q=p.get('q'); if(q){ $("#q").value=q; lookup(); }
 
-// Show a friendly error instead of silently breaking (helps debugging/AdSense QA)
-window.addEventListener("error", (ev) => {
-  const out = $("#out");
-  if (!out) return;
-  out.innerHTML = `<div class="card"><p class="error">A script error occurred: ${ev.message}. Try refreshing or switching Light/Dark. If this keeps happening, private mode or content blockers might be blocking storage or scripts.</p></div>` + (sk());
-});
-
-// Apply theme safely before UI paints too much
-document.addEventListener("DOMContentLoaded", () => {
-  const initialTheme = LS.get(THEME_KEY) || (prefersLight ? "light" : "dark");
-  applyTheme(initialTheme);
-  bindEvents();
-
-  // Tiny UX: example queries to encourage interaction (good for engagement)
-  const q = $("#q");
-  if (q && !q.value) {
-    q.setAttribute("list", "examples");
-    const dl = document.createElement("datalist");
-    dl.id = "examples";
-    dl.innerHTML = [
-      "doors", "er:lc", "adopt me", "brookhaven", "blox fruits",
-      "frontlines", "shindo life", "universe id 4520749081"
-    ].map(v => `<option value="${v}"></option>`).join("");
+  // UX: examples datalist
+  const qEl=$("#q");
+  if(qEl && !qEl.value){
+    qEl.setAttribute('list','examples');
+    const dl=document.createElement('datalist'); dl.id='examples';
+    dl.innerHTML=['doors','er:lc','adopt me','brookhaven','blox fruits','frontlines','shindo life','universe id 4520749081'].map(v=>`<option value="${v}"></option>`).join('');
     document.body.appendChild(dl);
   }
 });
-</script>
+  </script>
+</body>
+</html>
