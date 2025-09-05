@@ -2,18 +2,51 @@
 <html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
-  <title>Roblox Lookup — Players & Games</title>
+  <title>Roblox Lookup — Players, Games, Tools, and Guides</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Search Roblox games & users by name or ID. Sort, filter, bookmark, compare, and share. Fast and mobile-friendly." />
+  <meta name="description" content="Search Roblox games & users by name or ID. Sort, filter, bookmark, compare, generate embed cards, and learn with step-by-step guides. Fast, mobile-friendly, and ad-safe." />
   <meta name="robots" content="index,follow" />
   <meta name="theme-color" content="#0b0f1b" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Roblox Lookup — Players, Games, Tools, and Guides"/>
+  <meta property="og:description" content="Search Roblox games & users. Filters, compare, bookmarks, embed generator, and in-depth guides."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:image" content="https://placehold.co/1200x630/0b0f1b/edf1ff?text=Roblox+Lookup"/>
+
+  <!-- JSON-LD: WebSite + FAQPage -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"WebSite",
+    "name":"Roblox Lookup",
+    "url":"https://example.com/",
+    "potentialAction":{
+      "@type":"SearchAction",
+      "target":"https://example.com/?mode=game&q={query}",
+      "query-input":"required name=query"
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"FAQPage",
+    "mainEntity":[
+      {"@type":"Question","name":"How do I find a universe or place ID?","acceptedAnswer":{"@type":"Answer","text":"Open a game page on roblox.com and check the URL. /games/{placeId}/... shows place ID. Use the site to convert place→universe automatically."}},
+      {"@type":"Question","name":"Why do friends/followers sometimes show N/A?","acceptedAnswer":{"@type":"Answer","text":"Roblox social endpoints occasionally require authentication. The site treats those as optional and renders the rest so you’re never blocked."}},
+      {"@type":"Question","name":"Is this official?","acceptedAnswer":{"@type":"Answer","text":"No. This is a fansite; not affiliated with Roblox."}},
+      {"@type":"Question","name":"Do you store my data?","acceptedAnswer":{"@type":"Answer","text":"Bookmarks and recent searches are stored locally in your browser. No account or server storage."}}
+    ]
+  }
+  </script>
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
 
-  <!-- AdSense (kept away from buttons/results to avoid invalid clicks) -->
+  <!-- AdSense (kept away from interactive UI to avoid accidental clicks) -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6941574746900426" crossorigin="anonymous"></script>
 
   <style>
@@ -37,15 +70,19 @@
       color:var(--ink);
       font-family:'Outfit','Inter',system-ui,Segoe UI,Roboto,Ubuntu;
       display:flex; flex-direction:column; align-items:center; gap:22px;
-      min-height:100vh; padding:36px 16px 80px; text-align:center;
+      min-height:100vh; padding:28px 16px 80px; text-align:center;
     }
     [data-theme="light"] body{ background:#f1f5ff; }
 
-    .wrap{ width:min(980px,96vw); margin-inline:auto; }
+    .wrap{ width:min(1100px,96vw); margin-inline:auto; }
     header{ display:flex; flex-direction:column; align-items:center; gap:8px; }
     .logo{ width:54px; height:54px; border-radius:14px; background:linear-gradient(135deg,var(--accent),var(--accent-2)); box-shadow:0 14px 28px color-mix(in oklab, var(--accent) 50%, transparent); }
     h1{ margin:6px 0 2px; font-size:34px; letter-spacing:.2px; font-weight:800; }
     .sub{ margin:0; color:var(--ink-2); font-size:14px; }
+
+    nav{ display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin:8px 0 0; }
+    nav a{ text-decoration:none; padding:8px 12px; border-radius:999px; border:1px solid #273578; background:#0b1340; color:#dfe6ff; font-weight:800; }
+    [data-theme="light"] nav a{ background:#eef3ff; color:#1b2749; border-color:#dbe6ff; }
 
     .panel{ background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:18px; }
     .tabs{ display:inline-flex; gap:6px; padding:6px; border:1px solid #1d2650; border-radius:999px; background:#0c1330; margin:6px 0 12px; }
@@ -125,7 +162,7 @@
     .toast{ position:fixed; left:50%; bottom:22px; transform:translateX(-50%); background:#0b1340; color:#dfe6ff; border:1px solid #273578; padding:12px 16px; border-radius:999px; box-shadow:var(--shadow); display:none; z-index:40; }
     [data-theme="light"] .toast{ background:#eef3ff; color:#1b2749; border-color:#dbe6ff; }
 
-    footer{ width:min(980px,96vw); margin-top:34px; padding-top:12px; border-top:1px solid var(--line); color:#6b79c2; font-size:13px; text-align:center; }
+    footer{ width:min(1100px,96vw); margin-top:34px; padding-top:12px; border-top:1px solid var(--line); color:#6b79c2; font-size:13px; text-align:center; }
     footer a{ color:inherit }
   </style>
   <noscript><style>html,body{background:#0b0f1b;color:#edf1ff}</style></noscript>
@@ -135,7 +172,15 @@
     <header>
       <div class="logo" aria-hidden="true"></div>
       <h1>Roblox Lookup</h1>
-      <p class="sub">Search games & users. Sort, filter, bookmark, compare — fast and mobile-friendly.</p>
+      <p class="sub">Search games & users. Filters, compare, bookmarks, embed generator — plus guides that teach you the platform.</p>
+      <nav aria-label="Site">
+        <a href="#tools">Tools</a>
+        <a href="#guides">Guides</a>
+        <a href="#collections">Collections</a>
+        <a href="#faq">FAQ</a>
+        <a href="#policy">Policies</a>
+        <a href="#contact">Contact</a>
+      </nav>
     </header>
 
     <!-- Ad (top, far away from controls) -->
@@ -146,8 +191,8 @@
       <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
     </div>
 
-    <!-- Search -->
-    <section class="panel" role="search" aria-label="Roblox search">
+    <!-- ======= TOOLS (Search/Compare/Embed) ======= -->
+    <section id="tools" class="panel" role="search" aria-label="Roblox tools">
       <div class="tabs" role="tablist" aria-label="Type">
         <button class="tab active" id="tab-game" role="tab" aria-selected="true" title="G">Game</button>
         <button class="tab" id="tab-user" role="tab" aria-selected="false" title="U">User</button>
@@ -158,7 +203,6 @@
         <button class="btn" id="go">Search</button>
       </div>
 
-      <!-- controls -->
       <div class="controls" aria-label="Result controls">
         <select class="select" id="sortSel">
           <option value="visits">Sort: Visits</option>
@@ -184,24 +228,23 @@
         <span class="chip" data-trend="adopt me">Adopt Me</span>
         <span class="chip" data-trend="frontlines">Frontlines</span>
       </div>
+
+      <div class="tools" style="margin-top:10px">
+        <button class="tool" id="copyBtn">Copy link</button>
+        <button class="tool" id="booksBtn">Bookmarks</button>
+        <button class="tool" id="exportBtn">Export</button>
+        <label class="tool" style="cursor:pointer">
+          Import <input type="file" id="importFile" accept=".json" style="display:none" />
+        </label>
+        <button class="tool" id="recentBtn">Recent</button>
+        <button class="tool" id="clearBtn">Clear</button>
+      </div>
     </section>
 
-    <!-- Utilities -->
-    <div class="tools">
-      <button class="tool" id="copyBtn">Copy link</button>
-      <button class="tool" id="booksBtn">Bookmarks</button>
-      <button class="tool" id="exportBtn">Export</button>
-      <label class="tool" style="cursor:pointer">
-        Import <input type="file" id="importFile" accept=".json" style="display:none" />
-      </label>
-      <button class="tool" id="recentBtn">Recent</button>
-      <button class="tool" id="clearBtn">Clear</button>
-    </div>
-
-    <!-- Results -->
+    <!-- RESULTS -->
     <div id="out" aria-live="polite" aria-busy="false"></div>
 
-    <!-- Ads -->
+    <!-- Ad -->
     <div class="adsense-box">
       <ins class="adsbygoogle" style="display:block"
            data-ad-client="ca-pub-6941574746900426" data-ad-slot="5368161496"
@@ -209,7 +252,7 @@
       <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
     </div>
 
-    <!-- Compare -->
+    <!-- COMPARE -->
     <section class="card" id="compare" aria-label="Compare users">
       <h2 style="text-align:center;margin:0 0 8px">Quick Compare (Users)</h2>
       <div class="row">
@@ -220,7 +263,79 @@
       <div id="cmpOut" class="muted" style="margin-top:8px;text-align:center">Enter two users to compare basic stats.</div>
     </section>
 
-    <!-- Contact -->
+    <!-- EMBED GENERATOR -->
+    <section class="card" id="embed" aria-label="Embed generator">
+      <h2 style="margin:0 0 8px; text-align:center">Embed Card Generator (Games)</h2>
+      <p class="muted" style="text-align:center;margin-top:0">Make a shareable card you can paste into a blog or forum.</p>
+      <div class="row">
+        <input class="input" id="embedUni" placeholder="Universe ID or Place ID (we’ll convert)" />
+        <button class="btn" id="makeEmbed">Generate</button>
+      </div>
+      <div id="embedOut" class="muted" style="margin-top:8px;text-align:center">Enter an ID and click Generate.</div>
+    </section>
+
+    <!-- ======= GUIDES / EDITORIAL ======= -->
+    <section id="guides" class="card" aria-label="Guides">
+      <h2 style="margin:0 0 8px; text-align:center">Roblox Guides & How-Tos</h2>
+      <h3>Universe vs Place vs Experience (Quick)</h3>
+      <ul>
+        <li><b>Place ID:</b> A single map/server. URL format: <code>/games/{placeId}/...</code></li>
+        <li><b>Universe ID:</b> A container that can include multiple places (lobbies, levels).</li>
+        <li><b>Experience:</b> Player-facing app which references a universe.</li>
+      </ul>
+      <p><b>Tip:</b> Paste a <i>place</i> ID in the search bar — if it isn’t a universe, the site auto-converts place → universe before fetching stats.</p>
+
+      <h3>How We Calculate “Likes %”</h3>
+      <p>We show <b>upVotes ÷ (upVotes + downVotes)</b>, rounded to the nearest % with traffic-aware sorting. It prevents small games with 5 votes from outranking stable hits.</p>
+
+      <h3>Troubleshooting Social Counts</h3>
+      <p>Friends/Followers/Presence may require authentication on Roblox’s side. When they do, we hide those chips and still render everything else. You’ll never be blocked by a 401.</p>
+
+      <h3>Safety & Reporting</h3>
+      <ul>
+        <li>Use in-game report tools for harassment, scams, or impersonation.</li>
+        <li>Keep your account secure: enable 2-step verification, never share recovery codes.</li>
+        <li>Check a game’s like ratio and active players to avoid low-effort clones.</li>
+      </ul>
+    </section>
+
+    <!-- ======= CURATED COLLECTIONS ======= -->
+    <section id="collections" class="card" aria-label="Collections">
+      <h2 style="margin:0 0 8px; text-align:center">Curated Collections</h2>
+      <p class="muted" style="text-align:center;margin-top:0">Tap to search instantly.</p>
+      <div class="chips" id="collectionsChips">
+        <span class="chip" data-trend="tycoon">Tycoons</span>
+        <span class="chip" data-trend="simulator">Simulators</span>
+        <span class="chip" data-trend="fps">FPS</span>
+        <span class="chip" data-trend="obby">Obbies</span>
+        <span class="chip" data-trend="roleplay">Roleplay</span>
+        <span class="chip" data-trend="racing">Racing</span>
+        <span class="chip" data-trend="horror">Horror</span>
+      </div>
+    </section>
+
+    <!-- ======= FAQ (expanded) ======= -->
+    <section id="faq" class="card" aria-label="FAQ">
+      <h2 style="margin:0 0 8px; text-align:center">Frequently Asked Questions</h2>
+      <h3>Is this official?</h3>
+      <p>No. This fansite isn’t affiliated with Roblox.</p>
+      <h3>Where does the data come from?</h3>
+      <p>Publicly accessible endpoints proxied through CORS-friendly mirrors. If an endpoint requires auth, we skip it and still render the rest.</p>
+      <h3>Do you store my data?</h3>
+      <p>Bookmarks and recents are kept in your browser using local storage. No login and no server-side user storage.</p>
+      <h3>Why do some counts show N/A?</h3>
+      <p>Friends/Followers/Presence can require authentication; we mark them as unavailable instead of failing your search.</p>
+    </section>
+
+    <!-- ======= POLICIES ======= -->
+    <section class="card" id="policy" style="text-align:left">
+      <h2 style="margin:0 0 8px; text-align:center">Privacy & Terms (Short)</h2>
+      <p><b>Privacy:</b> We use local storage for bookmarks/recent searches. Advertising cookies may be used by ad partners (consent UI may appear depending on region). Contact form data is only what you submit; the form is processed by a third-party relay.</p>
+      <p><b>Terms:</b> Use the site as-is. All Roblox content and trademarks belong to their owners. Abusive traffic may be limited.</p>
+      <p><b>Content integrity:</b> Editorial guides are original, regularly updated, and focused on helping players navigate the platform safely and efficiently.</p>
+    </section>
+
+    <!-- ======= CONTACT ======= -->
     <section class="card" id="contact" style="text-align:center;">
       <h2 style="margin:0 0 6px">Contact</h2>
       <p class="muted" style="margin:0 0 12px">This form sends to <strong>supp.roxzy@gmail.com</strong>. If the mail service blocks the first try, you’ll get a button to send via <em>Gmail Web</em>.</p>
@@ -238,42 +353,14 @@
       </form>
     </section>
 
-    <!-- How it works / FAQ -->
-    <section class="card" id="how">
-      <h2 style="margin:0 0 8px; text-align:center">How Roblox Lookup Works</h2>
-      <p>Enter a game name, universe ID, or place ID to discover experiences. For users, type a username or user ID. Data comes from publicly available endpoints and is shown with tools like sorting, filtering, bookmarks, share links, and a basic compare view. No login required.</p>
-      <h3>Tips</h3>
-      <ul>
-        <li>Press <b>G</b>/<b>U</b> to switch modes.</li>
-        <li>Sort by <i>Visits</i>, <i>Playing</i>, <i>Favorites</i>, <i>Likes %</i>, or <i>Name</i>. Use filters to hide low-traffic games.</li>
-        <li>Use Bookmarks (and Export/Import) to keep favorites across devices.</li>
-        <li>“🎲 Surprise” opens a random item from your last results.</li>
-      </ul>
-      <h3>FAQ</h3>
-      <p><b>Is this official?</b> No, this fansite isn’t affiliated with Roblox.</p>
-      <p><b>Do you track me?</b> Bookmarks and recent searches are stored locally in your browser.</p>
-    </section>
-
-    <section class="card" id="policy" style="text-align:left">
-      <h2 style="margin:0 0 8px; text-align:center">Privacy & Terms (Short)</h2>
-      <p><b>Privacy:</b> We use local storage for bookmarks/recent searches. Advertising cookies may be used by ad partners (consent may appear depending on region). Contact form data is only what you submit.</p>
-      <p><b>Terms:</b> Use the site as-is. All Roblox content and trademarks belong to their owners. Abusive traffic may be limited.</p>
-    </section>
-
-    <footer>© Roblox Lookup — not affiliated with Roblox. • <a href="#how">How it works</a> • <a href="#policy">Privacy & Terms</a></footer>
+    <footer>© Roblox Lookup — not affiliated with Roblox. • <a href="#guides">Guides</a> • <a href="#policy">Policies</a></footer>
   </div>
 
   <div class="toast" id="toast"></div>
 
   <script>
-/* ======================= SAFE CORE ======================= */
-// Safe localStorage shim (no crashes in private mode/iframes)
-const LS = (() => {
-  try {
-    const t="__t"; localStorage.setItem(t,"1"); localStorage.removeItem(t);
-    return {get:(k)=>localStorage.getItem(k), set:(k,v)=>localStorage.setItem(k,v), remove:(k)=>localStorage.removeItem(k)};
-  } catch { const m={}; return {get:(k)=>m[k]??null, set:(k,v)=>{m[k]=String(v)}, remove:(k)=>{delete m[k]}}; }
-})();
+/* ======================= SAFE CORE & THEME ======================= */
+const LS = (() => { try { const t="__t"; localStorage.setItem(t,"1"); localStorage.removeItem(t); return {get:(k)=>localStorage.getItem(k), set:(k,v)=>localStorage.setItem(k,v), remove:(k)=>localStorage.removeItem(k)}; } catch { const m={}; return {get:(k)=>m[k]??null, set:(k,v)=>{m[k]=String(v)}, remove:(k)=>{delete m[k]}}; }})();
 const hasMM = typeof matchMedia==="function";
 const prefersLight = hasMM && matchMedia("(prefers-color-scheme: light)").matches;
 
@@ -282,82 +369,50 @@ function on(sel,evt,fn){ const el=$(sel); if(!el){ console.warn("[bind] missing:
 const sleep=(ms)=>new Promise(r=>setTimeout(r,ms));
 function toast(msg){ const t=$("#toast"); t.textContent=msg; t.style.display='block'; clearTimeout(toast._t); toast._t=setTimeout(()=>t.style.display='none',1400); }
 
-/* ======================= ACCENT THEMES ======================= */
 const ACCENTS = [
-  {a:"#7fb7ff", b:"#7af1ff"}, // Azure (default)
-  {a:"#b07bff", b:"#ff7bba"}, // Purple Pop
-  {a:"#7bffc3", b:"#7bf1ff"}, // Neo Mint
-  {a:"#ffb86b", b:"#ff7680"}, // Sunset
-  {a:"#9cff6b", b:"#7af1c2"}  // Lime Splash
+  {a:"#7fb7ff", b:"#7af1ff"},
+  {a:"#b07bff", b:"#ff7bba"},
+  {a:"#7bffc3", b:"#7bf1ff"},
+  {a:"#ffb86b", b:"#ff7680"},
+  {a:"#9cff6b", b:"#7af1c2"}
 ];
-const ACCENT_KEY = "rbx_lookup_accent";
-function applyAccent(i){
-  const idx = Math.max(0, Math.min(ACCENTS.length-1, i|0));
-  document.documentElement.style.setProperty('--accent', ACCENTS[idx].a);
-  document.documentElement.style.setProperty('--accent-2', ACCENTS[idx].b);
-  LS.set(ACCENT_KEY, String(idx));
-  const logo = document.querySelector('.logo'); if(logo) logo.style.background = `linear-gradient(135deg, ${ACCENTS[idx].a}, ${ACCENTS[idx].b})`;
-}
-function cycleAccent(){
-  const cur = Number(LS.get(ACCENT_KEY) || 0);
-  const next = (cur + 1) % ACCENTS.length;
-  applyAccent(next);
-  toast("Accent updated");
-}
+const ACCENT_KEY="rbx_lookup_accent";
+function applyAccent(i){ const idx=Math.max(0,Math.min(ACCENTS.length-1,i|0)); document.documentElement.style.setProperty('--accent',ACCENTS[idx].a); document.documentElement.style.setProperty('--accent-2',ACCENTS[idx].b); LS.set(ACCENT_KEY,String(idx)); const logo=$('.logo'); if(logo) logo.style.background=`linear-gradient(135deg, ${ACCENTS[idx].a}, ${ACCENTS[idx].b})`; }
+function cycleAccent(){ const cur=Number(LS.get(ACCENT_KEY)||0); const next=(cur+1)%ACCENTS.length; applyAccent(next); toast("Accent updated"); }
 
-/* ======================= CONFIG ======================= */
+const THEME_KEY='rbx_lookup_theme';
+function applyTheme(theme){ const t=theme==='light'?'light':'dark'; document.documentElement.setAttribute('data-theme',t); LS.set(THEME_KEY,t); const b=$("#themeBtn"); if(b) b.textContent=t==='light'?'Dark mode':'Light mode'; }
+function toggleTheme(){ const cur=LS.get(THEME_KEY)||(prefersLight?'light':'dark'); applyTheme(cur==='dark'?'light':'dark'); toast("Theme switched"); }
+
+/* ======================= CONFIG & FETCH ======================= */
 const RBX = {
-  apis: 'https://apis.roproxy.com',
-  games: 'https://games.roproxy.com',
+  apis:'https://apis.roproxy.com',
+  games:'https://games.roproxy.com',
   thumbs:'https://thumbnails.roproxy.com',
-  users: 'https://users.roproxy.com',
+  users:'https://users.roproxy.com',
   friends:'https://friends.roproxy.com',
   presence:'https://presence.roproxy.com'
 };
-const COOLDOWN_MS = 3500;
 const BOOK_KEY='rbx_lookup_bookmarks_v1';
 const RECENT_KEY='rbx_lookup_recent_v1';
-const THEME_KEY='rbx_lookup_theme';
+const COOLDOWN_MS=3500;
 
 let MODE='game', lastSearchAt=0, cooldownTimer=null;
 const GAME_CACHE=new Map();
 const LAST_RESULTS={games:[]};
 
-/* ======================= THEME ======================= */
-function applyTheme(theme){
-  const t = theme==='light'?'light':'dark';
-  document.documentElement.setAttribute('data-theme', t);
-  LS.set(THEME_KEY,t);
-  const b=$("#themeBtn"); if(b) b.textContent = t==='light'?'Dark mode':'Light mode';
-}
-function toggleTheme(){
-  const cur = LS.get(THEME_KEY) || (prefersLight?'light':'dark');
-  applyTheme(cur==='dark'?'light':'dark');
-  toast("Theme switched");
-}
-
-/* ======================= FETCH HELPERS ======================= */
 async function j(url,opt={}){ const r=await fetch(url,{...opt,cache:'no-store'}); if(!r.ok) throw new Error(String(r.status)); return r.json(); }
 async function jMaybe(url,opt={}){ try{ const r=await fetch(url,{...opt,cache:'no-store'}); if(!r.ok) return null; return await r.json(); }catch{ return null; } }
 async function jWithFallback(primary,fallback,opt={}){ const a=await jMaybe(primary,opt); if(a!==null) return a; if(!fallback) return null; return jMaybe(fallback,opt); }
 
-/* ======================= SKELETON ======================= */
-const sk=()=>`<div class="skeleton"><div class="shimmer"></div>
-  <div class="sk-row"><div class="sk-ava"></div><div class="sk-lines">
-    <div class="sk-line long"></div><div class="sk-line med"></div><div class="sk-line short"></div>
-  </div></div></div>`;
+/* ======================= UI HELPERS ======================= */
+function n(x){ return typeof x==='number'? x.toLocaleString(): 'N/A'; }
+function likeRatio(up,down){ const u=+up||0, d=+down||0, t=u+d; if(!t) return {cls:'ratio-mid',label:'0%'}; const p=Math.round((u/t)*100); return {cls:p>=80?'ratio-good':p>=60?'ratio-mid':'ratio-bad',label:p+'%'}; }
+const sk=()=>`<div class="skeleton"><div class="shimmer"></div><div class="sk-row"><div class="sk-ava"></div><div class="sk-lines"><div class="sk-line long"></div><div class="sk-line med"></div><div class="sk-line short"></div></div></div></div>`;
 
-/* ======================= GAMES ======================= */
-async function autoUniverses(q){
-  const url = `${RBX.apis}/games-autocomplete/v1/get-suggestion/${encodeURIComponent(q)}`;
-  const data = await jMaybe(url) || {entries:[]};
-  const ids=new Set(); (data.entries||[]).forEach(e=>{ if(e?.universeId>0) ids.add(e.universeId); });
-  return [...ids];
-}
-async function placeToUniverse(placeId){
-  try{ const u = await j(`${RBX.apis}/universes/v1/places/${placeId}/universe`); return u.universeId||u?.data?.universeId||u?.data?.[0]?.universeId||null; }
-  catch{ return null; }
-}
+/* ======================= SEARCH: GAMES ======================= */
+async function autoUniverses(q){ const data=await jMaybe(`${RBX.apis}/games-autocomplete/v1/get-suggestion/${encodeURIComponent(q)}`)||{entries:[]}; const ids=new Set(); (data.entries||[]).forEach(e=>{ if(e?.universeId>0) ids.add(e.universeId); }); return [...ids]; }
+async function placeToUniverse(placeId){ try{ const u=await j(`${RBX.apis}/universes/v1/places/${placeId}/universe`); return u.universeId||u?.data?.universeId||u?.data?.[0]?.universeId||null; }catch{ return null; } }
 async function gameDetails(universeIds){
   if(!universeIds.length) return [];
   const chunks=[]; for(let i=0;i<universeIds.length;i+=50) chunks.push(universeIds.slice(i,i+50));
@@ -365,9 +420,9 @@ async function gameDetails(universeIds){
   for(const group of chunks){
     const ids=group.join(',');
     const [games,thumbs,votes]=await Promise.all([
-      jMaybe(`${RBX.games}/v1/games?universeIds=${ids}`) || {data:[]},
-      jMaybe(`${RBX.thumbs}/v1/games/icons?universeIds=${ids}&size=150x150&format=Png&isCircular=false`) || {data:[]},
-      jMaybe(`${RBX.games}/v1/games/votes?universeIds=${ids}`) || {data:[]}
+      jMaybe(`${RBX.games}/v1/games?universeIds=${ids}`)||{data:[]},
+      jMaybe(`${RBX.thumbs}/v1/games/icons?universeIds=${ids}&size=150x150&format=Png&isCircular=false`)||{data:[]},
+      jMaybe(`${RBX.games}/v1/games/votes?universeIds=${ids}`)||{data:[]}
     ]);
     const t=new Map(); (thumbs.data||[]).forEach(a=>t.set(String(a.targetId),a.imageUrl));
     const v=new Map(); (votes.data||[]).forEach(x=>v.set(String(x.id||x.universeId||x.targetId),{up:x.upVotes??0,down:x.downVotes??0}));
@@ -388,7 +443,7 @@ function paintGames(arr){
   for(const g of arr){
     GAME_CACHE.set(g.id,g);
     const lr=likeRatio(g.up,g.down);
-    html += `
+    html+=`
       <div class="item" data-view-game="${g.id}">
         <div class="row2">
           <img class="thumb" loading="lazy" src="${g.thumb}" onerror="this.src='https://placehold.co/150x150?text=Game'">
@@ -404,13 +459,13 @@ function paintGames(arr){
         </div>
       </div>`;
   }
-  html += `</div></div>`;
-  res.innerHTML = html;
-  res.querySelectorAll('[data-view-game]').forEach(el=>el.addEventListener('click', ()=>viewGame(el.getAttribute('data-view-game'))));
+  html+=`</div></div>`;
+  res.innerHTML=html;
+  res.querySelectorAll('[data-view-game]').forEach(el=>el.addEventListener('click',()=>viewGame(el.getAttribute('data-view-game'))));
 }
 function paintGame(g){
   const lr=likeRatio(g.up,g.down);
-  $("#out").innerHTML = `
+  $("#out").innerHTML=`
     <div class="card">
       <div class="header-row">
         <img class="thumb" src="${g.thumb}" onerror="this.src='https://placehold.co/150x150?text=Game'">
@@ -431,62 +486,45 @@ function paintGame(g){
         </div>
       </div>
     </div>`;
-  on('#bmGame','click', ()=>bookmark('game', g.id));
-  on('#copyUni','click', ()=>navigator.clipboard?.writeText(String(g.id)));
+  on('#bmGame','click',()=>bookmark('game',g.id));
+  on('#copyUni','click',()=>navigator.clipboard?.writeText(String(g.id)));
 }
 
-/* ======================= USER LOOKUP ======================= */
-function likeRatio(up,down){ const u=+up||0,d=+down||0,t=u+d; if(!t) return {cls:'ratio-mid',label:'0%'}; const p=Math.round((u/t)*100); return {cls:p>=80?'ratio-good':p>=60?'ratio-mid':'ratio-bad',label:p+'%'}; }
-function n(x){ return typeof x==='number'? x.toLocaleString() : 'N/A'; }
-
+/* ======================= SEARCH: USERS ======================= */
 async function userLookup(q){
   const out=$("#out");
-  out.innerHTML = `<div class="card"><div class="loader"><div class="spinner"></div><div>Looking up user…</div></div></div>` + sk();
+  out.innerHTML=`<div class="card"><div class="loader"><div class="spinner"></div><div>Looking up user…</div></div></div>`+sk();
 
-  let id = q.trim();
+  let id=q.trim();
   if(!/^\d+$/.test(id)){
-    const r = await j(`${RBX.users}/v1/usernames/users`,{
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({usernames:[id.toLowerCase()], excludeBannedUsers:false})
-    });
-    if(!r?.data?.[0]) throw new Error('User not found');
-    id = String(r.data[0].id);
+    const r=await j(`${RBX.users}/v1/usernames/users`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({usernames:[id.toLowerCase()],excludeBannedUsers:false})});
+    if(!r?.data?.[0]) throw new Error('User not found'); id=String(r.data[0].id);
   }
 
-  const [u, ava, fri, fol, folw, pre] = await Promise.all([
+  const [u, ava, fri, fol, folw, pre]=await Promise.all([
     j(`${RBX.users}/v1/users/${id}`),
     jMaybe(`${RBX.thumbs}/v1/users/avatar-headshot?userIds=${id}&size=180x180&format=Png&isCircular=false`),
-
-    // social counts: optional (401-friendly)
-    jWithFallback(`${RBX.friends}/v1/users/${id}/friends/count`,   null),
-    jWithFallback(`${RBX.friends}/v1/users/${id}/followers/count`, null),
+    jWithFallback(`${RBX.friends}/v1/users/${id}/friends/count`,null),
+    jWithFallback(`${RBX.friends}/v1/users/${id}/followers/count`,null),
     jWithFallback(`${RBX.friends}/v1/users/${id}/followings/count`,null),
-
-    // presence often requires auth; optional
-    jMaybe(`${RBX.presence}/v1/presence/users`, {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({userIds:[Number(id)]})
-    })
+    jMaybe(`${RBX.presence}/v1/presence/users`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userIds:[Number(id)]})})
   ]);
 
-  const url = ava?.data?.[0]?.imageUrl || 'https://placehold.co/180x180?text=Avatar';
-  const created = u.created ? new Date(u.created).toLocaleString() : 'Unavailable';
-  const friendsCount   = fri?.count ?? null;
-  const followersCount = fol?.count ?? null;
-  const followingCount = folw?.count ?? null;
+  const url=ava?.data?.[0]?.imageUrl||'https://placehold.co/180x180?text=Avatar';
+  const created=u.created?new Date(u.created).toLocaleString():'Unavailable';
+  const friendsCount=fri?.count??null, followersCount=fol?.count??null, followingCount=folw?.count??null;
 
   const pt = pre?.userPresences?.[0]?.userPresenceType;
-  let sClass='offline', sText='Offline';
-  if(pt===1){sClass='online';sText='Online'} else if(pt===2){sClass='playing';sText='In Game'} else if(pt===3){sClass='studio';sText='In Studio'}
+  let sClass='offline', sText='Offline'; if(pt===1){sClass='online';sText='Online'} else if(pt===2){sClass='playing';sText='In Game'} else if(pt===3){sClass='studio';sText='In Studio'}
 
-  const chips = [
+  const chips=[
     `<span class="chip">Created: ${created}</span>`,
-    friendsCount   != null ? `<span class="chip">Friends: ${n(friendsCount)}</span>` : '',
-    followersCount != null ? `<span class="chip">Followers: ${n(followersCount)}</span>` : '',
-    followingCount != null ? `<span class="chip">Following: ${n(followingCount)}</span>` : ''
+    friendsCount!=null?`<span class="chip">Friends: ${n(friendsCount)}</span>`:'',
+    followersCount!=null?`<span class="chip">Followers: ${n(followersCount)}</span>`:'',
+    followingCount!=null?`<span class="chip">Following: ${n(followingCount)}</span>`:''
   ].filter(Boolean).join('');
 
-  out.innerHTML = `
+  out.innerHTML=`
     <div class="card">
       <div class="header-row">
         <img class="avatar" src="${url}" onerror="this.src='https://placehold.co/180x180?text=Avatar'">
@@ -506,187 +544,161 @@ async function userLookup(q){
       </div>
       <div class="pill ${sClass}" style="position:absolute; top:16px; right:16px">${sText}</div>
     </div>`;
-  on('#bmUser','click', ()=>bookmark('user', String(u.id)));
-  on('#copyUid','click', ()=>navigator.clipboard?.writeText(String(u.id)));
+  on('#bmUser','click',()=>bookmark('user',String(u.id)));
+  on('#copyUid','click',()=>navigator.clipboard?.writeText(String(u.id)));
 }
 
-/* ======================= CONTROLS / SEARCH ======================= */
-function startCooldown(){
-  const b=$("#go"); if(!b) return;
-  b.disabled=true; let left=COOLDOWN_MS; b.textContent=`Search ${Math.ceil(left/1000)}s`;
-  cooldownTimer=setInterval(()=>{
-    left-=1000;
-    if(left<=0){ clearInterval(cooldownTimer); b.disabled=false; b.textContent='Search'; }
-    else b.textContent=`Search ${Math.ceil(left/1000)}s`;
-  },1000);
-}
-function setMode(m){
-  MODE=m;
-  const tg=$("#tab-game"), tu=$("#tab-user");
-  if(tg&&tu){
-    tg.classList.toggle('active', m==='game'); tu.classList.toggle('active', m==='user');
-    tg.setAttribute('aria-selected', m==='game'); tu.setAttribute('aria-selected', m==='user');
-  }
-  const badge=$("#badge"); if(badge) badge.textContent='Mode: '+(m==='game'?'Game':'User');
-  $("#q")?.focus();
-}
+/* ======================= CONTROLS ======================= */
+function startCooldown(){ const b=$("#go"); if(!b) return; b.disabled=true; let left=COOLDOWN_MS; b.textContent=`Search ${Math.ceil(left/1000)}s`; cooldownTimer=setInterval(()=>{ left-=1000; if(left<=0){ clearInterval(cooldownTimer); b.disabled=false; b.textContent='Search'; } else b.textContent=`Search ${Math.ceil(left/1000)}s`; },1000); }
+function setMode(m){ MODE=m; const tg=$("#tab-game"), tu=$("#tab-user"); if(tg&&tu){ tg.classList.toggle('active',m==='game'); tu.classList.toggle('active',m==='user'); tg.setAttribute('aria-selected',m==='game'); tu.setAttribute('aria-selected',m==='user'); } const badge=$("#badge"); if(badge) badge.textContent='Mode: '+(m==='game'?'Game':'User'); $("#q")?.focus(); }
 function clearResults(){ const o=$("#out"); if(o) o.innerHTML=''; }
 
 async function lookup(){
-  const now=Date.now(); if(now < lastSearchAt + COOLDOWN_MS) return; lastSearchAt = now;
+  const now=Date.now(); if(now < lastSearchAt + COOLDOWN_MS) return; lastSearchAt=now;
   const q=$("#q")?.value.trim(); if(!q){ $("#out").innerHTML=`<div class="card"><p class="error">Type something to search.</p></div>`; return; }
   startCooldown(); saveRecent(q);
   try{
     if(MODE==='user'){ await userLookup(q); return; }
     $("#out").innerHTML = `<div class="card"><div class="loader"><div class="spinner"></div><div>Searching games…</div></div></div>` + sk() + sk();
-    let ids=[];
-    if(/^\d+$/.test(q)){
-      const uniDirect = await gameDetails([Number(q)]);
-      if(uniDirect.length){ LAST_RESULTS.games = uniDirect; applyControls(); return; }
-      const uni=await placeToUniverse(q); if(uni) ids=[uni];
-    }else{ ids=await autoUniverses(q); }
+    let ids=[]; if(/^\d+$/.test(q)){ const uniDirect=await gameDetails([Number(q)]); if(uniDirect.length){ LAST_RESULTS.games=uniDirect; applyControls(); return; } const uni=await placeToUniverse(q); if(uni) ids=[uni]; } else { ids=await autoUniverses(q); }
     if(!ids.length){ $("#out").innerHTML=`<div class="card"><p class="error">No games found. Try another name or an ID.</p></div>`; return; }
-    LAST_RESULTS.games = await gameDetails(ids);
-    applyControls();
-  }catch(e){
-    console.error(e);
-    $("#out").innerHTML = `<div class="card"><p class="error">Search failed. ${e.message||''}</p></div>`;
-    if(cooldownTimer){ clearInterval(cooldownTimer); const b=$("#go"); if(b){ b.disabled=false; b.textContent='Search'; } }
-  }
+    LAST_RESULTS.games = await gameDetails(ids); applyControls();
+  }catch(e){ console.error(e); $("#out").innerHTML=`<div class="card"><p class="error">Search failed. ${e.message||''}</p></div>`; if(cooldownTimer){ clearInterval(cooldownTimer); const b=$("#go"); if(b){ b.disabled=false; b.textContent='Search'; } } }
 }
 function applyControls(){
   if(!LAST_RESULTS.games.length) return;
-  const minP=Number($("#minPlayers")?.value||0);
-  const minV=Number($("#minVisits")?.value||0);
-  let arr = LAST_RESULTS.games.filter(g=>g.playing>=minP && g.visits>=minV);
-  const sort=$("#sortSel")?.value || 'visits';
-  const likePct=g=>{ const t=g.up+g.down; return t? (g.up/t):0; };
-  arr.sort((a,b)=>{
-    switch(sort){
-      case 'playing': return (b.playing||0)-(a.playing||0);
-      case 'favorites': return (b.favorites||0)-(a.favorites||0);
-      case 'likes': return likePct(b)-likePct(a);
-      case 'name': return String(a.name).localeCompare(String(b.name));
-      default: return (b.visits||0)-(a.visits||0);
-    }
-  });
+  const minP=Number($("#minPlayers")?.value||0), minV=Number($("#minVisits")?.value||0);
+  let arr=LAST_RESULTS.games.filter(g=>g.playing>=minP && g.visits>=minV);
+  const sort=$("#sortSel")?.value||'visits'; const likePct=g=>{ const t=g.up+g.down; return t? (g.up/t):0; };
+  arr.sort((a,b)=>{ switch(sort){ case'playing':return(b.playing||0)-(a.playing||0); case'favorites':return(b.favorites||0)-(a.favorites||0); case'likes':return likePct(b)-likePct(a); case'name':return String(a.name).localeCompare(String(b.name)); default:return(b.visits||0)-(a.visits||0);} });
   paintGames(arr);
 }
-async function viewGame(id){
-  let g = GAME_CACHE.get(Number(id));
-  if(!g){ const arr=await gameDetails([Number(id)]).catch(()=>[]); g=arr[0]; }
-  if(!g){ $("#out").innerHTML = `<div class="card"><p class="error">Couldn’t load that game.</p></div>`; return; }
-  paintGame(g);
-}
+async function viewGame(id){ let g=GAME_CACHE.get(Number(id)); if(!g){ const arr=await gameDetails([Number(id)]).catch(()=>[]); g=arr[0]; } if(!g){ $("#out").innerHTML=`<div class="card"><p class="error">Couldn’t load that game.</p></div>`; return; } paintGame(g); }
 
-/* ======================= BOOKMARKS / RECENT / SHARE ======================= */
-function bookmark(type,id){
-  let data; try{ data=JSON.parse(LS.get(BOOK_KEY)||'{}'); }catch{ data={}; }
-  if(!data[type]) data[type]=[];
-  if(!data[type].includes(String(id))) data[type].unshift(String(id));
-  LS.set(BOOK_KEY, JSON.stringify(data)); toast('Saved to bookmarks');
-}
+/* ======================= BOOKMARKS / RECENTS / SHARE ======================= */
+function bookmark(type,id){ let data; try{ data=JSON.parse(LS.get(BOOK_KEY)||'{}'); }catch{ data={}; } if(!data[type]) data[type]=[]; if(!data[type].includes(String(id))) data[type].unshift(String(id)); LS.set(BOOK_KEY,JSON.stringify(data)); toast('Saved to bookmarks'); }
 async function showBookmarks(){
   let data; try{ data=JSON.parse(LS.get(BOOK_KEY)||'{}'); }catch{ data={}; }
-  const gIds=(data.game||[]).slice(0,40).map(Number);
-  const uIds=(data.user||[]).slice(0,40).map(Number);
+  const gIds=(data.game||[]).slice(0,40).map(Number); const uIds=(data.user||[]).slice(0,40).map(Number);
   let html=`<div class="card"><h2 style="text-align:center;margin:0 0 8px">My Bookmarks</h2>`;
-  if(gIds.length){
-    const games=await gameDetails(gIds);
-    html += `<h3 style="text-align:center">Games</h3><div class="list">` +
-      games.map(g=>`<div class="item" data-view-game="${g.id}"><div class="row2"><img class="thumb" src="${g.thumb}" onerror="this.src='https://placehold.co/150x150?text=Game'"><div class="info"><h2>${g.name}</h2><div class="meta"><span>Visits: ${n(g.visits)}</span></div></div></div></div>`).join('') +
-      `</div>`;
-  }
-  if(uIds.length){
-    html += `<h3 style="text-align:center;margin-top:12px">Users</h3><div class="list">` +
-      uIds.map(uid=>`<div class="item" data-open-user="${uid}"><div class="row2"><div class="info"><h2 style="text-align:center">User ID ${uid}</h2><div class="meta"><span>Click to open</span></div></div></div></div>`).join('') +
-      `</div>`;
-  }
-  if(!gIds.length && !uIds.length) html += `<p class="muted" style="text-align:center">No bookmarks yet.</p>`;
-  html += `</div>`;
-  $("#out").innerHTML = html;
-  $("#out").querySelectorAll('[data-view-game]').forEach(el=>el.addEventListener('click', ()=>viewGame(el.getAttribute('data-view-game'))));
-  $("#out").querySelectorAll('[data-open-user]').forEach(el=>el.addEventListener('click', ()=>{
-    setMode('user'); $("#q").value = el.getAttribute('data-open-user'); lookup();
-  }));
+  if(gIds.length){ const games=await gameDetails(gIds); html+=`<h3 style="text-align:center">Games</h3><div class="list">`+games.map(g=>`<div class="item" data-view-game="${g.id}"><div class="row2"><img class="thumb" src="${g.thumb}" onerror="this.src='https://placehold.co/150x150?text=Game'"><div class="info"><h2>${g.name}</h2><div class="meta"><span>Visits: ${n(g.visits)}</span></div></div></div></div>`).join('')+`</div>`; }
+  if(uIds.length){ html+=`<h3 style="text-align:center;margin-top:12px">Users</h3><div class="list">`+uIds.map(uid=>`<div class="item" data-open-user="${uid}"><div class="row2"><div class="info"><h2 style="text-align:center">User ID ${uid}</h2><div class="meta"><span>Click to open</span></div></div></div></div>`).join('')+`</div>`; }
+  if(!gIds.length&&!uIds.length) html+=`<p class="muted" style="text-align:center">No bookmarks yet.</p>`;
+  html+=`</div>`; $("#out").innerHTML=html;
+  $("#out").querySelectorAll('[data-view-game]').forEach(el=>el.addEventListener('click',()=>viewGame(el.getAttribute('data-view-game'))));
+  $("#out").querySelectorAll('[data-open-user]').forEach(el=>el.addEventListener('click',()=>{ setMode('user'); $("#q").value=el.getAttribute('data-open-user'); lookup(); }));
 }
-function exportBookmarks(){
-  const data = LS.get(BOOK_KEY)||'{}';
-  const blob = new Blob([data],{type:'application/json'});
-  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='roblox-bookmarks.json'; a.click(); URL.revokeObjectURL(a.href);
-  toast('Exported JSON');
-}
-function importBookmarks(file){
-  const reader=new FileReader();
-  reader.onload=()=>{ try{ const data=JSON.parse(String(reader.result||'{}')); LS.set(BOOK_KEY, JSON.stringify(data||{})); toast('Imported'); }catch{ alert('Invalid JSON file.'); } };
-  reader.readAsText(file);
-}
-function saveRecent(q){
-  let arr; try{ arr=JSON.parse(LS.get(RECENT_KEY)||'[]'); }catch{ arr=[]; }
-  arr = arr.filter(x=>x!==q); arr.unshift(q); while(arr.length>15) arr.pop();
-  LS.set(RECENT_KEY, JSON.stringify(arr));
-}
-function showRecent(){
-  let arr; try{ arr=JSON.parse(LS.get(RECENT_KEY)||'[]'); }catch{ arr=[]; }
-  if(!arr.length){ alert('No recent searches yet.'); return; }
-  $("#out").innerHTML = `<div class="card"><h2 style="text-align:center;margin:0 0 8px">Recent searches</h2><div class="list">` +
-    arr.map(q=>`<div class="item" data-re-search="${q.replace(/"/g,'&quot;')}"><div class="row2"><div class="info"><h2 style="text-align:center">${q}</h2><div class="meta"><span>Click to search</span></div></div></div></div>`).join('') +
-    `</div></div>`;
-  $("#out").querySelectorAll('[data-re-search]').forEach(el=>{
-    el.addEventListener('click', ()=>{ $("#q").value = el.getAttribute('data-re-search'); lookup(); });
-  });
-}
-function copyLink(){
-  const p=new URLSearchParams(); p.set('mode',MODE);
-  const q=$("#q")?.value.trim(); if(q) p.set('q',q);
-  const base = (location.origin && location.origin!=="null") ? (location.origin+location.pathname) : location.href.split("?")[0];
-  const link=`${base}?${p.toString()}`;
-  navigator.clipboard?.writeText(link).then(()=>{ const b=$("#copyBtn"); if(b){ b.textContent='Copied!'; setTimeout(()=>b.textContent='Copy link',1200); } toast('Link copied'); });
-}
+function exportBookmarks(){ const data=LS.get(BOOK_KEY)||'{}'; const blob=new Blob([data],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='roblox-bookmarks.json'; a.click(); URL.revokeObjectURL(a.href); toast('Exported JSON'); }
+function importBookmarks(file){ const reader=new FileReader(); reader.onload=()=>{ try{ const data=JSON.parse(String(reader.result||'{}')); LS.set(BOOK_KEY,JSON.stringify(data||{})); toast('Imported'); }catch{ alert('Invalid JSON file.'); } }; reader.readAsText(file); }
+function saveRecent(q){ let arr; try{ arr=JSON.parse(LS.get(RECENT_KEY)||'[]'); }catch{ arr=[]; } arr=arr.filter(x=>x!==q); arr.unshift(q); while(arr.length>15) arr.pop(); LS.set(RECENT_KEY,JSON.stringify(arr)); }
+function showRecent(){ let arr; try{ arr=JSON.parse(LS.get(RECENT_KEY)||'[]'); }catch{ arr=[]; } if(!arr.length){ alert('No recent searches yet.'); return; } $("#out").innerHTML=`<div class="card"><h2 style="text-align:center;margin:0 0 8px">Recent searches</h2><div class="list">`+arr.map(q=>`<div class="item" data-re-search="${q.replace(/"/g,'&quot;')}"><div class="row2"><div class="info"><h2 style="text-align:center">${q}</h2><div class="meta"><span>Click to search</span></div></div></div></div>`).join('')+`</div></div>`; $("#out").querySelectorAll('[data-re-search]').forEach(el=>el.addEventListener('click',()=>{ $("#q").value=el.getAttribute('data-re-search'); lookup(); })); }
+function copyLink(){ const p=new URLSearchParams(); p.set('mode',MODE); const q=$("#q")?.value.trim(); if(q) p.set('q',q); const base=(location.origin&&location.origin!=="null")?(location.origin+location.pathname):location.href.split("?")[0]; const link=`${base}?${p.toString()}`; navigator.clipboard?.writeText(link).then(()=>{ const b=$("#copyBtn"); if(b){ b.textContent='Copied!'; setTimeout(()=>b.textContent='Copy link',1200); } toast('Link copied'); }); }
 
 /* ======================= COMPARE ======================= */
-async function idFromNameOrId(x){
-  let id=String(x).trim(); if(/^\d+$/.test(id)) return id;
-  const r=await j(`${RBX.users}/v1/usernames/users`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({usernames:[id.toLowerCase()],excludeBannedUsers:false})});
-  if(!r?.data?.[0]) throw new Error('User not found: '+x);
-  return String(r.data[0].id);
-}
-async function getUserLite(id){
-  const [u,fri,fol,folw]=await Promise.all([
-    j(`${RBX.users}/v1/users/${id}`),
-    jWithFallback(`${RBX.friends}/v1/users/${id}/friends/count`,   null),
-    jWithFallback(`${RBX.friends}/v1/users/${id}/followers/count`, null),
-    jWithFallback(`${RBX.friends}/v1/users/${id}/followings/count`,null)
-  ]);
-  return {id:u.id,name:u.name,displayName:u.displayName,created:u.created,
-          friends:fri?.count ?? null, followers:fol?.count ?? null, following:folw?.count ?? null};
-}
+async function idFromNameOrId(x){ let id=String(x).trim(); if(/^\d+$/.test(id)) return id; const r=await j(`${RBX.users}/v1/usernames/users`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({usernames:[id.toLowerCase()],excludeBannedUsers:false})}); if(!r?.data?.[0]) throw new Error('User not found: '+x); return String(r.data[0].id); }
+async function getUserLite(id){ const [u,fri,fol,folw]=await Promise.all([ j(`${RBX.users}/v1/users/${id}`), jWithFallback(`${RBX.friends}/v1/users/${id}/friends/count`,null), jWithFallback(`${RBX.friends}/v1/users/${id}/followers/count`,null), jWithFallback(`${RBX.friends}/v1/users/${id}/followings/count`,null) ]); return {id:u.id,name:u.name,displayName:u.displayName,created:u.created,friends:fri?.count??null,followers:fol?.count??null,following:folw?.count??null}; }
 function fmtCount(label,v){ return v==null ? '' : `<span>${label}: <b>${n(v)}</b></span>`; }
 async function compareUsers(){
-  const a=$("#cmpA")?.value.trim(), b=$("#cmpB")?.value.trim();
-  if(!a||!b){ $("#cmpOut").textContent='Enter two usernames or IDs.'; return; }
-  $("#cmpOut").innerHTML = '<div class="loader"><div class="spinner"></div><div>Comparing…</div></div>';
+  const a=$("#cmpA")?.value.trim(), b=$("#cmpB")?.value.trim(); if(!a||!b){ $("#cmpOut").textContent='Enter two usernames or IDs.'; return; }
+  $("#cmpOut").innerHTML='<div class="loader"><div class="spinner"></div><div>Comparing…</div></div>';
   try{
     const [idA,idB]=await Promise.all([idFromNameOrId(a), idFromNameOrId(b)]);
     const [ua,ub]=await Promise.all([getUserLite(idA), getUserLite(idB)]);
-    const older=new Date(ua.created) < new Date(ub.created) ? ua : ub;
-    $("#cmpOut").innerHTML = `
+    const older=new Date(ua.created)<new Date(ub.created)?ua:ub;
+    $("#cmpOut").innerHTML=`
       <div class="list">
         <div class="item" tabindex="0"><div class="info">
           <h2 style="text-align:center">${ua.name} <span class="muted">(${ua.displayName})</span></h2>
           <div class="meta">${fmtCount('Friends',ua.friends)}${fmtCount('Followers',ua.followers)}${fmtCount('Following',ua.following)}<span>Created: ${new Date(ua.created).toLocaleDateString()}</span></div>
         </div></div>
-        <div class="item" tabindex="0"><div class="info>
+        <div class="item" tabindex="0"><div class="info">
           <h2 style="text-align:center">${ub.name} <span class="muted">(${ub.displayName})</span></h2>
           <div class="meta">${fmtCount('Friends',ub.friends)}${fmtCount('Followers',ub.followers)}${fmtCount('Following',ub.following)}<span>Created: ${new Date(ub.created).toLocaleDateString()}</span></div>
         </div></div>
       </div>
       <p class="muted" style="text-align:center;margin-top:8px">Older account: <b>${older.name}</b></p>`;
-  }catch(e){ $("#cmpOut").textContent = e.message||'Compare failed.'; }
+  }catch(e){ $("#cmpOut").textContent=e.message||'Compare failed.'; }
 }
 
-/* ======================= CONTACT FORM ======================= */
-const FORM_ENDPOINT = "https://formsubmit.co/ajax/supp.roxzy@gmail.com";
+/* ======================= EMBED GENERATOR ======================= */
+function gameCardHTML(g){
+  const lr=likeRatio(g.up,g.down);
+  return `<div style="font-family:Inter,system-ui;max-width:560px;border:1px solid #dbe6ff;border-radius:16px;padding:12px;background:#fff;color:#0b1433">
+    <div style="display:flex;gap:12px;align-items:center">
+      <img src="${g.thumb}" alt="${g.name}" style="width:96px;height:96px;border-radius:12px;border:1px solid #dbe6ff;object-fit:cover"/>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:800">${g.name}</div>
+        <div style="font-size:12px;color:#3a4774">Creator: ${g.creator}</div>
+        <div style="display:flex;gap:10px;margin-top:6px;font-size:12px;color:#3a4774">
+          <span>Visits: ${n(g.visits)}</span><span>Playing: ${n(g.playing)}</span><span>Likes: ${lr.label}</span>
+        </div>
+        <a href="https://www.roblox.com/games/${g.rootPlaceId}" target="_blank" style="display:inline-block;margin-top:8px;padding:8px 10px;border-radius:999px;background:#0b5fff;color:#fff;text-decoration:none;font-weight:800">Play</a>
+      </div>
+    </div>
+  </div>`;
+}
+async function makeEmbed(){
+  const box=$("#embedOut"); box.innerHTML='<div class="loader"><div class="spinner"></div><div>Generating…</div></div>';
+  let id=($("#embedUni")?.value||'').trim(); if(!id){ box.textContent='Enter a universe or place ID.'; return; }
+  if(!/^\d+$/.test(id)){ box.textContent='ID must be numeric.'; return; }
+  // if it's a place ID, convert to universe if needed
+  let uni = Number(id);
+  const details = await gameDetails([uni]);
+  let g = details[0];
+  if(!g){ const uniFromPlace = await placeToUniverse(id); if(!uniFromPlace){ box.textContent='Could not resolve that ID.'; return; } const det2 = await gameDetails([uniFromPlace]); g = det2[0]; }
+  if(!g){ box.textContent='Could not load game details.'; return; }
+  const html = gameCardHTML(g).replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  box.innerHTML = `<div class="card" style="text-align:center">
+    <h3 style="margin:0 0 8px">Preview</h3>
+    ${gameCardHTML(g)}
+    <h3 style="margin:12px 0 4px">Embed HTML</h3>
+    <textarea class="input" style="height:160px;max-width:100%;text-align:left" readonly>${html}</textarea><br>
+    <button class="btn" id="copyEmbed">Copy</button>
+  </div>`;
+  on('#copyEmbed','click',()=>{ const ta=box.querySelector('textarea'); ta.select(); document.execCommand('copy'); toast('Embed copied'); });
+}
+
+/* ======================= INIT & ERROR OVERLAY ======================= */
+window.addEventListener('error',(ev)=>{ const out=$("#out"); if(!out) return; out.innerHTML=`<div class="card"><p class="error">A script error occurred: ${ev.message}. Try toggling Light/Dark or disabling strict privacy mode.</p></div>`+sk(); });
+document.addEventListener('DOMContentLoaded', ()=>{
+  applyAccent(Number(LS.get(ACCENT_KEY) || 0));
+  applyTheme(LS.get(THEME_KEY) || (prefersLight?'light':'dark'));
+
+  on('#tab-game','click',()=>setMode('game'));
+  on('#tab-user','click',()=>setMode('user'));
+  on('#go','click',lookup);
+  on('#applyBtn','click',applyControls);
+  on('#randBtn','click',()=>{ const list=LAST_RESULTS.games; if(!list.length){ alert('Search first!'); return; } const pick=list[Math.floor(Math.random()*list.length)]; viewGame(pick.id); });
+  on('#themeBtn','click',toggleTheme);
+  on('#accentBtn','click',cycleAccent);
+
+  on('#copyBtn','click',copyLink);
+  on('#booksBtn','click',showBookmarks);
+  on('#exportBtn','click',exportBookmarks);
+  on('#recentBtn','click',showRecent);
+  on('#clearBtn','click',clearResults);
+  const importFile=$("#importFile"); if(importFile) importFile.addEventListener('change',(e)=>{ if(e.target.files?.[0]) importBookmarks(e.target.files[0]); });
+
+  on('#cmpBtn','click',compareUsers);
+  const form=$("#contactForm"); if(form) form.addEventListener('submit',sendContact);
+
+  on('#makeEmbed','click',makeEmbed);
+
+  // Search shortcuts
+  document.addEventListener('keydown',(e)=>{ if(e.key==='/' && document.activeElement!==$('#q')){ e.preventDefault(); $('#q')?.focus(); } if(e.key==='Enter' && document.activeElement===$('#q')) lookup(); const k=e.key.toLowerCase(); if(k==='g') setMode('game'); if(k==='u') setMode('user'); });
+
+  // Trending & collections chips
+  document.querySelectorAll('[data-trend]').forEach(chip=>{ chip.addEventListener('click',()=>{ $("#q").value=chip.dataset.trend; lookup(); }); });
+
+  // Deep link
+  const p=new URLSearchParams(location.search); const m=p.get('mode'); if(m==='user'||m==='game') setMode(m); const q=p.get('q'); if(q){ $("#q").value=q; lookup(); }
+
+  // Datalist hints
+  const qEl=$("#q"); if(qEl && !qEl.value){ qEl.setAttribute('list','examples'); const dl=document.createElement('datalist'); dl.id='examples'; dl.innerHTML=['doors','er:lc','adopt me','brookhaven','blox fruits','frontlines','shindo life','universe id 4520749081'].map(v=>`<option value="${v}"></option>`).join(''); document.body.appendChild(dl); }
+});
+
+/* ======================= CONTACT FORM (service) ======================= */
+const FORM_ENDPOINT="https://formsubmit.co/ajax/supp.roxzy@gmail.com";
 async function sendContact(e){
   e.preventDefault();
   const btn=$("#sendBtn"), gmailBtn=$("#gmailBtn"), note=$("#sendNote");
@@ -695,76 +707,15 @@ async function sendContact(e){
   try{
     const r=await fetch(FORM_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(payload)});
     const data=await r.json().catch(()=>({}));
-    if(r.ok && (data.success||data.message)){ note.textContent='✓ Message sent. Watch your inbox for a reply.'; btn.textContent='Sent'; setTimeout(()=>{ btn.disabled=false; btn.textContent='Send message'; },2000); e.target.reset(); }
+    if(r.ok && (data.success||data.message)){ note.textContent='✓ Message sent. Check your inbox.'; btn.textContent='Sent'; setTimeout(()=>{ btn.disabled=false; btn.textContent='Send message'; },2000); e.target.reset(); }
     else throw new Error('Service error');
   }catch{
-    note.textContent='Could not send via service. You can send quickly via Gmail Web.';
+    note.textContent='Could not send via service. Use Gmail Web instead.';
     gmailBtn.style.display='inline-block';
-    gmailBtn.onclick=()=>{
-      const u=new URL('https://mail.google.com/mail/'); u.searchParams.set('view','cm'); u.searchParams.set('to','supp.roxzy@gmail.com');
-      u.searchParams.set('su', payload.subject || 'Roblox Lookup message'); u.searchParams.set('body', `${payload.message}\n\nFrom: ${payload.name} <${payload.email}>`);
-      window.open(u.toString(), '_blank');
-    };
+    gmailBtn.onclick=()=>{ const u=new URL('https://mail.google.com/mail/'); u.searchParams.set('view','cm'); u.searchParams.set('to','supp.roxzy@gmail.com'); u.searchParams.set('su', payload.subject || 'Roblox Lookup message'); u.searchParams.set('body', `${payload.message}\n\nFrom: ${payload.name} <${payload.email}>`); window.open(u.toString(),'_blank'); };
     btn.disabled=false; btn.textContent='Send message';
   }
 }
-
-/* ======================= INIT & SAFETY ======================= */
-window.addEventListener('error',(ev)=>{
-  const out=$("#out"); if(!out) return;
-  out.innerHTML = `<div class="card"><p class="error">A script error occurred: ${ev.message}. If this keeps happening, try toggling Light/Dark or disabling strict privacy mode.</p></div>` + sk();
-});
-document.addEventListener('DOMContentLoaded', ()=>{
-  applyAccent(Number(LS.get(ACCENT_KEY) || 0));
-  const initialTheme = LS.get(THEME_KEY) || (prefersLight?'light':'dark');
-  applyTheme(initialTheme);
-
-  // Binds
-  on('#tab-game','click', ()=>setMode('game'));
-  on('#tab-user','click', ()=>setMode('user'));
-  on('#go','click', lookup);
-  on('#applyBtn','click', applyControls);
-  on('#randBtn','click', ()=>{ const list=LAST_RESULTS.games; if(!list.length){ alert('Search first!'); return; } const pick=list[Math.floor(Math.random()*list.length)]; viewGame(pick.id); });
-  on('#themeBtn','click', toggleTheme);
-  on('#accentBtn','click', cycleAccent);
-
-  on('#copyBtn','click', copyLink);
-  on('#booksBtn','click', showBookmarks);
-  on('#exportBtn','click', exportBookmarks);
-  on('#recentBtn','click', showRecent);
-  on('#clearBtn','click', clearResults);
-  const importFile=$("#importFile");
-  if(importFile) importFile.addEventListener('change', (e)=>{ if(e.target.files?.[0]) importBookmarks(e.target.files[0]); });
-
-  on('#cmpBtn','click', compareUsers);
-  const form=$("#contactForm"); if(form) form.addEventListener('submit', sendContact);
-
-  // shortcuts
-  document.addEventListener('keydown',(e)=>{
-    if(e.key==='/' && document.activeElement!==$('#q')){ e.preventDefault(); $('#q')?.focus(); }
-    if(e.key==='Enter' && document.activeElement===$('#q')) lookup();
-    const k=e.key.toLowerCase(); if(k==='g') setMode('game'); if(k==='u') setMode('user');
-  });
-
-  // trending chips
-  document.querySelectorAll('[data-trend]').forEach(chip=>{
-    chip.addEventListener('click', ()=>{ $("#q").value = chip.dataset.trend; lookup(); });
-  });
-
-  // deep link
-  const p=new URLSearchParams(location.search);
-  const m=p.get('mode'); if(m==='user'||m==='game') setMode(m);
-  const q=p.get('q'); if(q){ $("#q").value=q; lookup(); }
-
-  // datalist hints
-  const qEl=$("#q");
-  if(qEl && !qEl.value){
-    qEl.setAttribute('list','examples');
-    const dl=document.createElement('datalist'); dl.id='examples';
-    dl.innerHTML=['doors','er:lc','adopt me','brookhaven','blox fruits','frontlines','shindo life','universe id 4520749081'].map(v=>`<option value="${v}"></option>`).join('');
-    document.body.appendChild(dl);
-  }
-});
   </script>
 </body>
 </html>
