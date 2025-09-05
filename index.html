@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="Search Roblox games & users by name or ID. Sort, filter, bookmark, compare, and share. Fast and mobile-friendly." />
   <meta name="robots" content="index,follow" />
+  <meta name="theme-color" content="#0b0f1b" />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -42,7 +43,7 @@
 
     .wrap{ width:min(980px,96vw); margin-inline:auto; }
     header{ display:flex; flex-direction:column; align-items:center; gap:8px; }
-    .logo{ width:54px; height:54px; border-radius:14px; background:linear-gradient(135deg,#7fb7ff,#7af1ff); box-shadow:0 14px 28px rgba(127,183,255,.35); }
+    .logo{ width:54px; height:54px; border-radius:14px; background:linear-gradient(135deg,var(--accent),var(--accent-2)); box-shadow:0 14px 28px color-mix(in oklab, var(--accent) 50%, transparent); }
     h1{ margin:6px 0 2px; font-size:34px; letter-spacing:.2px; font-weight:800; }
     .sub{ margin:0; color:var(--ink-2); font-size:14px; }
 
@@ -51,17 +52,17 @@
     [data-theme="light"] .tabs{ background:#eef3ff; border-color:#d8e2ff; }
     .tab{ border:0; background:transparent; color:#dfe6ff; font-weight:800; padding:10px 16px; border-radius:999px; cursor:pointer; }
     [data-theme="light"] .tab{ color:#233160; }
-    .tab.active{ background:linear-gradient(90deg,#7fb7ff,#7af1ff); color:#051124; }
+    .tab.active{ background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#051124; }
     .row{ display:flex; gap:10px; align-items:center; justify-content:center; flex-wrap:wrap; }
     .input{
       width:min(640px, 92vw); background:#0c1330; color:#fff; border:1px solid #223068;
       padding:14px 16px; border-radius:12px; font-size:16px; outline:none; text-align:center;
     }
     [data-theme="light"] .input{ background:#f7f9ff; color:#0b1433; border-color:#d5e0ff; }
-    .input:focus{ border-color:#7fb7ff; box-shadow:0 0 0 4px rgba(127,183,255,.22); }
+    .input:focus{ border-color:var(--accent); box-shadow:0 0 0 4px color-mix(in oklab, var(--accent) 30%, transparent); }
     .btn{
       border:0; cursor:pointer; font-weight:900; padding:14px 18px; border-radius:12px;
-      background:linear-gradient(90deg,#7fb7ff,#7af1ff); color:#071127; box-shadow:0 14px 32px rgba(127,183,255,.35);
+      background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#071127; box-shadow:0 14px 32px color-mix(in oklab, var(--accent) 45%, transparent);
     }
     .btn:disabled{ opacity:.6; cursor:not-allowed; box-shadow:none; }
 
@@ -79,7 +80,9 @@
     .chip{ padding:6px 10px; border-radius:999px; font-size:12px; font-weight:900; background:#0e173e; border:1px solid #2a3a80; color:#dfe6ff; }
     [data-theme="light"] .chip{ background:#f0f4ff; border-color:#dbe6ff; color:#1b2749; }
     .pill{ padding:6px 10px; border-radius:999px; font-size:12px; font-weight:900; }
-    .online{ background:#7fb7ff; color:#06122a; } .playing{ background:#38e3ab; color:#06131b; } .studio{ background:#ffd36a; color:#2d1a00; } .offline{ background:#8b93af; color:#0c1126; }
+
+    .online{ background:var(--accent); color:#06122a; } .playing{ background:var(--ok); color:#06131b; }
+    .studio{ background:var(--warn); color:#2d1a00; } .offline{ background:#8b93af; color:#0c1126; }
 
     .list{ display:grid; grid-template-columns:1fr; gap:12px; margin-top:12px; }
     .item{ background:#131c38; border:1px solid #2c3d86; border-radius:14px; padding:12px; cursor:pointer; transition:.15s; }
@@ -94,6 +97,10 @@
 
     .muted{ color:var(--ink-3); }
     .error{ color:var(--bad); font-weight:800; text-align:center; }
+
+    .ratio-good{ color:var(--ok); font-weight:800; }
+    .ratio-mid{ color:var(--warn); font-weight:800; }
+    .ratio-bad{ color:var(--bad); font-weight:800; }
 
     .loader{ display:flex; align-items:center; justify-content:center; gap:10px; color:#dce2ff; }
     .spinner{ width:18px; height:18px; border:2px solid var(--accent-2); border-top-color:transparent; border-radius:50%; animation:spin .8s linear infinite; }
@@ -113,6 +120,10 @@
     [data-theme="light"] .tool{ background:#eef3ff; color:#1b2749; border-color:#dbe6ff; }
 
     .adsense-box{ margin-top:16px; }
+    .adsense-box.top{ margin-top:0; margin-bottom:16px; }
+
+    .toast{ position:fixed; left:50%; bottom:22px; transform:translateX(-50%); background:#0b1340; color:#dfe6ff; border:1px solid #273578; padding:12px 16px; border-radius:999px; box-shadow:var(--shadow); display:none; z-index:40; }
+    [data-theme="light"] .toast{ background:#eef3ff; color:#1b2749; border-color:#dbe6ff; }
 
     footer{ width:min(980px,96vw); margin-top:34px; padding-top:12px; border-top:1px solid var(--line); color:#6b79c2; font-size:13px; text-align:center; }
     footer a{ color:inherit }
@@ -126,6 +137,14 @@
       <h1>Roblox Lookup</h1>
       <p class="sub">Search games & users. Sort, filter, bookmark, compare — fast and mobile-friendly.</p>
     </header>
+
+    <!-- Ad (top, far away from controls) -->
+    <div class="adsense-box top">
+      <ins class="adsbygoogle" style="display:block"
+           data-ad-client="ca-pub-6941574746900426" data-ad-slot="5368161496"
+           data-ad-format="auto" data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
+    </div>
 
     <!-- Search -->
     <section class="panel" role="search" aria-label="Roblox search">
@@ -151,11 +170,20 @@
         <input class="num" id="minPlayers" type="number" min="0" step="1" placeholder="Min playing"/>
         <input class="num" id="minVisits" type="number" min="0" step="1000" placeholder="Min visits"/>
         <button class="tool" id="applyBtn">Apply</button>
-        <button class="tool" id="randBtn">🎲 Surprise me</button>
+        <button class="tool" id="randBtn">🎲 Surprise</button>
         <button class="tool" id="themeBtn">Light/Dark</button>
+        <button class="tool" id="accentBtn">🎨 Accent</button>
       </div>
 
       <p class="muted" style="margin:10px 0 0">/ focus • Enter search • G/U switch • Cooldown stops spam. <span class="chip" id="badge">Mode: Game</span></p>
+
+      <div class="chips" id="trending" style="margin-top:10px">
+        <span class="chip" data-trend="doors">Doors</span>
+        <span class="chip" data-trend="blox fruits">Blox Fruits</span>
+        <span class="chip" data-trend="brookhaven">Brookhaven</span>
+        <span class="chip" data-trend="adopt me">Adopt Me</span>
+        <span class="chip" data-trend="frontlines">Frontlines</span>
+      </div>
     </section>
 
     <!-- Utilities -->
@@ -219,7 +247,7 @@
         <li>Press <b>G</b>/<b>U</b> to switch modes.</li>
         <li>Sort by <i>Visits</i>, <i>Playing</i>, <i>Favorites</i>, <i>Likes %</i>, or <i>Name</i>. Use filters to hide low-traffic games.</li>
         <li>Use Bookmarks (and Export/Import) to keep favorites across devices.</li>
-        <li>“🎲 Surprise me” opens a random item from your last results.</li>
+        <li>“🎲 Surprise” opens a random item from your last results.</li>
       </ul>
       <h3>FAQ</h3>
       <p><b>Is this official?</b> No, this fansite isn’t affiliated with Roblox.</p>
@@ -234,6 +262,8 @@
 
     <footer>© Roblox Lookup — not affiliated with Roblox. • <a href="#how">How it works</a> • <a href="#policy">Privacy & Terms</a></footer>
   </div>
+
+  <div class="toast" id="toast"></div>
 
   <script>
 /* ======================= SAFE CORE ======================= */
@@ -250,6 +280,30 @@ const prefersLight = hasMM && matchMedia("(prefers-color-scheme: light)").matche
 const $ = (s)=>document.querySelector(s);
 function on(sel,evt,fn){ const el=$(sel); if(!el){ console.warn("[bind] missing:",sel); return; } el.addEventListener(evt,fn,{passive:true}); }
 const sleep=(ms)=>new Promise(r=>setTimeout(r,ms));
+function toast(msg){ const t=$("#toast"); t.textContent=msg; t.style.display='block'; clearTimeout(toast._t); toast._t=setTimeout(()=>t.style.display='none',1400); }
+
+/* ======================= ACCENT THEMES ======================= */
+const ACCENTS = [
+  {a:"#7fb7ff", b:"#7af1ff"}, // Azure (default)
+  {a:"#b07bff", b:"#ff7bba"}, // Purple Pop
+  {a:"#7bffc3", b:"#7bf1ff"}, // Neo Mint
+  {a:"#ffb86b", b:"#ff7680"}, // Sunset
+  {a:"#9cff6b", b:"#7af1c2"}  // Lime Splash
+];
+const ACCENT_KEY = "rbx_lookup_accent";
+function applyAccent(i){
+  const idx = Math.max(0, Math.min(ACCENTS.length-1, i|0));
+  document.documentElement.style.setProperty('--accent', ACCENTS[idx].a);
+  document.documentElement.style.setProperty('--accent-2', ACCENTS[idx].b);
+  LS.set(ACCENT_KEY, String(idx));
+  const logo = document.querySelector('.logo'); if(logo) logo.style.background = `linear-gradient(135deg, ${ACCENTS[idx].a}, ${ACCENTS[idx].b})`;
+}
+function cycleAccent(){
+  const cur = Number(LS.get(ACCENT_KEY) || 0);
+  const next = (cur + 1) % ACCENTS.length;
+  applyAccent(next);
+  toast("Accent updated");
+}
 
 /* ======================= CONFIG ======================= */
 const RBX = {
@@ -279,12 +333,13 @@ function applyTheme(theme){
 function toggleTheme(){
   const cur = LS.get(THEME_KEY) || (prefersLight?'light':'dark');
   applyTheme(cur==='dark'?'light':'dark');
+  toast("Theme switched");
 }
 
-/* ======================= HELPERS ======================= */
-async function j(url,opt={}){ const r=await fetch(url,{...opt,cache:'no-store'}); if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); }
-function n(x){ return typeof x==='number'? x.toLocaleString() : 'N/A'; }
-function likeRatio(up,down){ const u=+up||0,d=+down||0,t=u+d; if(!t) return {cls:'ratio-mid',label:'0%'}; const p=Math.round((u/t)*100); return {cls:p>=80?'ratio-good':p>=60?'ratio-mid':'ratio-bad',label:p+'%'}; }
+/* ======================= FETCH HELPERS ======================= */
+async function j(url,opt={}){ const r=await fetch(url,{...opt,cache:'no-store'}); if(!r.ok) throw new Error(String(r.status)); return r.json(); }
+async function jMaybe(url,opt={}){ try{ const r=await fetch(url,{...opt,cache:'no-store'}); if(!r.ok) return null; return await r.json(); }catch{ return null; } }
+async function jWithFallback(primary,fallback,opt={}){ const a=await jMaybe(primary,opt); if(a!==null) return a; if(!fallback) return null; return jMaybe(fallback,opt); }
 
 /* ======================= SKELETON ======================= */
 const sk=()=>`<div class="skeleton"><div class="shimmer"></div>
@@ -292,10 +347,10 @@ const sk=()=>`<div class="skeleton"><div class="shimmer"></div>
     <div class="sk-line long"></div><div class="sk-line med"></div><div class="sk-line short"></div>
   </div></div></div>`;
 
-/* ======================= GAME LOOKUP ======================= */
+/* ======================= GAMES ======================= */
 async function autoUniverses(q){
   const url = `${RBX.apis}/games-autocomplete/v1/get-suggestion/${encodeURIComponent(q)}`;
-  const data = await j(url).catch(()=>({entries:[]}));
+  const data = await jMaybe(url) || {entries:[]};
   const ids=new Set(); (data.entries||[]).forEach(e=>{ if(e?.universeId>0) ids.add(e.universeId); });
   return [...ids];
 }
@@ -310,9 +365,9 @@ async function gameDetails(universeIds){
   for(const group of chunks){
     const ids=group.join(',');
     const [games,thumbs,votes]=await Promise.all([
-      j(`${RBX.games}/v1/games?universeIds=${ids}`).catch(()=>({data:[]})),
-      j(`${RBX.thumbs}/v1/games/icons?universeIds=${ids}&size=150x150&format=Png&isCircular=false`).catch(()=>({data:[]})),
-      j(`${RBX.games}/v1/games/votes?universeIds=${ids}`).catch(()=>({data:[]}))
+      jMaybe(`${RBX.games}/v1/games?universeIds=${ids}`) || {data:[]},
+      jMaybe(`${RBX.thumbs}/v1/games/icons?universeIds=${ids}&size=150x150&format=Png&isCircular=false`) || {data:[]},
+      jMaybe(`${RBX.games}/v1/games/votes?universeIds=${ids}`) || {data:[]}
     ]);
     const t=new Map(); (thumbs.data||[]).forEach(a=>t.set(String(a.targetId),a.imageUrl));
     const v=new Map(); (votes.data||[]).forEach(x=>v.set(String(x.id||x.universeId||x.targetId),{up:x.upVotes??0,down:x.downVotes??0}));
@@ -381,9 +436,13 @@ function paintGame(g){
 }
 
 /* ======================= USER LOOKUP ======================= */
+function likeRatio(up,down){ const u=+up||0,d=+down||0,t=u+d; if(!t) return {cls:'ratio-mid',label:'0%'}; const p=Math.round((u/t)*100); return {cls:p>=80?'ratio-good':p>=60?'ratio-mid':'ratio-bad',label:p+'%'}; }
+function n(x){ return typeof x==='number'? x.toLocaleString() : 'N/A'; }
+
 async function userLookup(q){
   const out=$("#out");
   out.innerHTML = `<div class="card"><div class="loader"><div class="spinner"></div><div>Looking up user…</div></div></div>` + sk();
+
   let id = q.trim();
   if(!/^\d+$/.test(id)){
     const r = await j(`${RBX.users}/v1/usernames/users`,{
@@ -393,19 +452,39 @@ async function userLookup(q){
     if(!r?.data?.[0]) throw new Error('User not found');
     id = String(r.data[0].id);
   }
-  const [u,ava,fri,fol,folw,pre]=await Promise.all([
+
+  const [u, ava, fri, fol, folw, pre] = await Promise.all([
     j(`${RBX.users}/v1/users/${id}`),
-    j(`${RBX.thumbs}/v1/users/avatar-headshot?userIds=${id}&size=180x180&format=Png&isCircular=false`),
-    j(`${RBX.friends}/v1/users/${id}/friends/count`),
-    j(`${RBX.friends}/v1/users/${id}/followers/count`),
-    j(`${RBX.friends}/v1/users/${id}/followings/count`),
-    j(`${RBX.presence}/v1/presence/users`, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({userIds:[Number(id)]})})
+    jMaybe(`${RBX.thumbs}/v1/users/avatar-headshot?userIds=${id}&size=180x180&format=Png&isCircular=false`),
+
+    // social counts: optional (401-friendly)
+    jWithFallback(`${RBX.friends}/v1/users/${id}/friends/count`,   null),
+    jWithFallback(`${RBX.friends}/v1/users/${id}/followers/count`, null),
+    jWithFallback(`${RBX.friends}/v1/users/${id}/followings/count`,null),
+
+    // presence often requires auth; optional
+    jMaybe(`${RBX.presence}/v1/presence/users`, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({userIds:[Number(id)]})
+    })
   ]);
-  const url=ava?.data?.[0]?.imageUrl||'https://placehold.co/180x180?text=Avatar';
-  const created=u.created?new Date(u.created).toLocaleString():'Unavailable';
-  const pt=pre?.userPresences?.[0]?.userPresenceType;
+
+  const url = ava?.data?.[0]?.imageUrl || 'https://placehold.co/180x180?text=Avatar';
+  const created = u.created ? new Date(u.created).toLocaleString() : 'Unavailable';
+  const friendsCount   = fri?.count ?? null;
+  const followersCount = fol?.count ?? null;
+  const followingCount = folw?.count ?? null;
+
+  const pt = pre?.userPresences?.[0]?.userPresenceType;
   let sClass='offline', sText='Offline';
   if(pt===1){sClass='online';sText='Online'} else if(pt===2){sClass='playing';sText='In Game'} else if(pt===3){sClass='studio';sText='In Studio'}
+
+  const chips = [
+    `<span class="chip">Created: ${created}</span>`,
+    friendsCount   != null ? `<span class="chip">Friends: ${n(friendsCount)}</span>` : '',
+    followersCount != null ? `<span class="chip">Followers: ${n(followersCount)}</span>` : '',
+    followingCount != null ? `<span class="chip">Following: ${n(followingCount)}</span>` : ''
+  ].filter(Boolean).join('');
 
   out.innerHTML = `
     <div class="card">
@@ -413,12 +492,7 @@ async function userLookup(q){
         <img class="avatar" src="${url}" onerror="this.src='https://placehold.co/180x180?text=Avatar'">
         <div class="info">
           <h2 style="text-align:center">${u.name||'Unknown'} <span class="muted">(${u.displayName||'Unknown'})</span></h2>
-          <div class="chips">
-            <span class="chip">Created: ${created}</span>
-            <span class="chip">Friends: ${n(fri.count)}</span>
-            <span class="chip">Followers: ${n(fol.count)}</span>
-            <span class="chip">Following: ${n(folw.count)}</span>
-          </div>
+          <div class="chips">${chips || '<span class="muted">Counts unavailable right now.</span>'}</div>
           <p style="text-align:center;margin-top:6px"><b>Bio:</b> ${
             u.description ? String(u.description).replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m])).replace(/\n/g,'<br>')
                           : '<span class="muted">None</span>'
@@ -510,7 +584,7 @@ function bookmark(type,id){
   let data; try{ data=JSON.parse(LS.get(BOOK_KEY)||'{}'); }catch{ data={}; }
   if(!data[type]) data[type]=[];
   if(!data[type].includes(String(id))) data[type].unshift(String(id));
-  LS.set(BOOK_KEY, JSON.stringify(data)); alert('Saved to bookmarks!');
+  LS.set(BOOK_KEY, JSON.stringify(data)); toast('Saved to bookmarks');
 }
 async function showBookmarks(){
   let data; try{ data=JSON.parse(LS.get(BOOK_KEY)||'{}'); }catch{ data={}; }
@@ -540,10 +614,11 @@ function exportBookmarks(){
   const data = LS.get(BOOK_KEY)||'{}';
   const blob = new Blob([data],{type:'application/json'});
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='roblox-bookmarks.json'; a.click(); URL.revokeObjectURL(a.href);
+  toast('Exported JSON');
 }
 function importBookmarks(file){
   const reader=new FileReader();
-  reader.onload=()=>{ try{ const data=JSON.parse(String(reader.result||'{}')); LS.set(BOOK_KEY, JSON.stringify(data||{})); alert('Imported!'); }catch{ alert('Invalid JSON file.'); } };
+  reader.onload=()=>{ try{ const data=JSON.parse(String(reader.result||'{}')); LS.set(BOOK_KEY, JSON.stringify(data||{})); toast('Imported'); }catch{ alert('Invalid JSON file.'); } };
   reader.readAsText(file);
 }
 function saveRecent(q){
@@ -566,7 +641,7 @@ function copyLink(){
   const q=$("#q")?.value.trim(); if(q) p.set('q',q);
   const base = (location.origin && location.origin!=="null") ? (location.origin+location.pathname) : location.href.split("?")[0];
   const link=`${base}?${p.toString()}`;
-  navigator.clipboard?.writeText(link).then(()=>{ const b=$("#copyBtn"); if(b){ b.textContent='Copied!'; setTimeout(()=>b.textContent='Copy link',1200); } });
+  navigator.clipboard?.writeText(link).then(()=>{ const b=$("#copyBtn"); if(b){ b.textContent='Copied!'; setTimeout(()=>b.textContent='Copy link',1200); } toast('Link copied'); });
 }
 
 /* ======================= COMPARE ======================= */
@@ -579,12 +654,14 @@ async function idFromNameOrId(x){
 async function getUserLite(id){
   const [u,fri,fol,folw]=await Promise.all([
     j(`${RBX.users}/v1/users/${id}`),
-    j(`${RBX.friends}/v1/users/${id}/friends/count`),
-    j(`${RBX.friends}/v1/users/${id}/followers/count`),
-    j(`${RBX.friends}/v1/users/${id}/followings/count`),
+    jWithFallback(`${RBX.friends}/v1/users/${id}/friends/count`,   null),
+    jWithFallback(`${RBX.friends}/v1/users/${id}/followers/count`, null),
+    jWithFallback(`${RBX.friends}/v1/users/${id}/followings/count`,null)
   ]);
-  return {id:u.id,name:u.name,displayName:u.displayName,created:u.created,friends:fri.count,followers:fol.count,following:folw.count};
+  return {id:u.id,name:u.name,displayName:u.displayName,created:u.created,
+          friends:fri?.count ?? null, followers:fol?.count ?? null, following:folw?.count ?? null};
 }
+function fmtCount(label,v){ return v==null ? '' : `<span>${label}: <b>${n(v)}</b></span>`; }
 async function compareUsers(){
   const a=$("#cmpA")?.value.trim(), b=$("#cmpB")?.value.trim();
   if(!a||!b){ $("#cmpOut").textContent='Enter two usernames or IDs.'; return; }
@@ -597,11 +674,11 @@ async function compareUsers(){
       <div class="list">
         <div class="item" tabindex="0"><div class="info">
           <h2 style="text-align:center">${ua.name} <span class="muted">(${ua.displayName})</span></h2>
-          <div class="meta"><span>Friends: <b>${n(ua.friends)}</b></span><span>Followers: <b>${n(ua.followers)}</b></span><span>Following: <b>${n(ua.following)}</b></span><span>Created: ${new Date(ua.created).toLocaleDateString()}</span></div>
+          <div class="meta">${fmtCount('Friends',ua.friends)}${fmtCount('Followers',ua.followers)}${fmtCount('Following',ua.following)}<span>Created: ${new Date(ua.created).toLocaleDateString()}</span></div>
         </div></div>
-        <div class="item" tabindex="0"><div class="info">
+        <div class="item" tabindex="0"><div class="info>
           <h2 style="text-align:center">${ub.name} <span class="muted">(${ub.displayName})</span></h2>
-          <div class="meta"><span>Friends: <b>${n(ub.friends)}</b></span><span>Followers: <b>${n(ub.followers)}</b></span><span>Following: <b>${n(ub.following)}</b></span><span>Created: ${new Date(ub.created).toLocaleDateString()}</span></div>
+          <div class="meta">${fmtCount('Friends',ub.friends)}${fmtCount('Followers',ub.followers)}${fmtCount('Following',ub.following)}<span>Created: ${new Date(ub.created).toLocaleDateString()}</span></div>
         </div></div>
       </div>
       <p class="muted" style="text-align:center;margin-top:8px">Older account: <b>${older.name}</b></p>`;
@@ -632,24 +709,24 @@ async function sendContact(e){
   }
 }
 
-/* ======================= INIT ======================= */
-// Show friendly error on page (debug white-screen)
+/* ======================= INIT & SAFETY ======================= */
 window.addEventListener('error',(ev)=>{
   const out=$("#out"); if(!out) return;
   out.innerHTML = `<div class="card"><p class="error">A script error occurred: ${ev.message}. If this keeps happening, try toggling Light/Dark or disabling strict privacy mode.</p></div>` + sk();
 });
-
 document.addEventListener('DOMContentLoaded', ()=>{
+  applyAccent(Number(LS.get(ACCENT_KEY) || 0));
   const initialTheme = LS.get(THEME_KEY) || (prefersLight?'light':'dark');
   applyTheme(initialTheme);
 
-  // Binds (defensive)
+  // Binds
   on('#tab-game','click', ()=>setMode('game'));
   on('#tab-user','click', ()=>setMode('user'));
   on('#go','click', lookup);
   on('#applyBtn','click', applyControls);
   on('#randBtn','click', ()=>{ const list=LAST_RESULTS.games; if(!list.length){ alert('Search first!'); return; } const pick=list[Math.floor(Math.random()*list.length)]; viewGame(pick.id); });
   on('#themeBtn','click', toggleTheme);
+  on('#accentBtn','click', cycleAccent);
 
   on('#copyBtn','click', copyLink);
   on('#booksBtn','click', showBookmarks);
@@ -669,12 +746,17 @@ document.addEventListener('DOMContentLoaded', ()=>{
     const k=e.key.toLowerCase(); if(k==='g') setMode('game'); if(k==='u') setMode('user');
   });
 
+  // trending chips
+  document.querySelectorAll('[data-trend]').forEach(chip=>{
+    chip.addEventListener('click', ()=>{ $("#q").value = chip.dataset.trend; lookup(); });
+  });
+
   // deep link
   const p=new URLSearchParams(location.search);
   const m=p.get('mode'); if(m==='user'||m==='game') setMode(m);
   const q=p.get('q'); if(q){ $("#q").value=q; lookup(); }
 
-  // UX: examples datalist
+  // datalist hints
   const qEl=$("#q");
   if(qEl && !qEl.value){
     qEl.setAttribute('list','examples');
