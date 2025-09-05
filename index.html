@@ -4,32 +4,26 @@
   <meta charset="UTF-8" />
   <title>Roblox Lookup — Players & Games</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Find Roblox games and users by name or ID. Clean UI, fast results." />
+  <meta name="description" content="Search Roblox games & users by name or ID. Sort, filter, bookmark, compare, and learn how Roblox discovery works. Clean UI, fast results." />
+  <meta name="robots" content="index,follow" />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
 
-  <!-- AdSense (unchanged) -->
+  <!-- AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6941574746900426" crossorigin="anonymous"></script>
 
   <style>
     :root{
-      --bg:#0b0f1b;
-      --panel:#0f1526;
-      --card:#151c33;
-      --ink:#edf1ff;
-      --ink-2:#c9d2ff;
-      --ink-3:#9aa7ff;
-      --line:#253059;
-      --accent:#7fb7ff;
-      --accent-2:#7af1ff;
-      --ok:#38e3ab;
-      --warn:#ffd36a;
-      --bad:#ff7c99;
-      --radius:16px;
-      --shadow:0 16px 40px rgba(0,0,0,.45);
+      --bg:#0b0f1b; --panel:#0f1526; --card:#151c33; --ink:#edf1ff; --ink-2:#c9d2ff; --ink-3:#9aa7ff;
+      --line:#253059; --accent:#7fb7ff; --accent-2:#7af1ff; --ok:#38e3ab; --warn:#ffd36a; --bad:#ff7c99;
+      --radius:16px; --shadow:0 16px 40px rgba(0,0,0,.45);
+    }
+    [data-theme="light"]{
+      --bg:#f8fbff; --panel:#ffffff; --card:#ffffff; --ink:#101630; --ink-2:#374062; --ink-3:#5b6ab0;
+      --line:#e3e9ff; --shadow:0 12px 24px rgba(6,12,40,.08);
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -45,30 +39,30 @@
       min-height:100vh; padding:36px 16px 80px;
       text-align:center;
     }
+    [data-theme="light"] body{
+      background:#f3f6ff;
+    }
 
-    /* Layout */
     .wrap{ width:min(980px, 96vw); margin-inline:auto; }
     header{ display:flex; flex-direction:column; align-items:center; gap:8px; }
     .logo{ width:54px; height:54px; border-radius:14px; background:linear-gradient(135deg,#7fb7ff,#7af1ff); box-shadow:0 14px 28px rgba(127,183,255,.35); }
     h1{ margin:6px 0 2px; font-size:34px; letter-spacing:.2px; font-weight:800; }
     .sub{ margin:0; color:var(--ink-2); font-size:14px; }
 
-    /* Search panel */
     .panel{
-      background:var(--panel);
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      padding:18px;
+      background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:18px;
     }
+    .row{ display:flex; gap:10px; align-items:center; justify-content:center; flex-wrap:wrap; }
     .tabs{ display:inline-flex; gap:6px; padding:6px; border:1px solid #1d2650; border-radius:999px; background:#0c1330; margin:6px 0 12px; }
+    [data-theme="light"] .tabs{ background:#eef3ff; border-color:#d8e2ff; }
     .tab{ border:0; background:transparent; color:#dfe6ff; font-weight:800; padding:10px 16px; border-radius:999px; cursor:pointer; }
+    [data-theme="light"] .tab{ color:#243056; }
     .tab.active{ background:linear-gradient(90deg,#7fb7ff,#7af1ff); color:#051124; }
-    .search-row{ display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap; }
     .input{
       width:min(640px, 92vw); background:#0c1330; color:#fff; border:1px solid #223068;
       padding:14px 16px; border-radius:12px; font-size:16px; outline:none; text-align:center;
     }
+    [data-theme="light"] .input{ background:#f7f9ff; color:#09122b; border-color:#d5e0ff; }
     .input:focus{ border-color:#7fb7ff; box-shadow:0 0 0 4px rgba(127,183,255,.22); }
     .btn{
       border:0; cursor:pointer; font-weight:900; padding:14px 18px; border-radius:12px;
@@ -76,32 +70,38 @@
     }
     .btn:disabled{ opacity:.6; cursor:not-allowed; box-shadow:none; }
 
-    /* Cards / list */
-    .card{
-      background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
-      box-shadow:var(--shadow); padding:18px; margin-top:18px; text-align:left;
-    }
+    .card{ background:var(--card); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:18px; margin-top:18px; text-align:left; }
     .header-row{ display:flex; align-items:center; justify-content:center; gap:16px; }
     .thumb,.avatar{ width:120px; height:120px; border-radius:16px; border:1px solid #2a3973; background:#22306a; object-fit:cover; }
+    [data-theme="light"] .thumb,[data-theme="light"] .avatar{ border-color:#dbe6ff; background:#eef3ff; }
     .info{ flex:1; min-width:0; text-align:left; }
     .info h2{ margin:0 0 8px; font-size:22px; }
     .chips{ display:flex; gap:8px; flex-wrap:wrap; margin-top:6px; justify-content:center; }
     .chip{ padding:6px 10px; border-radius:999px; font-size:12px; font-weight:900; background:#0e173e; border:1px solid #2a3a80; color:#dfe6ff; }
+    [data-theme="light"] .chip{ background:#f0f4ff; border-color:#dbe6ff; color:#1b2749; }
     .pill{ padding:6px 10px; border-radius:999px; font-size:12px; font-weight:900; }
     .online{ background:#7fb7ff; color:#06122a; } .playing{ background:#38e3ab; color:#06131b; } .studio{ background:#ffd36a; color:#2d1a00; } .offline{ background:#8b93af; color:#0c1126; }
 
     .list{ display:grid; grid-template-columns:1fr; gap:12px; margin-top:12px; }
     .item{ background:#131c38; border:1px solid #2c3d86; border-radius:14px; padding:12px; cursor:pointer; transition:.15s; }
+    [data-theme="light"] .item{ background:#f7f9ff; border-color:#dbe6ff; }
     .item:hover{ transform:translateY(-1px); border-color:#3b4caa; background:#17234f; }
+    [data-theme="light"] .item:hover{ background:#eef3ff; }
     .row2{ display:flex; gap:14px; align-items:center; justify-content:center; }
     .meta{ display:flex; gap:12px; flex-wrap:wrap; color:#cfd7ff; font-size:13px; justify-content:center; }
+    [data-theme="light"] .meta{ color:#3a4774; }
     .tag{ padding:3px 8px; border-radius:999px; background:#0f1a49; border:1px solid #374ca6; }
+    [data-theme="light"] .tag{ background:#eef3ff; border-color:#dbe6ff; }
 
-    .ratio-good{ color:#9bffd0; } .ratio-mid{ color:#ffe29b; } .ratio-bad{ color:#ff9aa8; }
+    .controls{ display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-top:8px; }
+    .select, .num{
+      background:#0c1330; color:#fff; border:1px solid #223068; padding:10px 12px; border-radius:10px; font-weight:700;
+    }
+    [data-theme="light"] .select,[data-theme="light"] .num{ background:#f7f9ff; color:#09122b; border-color:#d5e0ff; }
+
     .muted{ color:var(--ink-3); }
     .error{ color:var(--bad); font-weight:800; text-align:center; }
 
-    /* Loader / skeleton */
     .loader{ display:flex; align-items:center; justify-content:center; gap:10px; color:#dce2ff; }
     .spinner{ width:18px; height:18px; border:2px solid var(--accent-2); border-top-color:transparent; border-radius:50%; animation:spin .8s linear infinite; }
     @keyframes spin{ to{ transform:rotate(360deg); } }
@@ -114,18 +114,34 @@
     .sk-line{ height:14px; background:#17204a; border-radius:8px; }
     .sk-line.short{ width:40% } .sk-line.med{ width:70% } .sk-line.long{ width:90% }
 
-    /* Utilities + footer */
     .tools{ display:flex; justify-content:center; gap:8px; flex-wrap:wrap; }
     .tool{ padding:8px 12px; border-radius:999px; border:1px solid #273578; background:#0b1340; color:#dfe6ff; font-size:13px; font-weight:800; cursor:pointer; }
-    footer{ width:min(980px,96vw); margin-top:34px; padding-top:12px; border-top:1px solid var(--line); color:#bcd3ff; font-size:13px; text-align:center; }
+    [data-theme="light"] .tool{ background:#eef3ff; color:#1b2749; border-color:#dbe6ff; }
+    .adsense-box{ margin-top:16px; }
+
+    footer{ width:min(980px,96vw); margin-top:34px; padding-top:12px; border-top:1px solid var(--line); color:#6d7ac0; font-size:13px; text-align:center; }
+    footer a{ color:inherit }
   </style>
+
+  <!-- FAQ structured data to boost quality signals -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type":"Question","name":"How do I search by game or place ID?","acceptedAnswer":{"@type":"Answer","text":"Switch to Game mode, paste a universe ID or place ID, and press Search. Place IDs are auto-mapped to their universe when possible."}},
+      {"@type":"Question","name":"Can I bookmark results?","acceptedAnswer":{"@type":"Answer","text":"Yes, use the Bookmark button on games and users. Open Bookmarks from the top toolbar to revisit them. You can also Export or Import bookmarks."}},
+      {"@type":"Question","name":"Is this affiliated with Roblox?","acceptedAnswer":{"@type":"Answer","text":"No. Roblox Lookup is an independent tool that uses publicly-available endpoints. It does not require your login."}}
+    ]
+  }
+  </script>
 </head>
 <body>
   <div class="wrap">
     <header>
       <div class="logo" aria-hidden="true"></div>
       <h1>Roblox Lookup</h1>
-      <p class="sub">A small tool to explore Roblox games & users. Built with love, not buzzwords.</p>
+      <p class="sub">Explore Roblox games & users. Sort, filter, bookmark, compare — and learn how it works.</p>
     </header>
 
     <!-- Search -->
@@ -135,9 +151,25 @@
         <button class="tab" id="tab-user" role="tab" aria-selected="false" onclick="setMode('user')" title="U">User</button>
       </div>
 
-      <div class="search-row">
+      <div class="row">
         <input class="input" id="q" placeholder="Type a game name / universe ID / place ID • or a username / user ID" />
         <button class="btn" id="go" onclick="lookup()">Search</button>
+      </div>
+
+      <!-- New controls: sort + filters + theme -->
+      <div class="controls" aria-label="Result controls">
+        <select class="select" id="sortSel" title="Sort">
+          <option value="visits">Sort: Visits</option>
+          <option value="playing">Sort: Playing</option>
+          <option value="favorites">Sort: Favorites</option>
+          <option value="likes">Sort: Likes %</option>
+          <option value="name">Sort: Name</option>
+        </select>
+        <input class="num" id="minPlayers" type="number" min="0" step="1" placeholder="Min playing" title="Min playing users"/>
+        <input class="num" id="minVisits" type="number" min="0" step="1000" placeholder="Min visits" title="Min total visits"/>
+        <button class="tool" onclick="applyControls()">Apply</button>
+        <button class="tool" onclick="surpriseMe()">🎲 Surprise me</button>
+        <button class="tool" onclick="toggleTheme()" id="themeBtn">Light/Dark</button>
       </div>
 
       <p class="muted" style="margin:10px 0 0">/ to focus • Enter to search • G/U to switch • Cooldown stops spam. <span class="chip" id="badge">Mode: Game</span></p>
@@ -147,13 +179,18 @@
     <div class="tools">
       <button class="tool" onclick="copyLink()" id="copyBtn">Copy link</button>
       <button class="tool" onclick="showBookmarks()">Bookmarks</button>
+      <button class="tool" onclick="exportBookmarks()">Export</button>
+      <label class="tool" style="cursor:pointer">
+        Import <input type="file" id="importFile" accept=".json" style="display:none" onchange="importBookmarks(event)" />
+      </label>
+      <button class="tool" onclick="showRecent()">Recent</button>
       <button class="tool" onclick="clearResults()">Clear</button>
     </div>
 
     <!-- Results -->
     <div id="out" aria-live="polite" aria-busy="false"></div>
 
-    <!-- Ads -->
+    <!-- Ad (kept away from buttons/forms to avoid accidental clicks) -->
     <div class="adsense-box">
       <ins class="adsbygoogle" style="display:block"
            data-ad-client="ca-pub-6941574746900426" data-ad-slot="5368161496"
@@ -161,10 +198,21 @@
       <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
     </div>
 
+    <!-- Compare users -->
+    <section class="card" id="compare" aria-label="Compare users">
+      <h2 style="text-align:center;margin:0 0 8px">Quick Compare (Users)</h2>
+      <div class="row">
+        <input class="input" id="cmpA" placeholder="Username or ID A">
+        <input class="input" id="cmpB" placeholder="Username or ID B">
+        <button class="btn" onclick="compareUsers()">Compare</button>
+      </div>
+      <div id="cmpOut" class="muted" style="margin-top:8px;text-align:center">Enter two users to compare basic stats.</div>
+    </section>
+
     <!-- Contact -->
     <section class="card" id="contact" style="text-align:center;">
       <h2 style="margin:0 0 6px">Contact</h2>
-      <p class="muted" style="margin:0 0 12px">This form sends to <strong>supp.roxzy@gmail.com</strong>. If the mail service blocks the first try, you’ll get a big button to send via <em>Gmail Web</em> (no Outlook).</p>
+      <p class="muted" style="margin:0 0 12px">This form sends to <strong>supp.roxzy@gmail.com</strong>. If the mail service blocks the first try, you’ll get a big button to send via <em>Gmail Web</em>.</p>
 
       <form id="contactForm" style="display:grid; place-items:center; gap:10px;">
         <input class="input" style="max-width:620px" name="name" id="cName" placeholder="Your name" required>
@@ -179,7 +227,32 @@
       </form>
     </section>
 
-    <footer>© Roblox Lookup — not affiliated with Roblox.</footer>
+    <!-- How it works / FAQ (adds real text content for AdSense quality) -->
+    <section class="card" id="how">
+      <h2 style="margin:0 0 8px; text-align:center">How Roblox Lookup Works</h2>
+      <p>Type a game name, universe ID, or place ID to discover experiences. For users, enter a username or user ID. The tool fetches publicly available metadata (name, creator, visits, like ratio, presence and counts) and lets you sort, filter, bookmark, and share deep links. No login is required.</p>
+      <h3>Tips</h3>
+      <ul>
+        <li>Use <b>G</b>/<b>U</b> on your keyboard to switch modes.</li>
+        <li>Sort by <i>Visits</i>, <i>Playing</i>, <i>Favorites</i>, <i>Likes %</i> or <i>Name</i>. Apply filters to hide low-traffic games.</li>
+        <li>Bookmark favorites and <b>Export</b> them as a JSON file you can import on another device.</li>
+        <li>“🎲 Surprise me” will pick a random result from your last search.</li>
+      </ul>
+      <h3>FAQ</h3>
+      <p><b>Is this official?</b> No, this site isn’t affiliated with Roblox.</p>
+      <p><b>Do you track me?</b> We don’t require accounts. See the Privacy section below.</p>
+    </section>
+
+    <section class="card" id="policy" style="text-align:left">
+      <h2 style="margin:0 0 8px; text-align:center">Privacy & Terms (Short)</h2>
+      <p><b>Privacy:</b> This site uses local storage for your bookmarks and recent searches. If advertising cookies are used, you may see a consent banner depending on your region. We do not collect personal data via forms beyond what you send willingly in the contact form.</p>
+      <p><b>Terms:</b> Use the site as-is. Content and logos belong to their respective owners. We may remove abusive traffic or spam.</p>
+    </section>
+
+    <footer>
+      © Roblox Lookup — not affiliated with Roblox. •
+      <a href="#how">How it works</a> • <a href="#policy">Privacy & Terms</a>
+    </footer>
   </div>
 
   <script>
@@ -190,17 +263,31 @@
     let lastSearchAt = 0, cooldownTick = null;
 
     const GAME_CACHE = new Map();
+    const LAST_RESULTS = { games: [] };
     const BOOK_KEY = 'rbx_lookup_bookmarks_v1';
+    const RECENT_KEY = 'rbx_lookup_recent_v1';
+    const THEME_KEY = 'rbx_lookup_theme';
 
     const $ = s => document.querySelector(s);
     const sleep = ms => new Promise(r=>setTimeout(r,ms));
-
     function likeRatio(up,down){
       const u=+up||0,d=+down||0,t=u+d; if(!t) return {cls:'ratio-mid',label:'0%'};
       const p=Math.round((u/t)*100); return {cls:p>=80?'ratio-good':p>=60?'ratio-mid':'ratio-bad',label:p+'%'}
     }
     function n(x){ return typeof x==='number' ? x.toLocaleString() : 'N/A' }
     async function j(url,opt={}){ const r=await fetch(url,opt); if(!r.ok){throw new Error('HTTP '+r.status)} return r.json(); }
+
+    // ---------- Theme ----------
+    function applyTheme(theme){
+      document.documentElement.setAttribute('data-theme', theme==='light'?'light':'dark');
+      localStorage.setItem(THEME_KEY, theme);
+      $('#themeBtn').textContent = (theme==='light'?'Dark':'Light') + '/Dark';
+    }
+    function toggleTheme(){
+      const cur = localStorage.getItem(THEME_KEY)||'dark';
+      applyTheme(cur==='dark'?'light':'dark');
+    }
+    applyTheme(localStorage.getItem(THEME_KEY)|| (matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'));
 
     // ---------- UI ----------
     function setMode(m){
@@ -227,16 +314,16 @@
         </div>
       </div>`;
 
-    // ---------- Game search (name or universe/place ID) ----------
+    // ---------- Game search ----------
     async function autoUniverses(q){
-      const url=PROXY+encodeURIComponent(`https://apis.roblox.com/games-autocomplete/v1/get-suggestion/${encodeURIComponent(q)}`);
+      const url=PROXY+encodeURIComponent(\`https://apis.roblox.com/games-autocomplete/v1/get-suggestion/\${encodeURIComponent(q)}\`);
       const data=await j(url); const ids=new Set();
       (data.entries||[]).forEach(e=>{ if(e?.universeId>0) ids.add(e.universeId) });
       return [...ids];
     }
     async function placeToUniverse(pid){
       try{
-        const data=await j(PROXY+encodeURIComponent(`https://apis.roblox.com/universes/v1/places/${pid}/universe`));
+        const data=await j(PROXY+encodeURIComponent(\`https://apis.roblox.com/universes/v1/places/\${pid}/universe\`));
         return data.universeId||data?.data?.universeId||data?.data?.[0]?.universeId||null;
       }catch{ return null }
     }
@@ -247,9 +334,9 @@
       for(const group of chunks){
         const ids=group.join(',');
         const [games, thumbs, votes] = await Promise.all([
-          j(PROXY+encodeURIComponent(`https://games.roblox.com/v1/games?universeIds=${ids}`)).catch(()=>({data:[]})),
-          j(PROXY+encodeURIComponent(`https://thumbnails.roblox.com/v1/games/icons?universeIds=${ids}&size=150x150&format=Png&isCircular=false`)).catch(()=>({data:[]})),
-          j(PROXY+encodeURIComponent(`https://games.roblox.com/v1/games/votes?universeIds=${ids}`)).catch(()=>({data:[]}))
+          j(PROXY+encodeURIComponent(\`https://games.roblox.com/v1/games?universeIds=\${ids}\`)).catch(()=>({data:[]})),
+          j(PROXY+encodeURIComponent(\`https://thumbnails.roblox.com/v1/games/icons?universeIds=\${ids}&size=150x150&format=Png&isCircular=false\`)).catch(()=>({data:[]})),
+          j(PROXY+encodeURIComponent(\`https://games.roblox.com/v1/games/votes?universeIds=\${ids}\`)).catch(()=>({data:[]}))
         ]);
         const t=new Map(); (thumbs.data||[]).forEach(a=>t.set(String(a.targetId), a.imageUrl));
         const v=new Map(); (votes.data||[]).forEach(x=>v.set(String(x.id||x.universeId||x.targetId),{up:x.upVotes??0,down:x.downVotes??0}));
@@ -261,64 +348,91 @@
         });
         await sleep(80);
       }
-      all.sort((a,b)=>(b.visits||0)-(a.visits||0));
       return all;
     }
     function paintGames(arr){
-      const res=$('#out'); if(!arr.length){ res.innerHTML=`<div class="card"><p class="error">No games found.</p></div>`; return; }
-      let html=`<div class="card"><h2 style="text-align:center;margin:0 0 8px">Games</h2><div class="list">`;
+      const res=$('#out'); if(!arr.length){ res.innerHTML=\`<div class="card"><p class="error">No games found.</p></div>\`; return; }
+      let html=\`<div class="card"><h2 style="text-align:center;margin:0 0 8px">Games</h2><div class="list">\`;
       for(const g of arr){
         GAME_CACHE.set(g.id,g);
         const lr=likeRatio(g.up,g.down);
-        html+=`<div class="item" onclick="viewGame(${g.id})">
+        html+=\`<div class="item" onclick="viewGame(\${g.id})">
           <div class="row2">
-            <img class="thumb" loading="lazy" src="${g.thumb}" onerror="this.src='https://placehold.co/150x150?text=Game'">
+            <img class="thumb" loading="lazy" src="\${g.thumb}" onerror="this.src='https://placehold.co/150x150?text=Game'">
             <div class="info">
-              <h2>${g.name}</h2>
+              <h2>\${g.name}</h2>
               <div class="meta">
-                <span class="tag">Creator: ${g.creator}</span>
-                <span>Visits: <b>${n(g.visits)}</b></span>
-                <span>Playing: <b>${n(g.playing)}</b></span>
-                <span>Likes: <b class="${lr.cls}">${lr.label}</b></span>
+                <span class="tag">Creator: \${g.creator}</span>
+                <span>Visits: <b>\${n(g.visits)}</b></span>
+                <span>Playing: <b>\${n(g.playing)}</b></span>
+                <span>Likes: <b class="\${lr.cls}">\${lr.label}</b></span>
               </div>
             </div>
           </div>
-        </div>`;
+        </div>\`;
       }
-      html+=`</div></div>`;
+      html+=\`</div></div>\`;
       res.innerHTML=html;
     }
     function paintGame(g){
       const lr=likeRatio(g.up,g.down);
-      $('#out').innerHTML=`
+      $('#out').innerHTML=\`
         <div class="card">
           <div class="header-row">
-            <img class="thumb" src="${g.thumb}" onerror="this.src='https://placehold.co/150x150?text=Game'">
+            <img class="thumb" src="\${g.thumb}" onerror="this.src='https://placehold.co/150x150?text=Game'">
             <div class="info">
-              <h2 style="text-align:center">${g.name}</h2>
+              <h2 style="text-align:center">\${g.name}</h2>
               <div class="chips">
-                <span class="chip">Creator: ${g.creator}</span>
-                <span class="chip">Visits: ${n(g.visits)}</span>
-                <span class="chip">Playing: ${n(g.playing)}</span>
-                <span class="chip">Favorites: ${n(g.favorites)}</span>
+                <span class="chip">Creator: \${g.creator}</span>
+                <span class="chip">Visits: \${n(g.visits)}</span>
+                <span class="chip">Playing: \${n(g.playing)}</span>
+                <span class="chip">Favorites: \${n(g.favorites)}</span>
               </div>
-              <p style="text-align:center;margin-top:6px"><b>Likes</b> <span class="${lr.cls}">${lr.label}</span> <span class="muted">(${n(g.up)} / ${n(g.down)})</span></p>
+              <p style="text-align:center;margin-top:6px"><b>Likes</b> <span class="\${lr.cls}">\${lr.label}</span> <span class="muted">(\${n(g.up)} / \${n(g.down)})</span></p>
               <div style="display:flex;justify-content:center;gap:8px;margin-top:8px;flex-wrap:wrap">
-                <a class="btn" target="_blank" rel="noopener" href="https://www.roblox.com/games/${g.rootPlaceId}">Play</a>
-                <button class="btn" onclick="bookmark('game', ${g.id})">Bookmark</button>
+                <a class="btn" target="_blank" rel="noopener" href="https://www.roblox.com/games/\${g.rootPlaceId}">Play</a>
+                <button class="btn" onclick="bookmark('game', \${g.id})">Bookmark</button>
+                <button class="btn" onclick="navigator.clipboard.writeText(String(\${g.id}))">Copy Universe ID</button>
               </div>
             </div>
           </div>
-        </div>`;
+        </div>\`;
     }
 
-    // ---------- User search (name or ID) ----------
+    // ---------- Sort / filter controls ----------
+    function applyControls(){
+      if(!LAST_RESULTS.games.length) return;
+      const minPlayers = Number($('#minPlayers').value||0);
+      const minVisits  = Number($('#minVisits').value||0);
+      let arr = LAST_RESULTS.games.filter(g => g.playing>=minPlayers && g.visits>=minVisits);
+
+      const sort = $('#sortSel').value;
+      const likePct = g => { const t=g.up+g.down; return t? (g.up/t) : 0; }
+      arr.sort((a,b)=>{
+        switch(sort){
+          case 'playing': return (b.playing||0)-(a.playing||0);
+          case 'favorites': return (b.favorites||0)-(a.favorites||0);
+          case 'likes': return likePct(b)-likePct(a);
+          case 'name': return String(a.name).localeCompare(String(b.name));
+          default: return (b.visits||0)-(a.visits||0);
+        }
+      });
+      paintGames(arr);
+    }
+    function surpriseMe(){
+      const list = LAST_RESULTS.games;
+      if(!list.length){ alert('Search first!'); return; }
+      const pick = list[Math.floor(Math.random()*list.length)];
+      viewGame(pick.id);
+    }
+
+    // ---------- User search ----------
     async function userLookup(q){
       const out=$('#out');
-      out.innerHTML=`<div class="card"><div class="loader"><div class="spinner"></div><div>Looking up user…</div></div></div>${sk()}`;
+      out.innerHTML=\`<div class="card"><div class="loader"><div class="spinner"></div><div>Looking up user…</div></div></div>\${sk()}\`;
 
       let id=q.trim();
-      if(!/^\d+$/.test(id)){
+      if(!/^\\d+$/.test(id)){
         const r=await j(PROXY+encodeURIComponent('https://users.roblox.com/v1/usernames/users'),{
           method:'POST',headers:{'Content-Type':'application/json'},
           body:JSON.stringify({usernames:[id.toLowerCase()],excludeBannedUsers:false})
@@ -328,12 +442,12 @@
       }
 
       const [u,ava,fri,fol,folw,pre]=await Promise.all([
-        j(PROXY+encodeURIComponent(`https://users.roblox.com/v1/users/${id}`)),
-        j(PROXY+encodeURIComponent(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${id}&size=180x180&format=Png&isCircular=false`)),
-        j(PROXY+encodeURIComponent(`https://friends.roblox.com/v1/users/${id}/friends/count`)),
-        j(PROXY+encodeURIComponent(`https://friends.roblox.com/v1/users/${id}/followers/count`)),
-        j(PROXY+encodeURIComponent(`https://friends.roblox.com/v1/users/${id}/followings/count`)),
-        j(PROXY+encodeURIComponent(`https://presence.roblox.com/v1/presence/users`),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userIds:[Number(id)]})})
+        j(PROXY+encodeURIComponent(\`https://users.roblox.com/v1/users/\${id}\`)),
+        j(PROXY+encodeURIComponent(\`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=\${id}&size=180x180&format=Png&isCircular=false\`)),
+        j(PROXY+encodeURIComponent(\`https://friends.roblox.com/v1/users/\${id}/friends/count\`)),
+        j(PROXY+encodeURIComponent(\`https://friends.roblox.com/v1/users/\${id}/followers/count\`)),
+        j(PROXY+encodeURIComponent(\`https://friends.roblox.com/v1/users/\${id}/followings/count\`)),
+        j(PROXY+encodeURIComponent(\`https://presence.roblox.com/v1/presence/users\`),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userIds:[Number(id)]})})
       ]);
 
       const url=ava?.data?.[0]?.imageUrl||'https://placehold.co/180x180?text=Avatar';
@@ -341,27 +455,28 @@
       const pt=pre?.userPresences?.[0]?.userPresenceType;
       let sClass='offline', sText='Offline'; if(pt===1){sClass='online';sText='Online'} else if(pt===2){sClass='playing';sText='In Game'} else if(pt===3){sClass='studio';sText='In Studio'}
 
-      out.innerHTML=`
+      out.innerHTML=\`
         <div class="card">
           <div class="header-row">
-            <img class="avatar" src="${url}" onerror="this.src='https://placehold.co/180x180?text=Avatar'">
+            <img class="avatar" src="\${url}" onerror="this.src='https://placehold.co/180x180?text=Avatar'">
             <div class="info">
-              <h2 style="text-align:center">${u.name||'Unknown'} <span class="muted">(${u.displayName||'Unknown'})</span></h2>
+              <h2 style="text-align:center">\${u.name||'Unknown'} <span class="muted">(\${u.displayName||'Unknown'})</span></h2>
               <div class="chips">
-                <span class="chip">Created: ${created}</span>
-                <span class="chip">Friends: ${n(fri.count)}</span>
-                <span class="chip">Followers: ${n(fol.count)}</span>
-                <span class="chip">Following: ${n(folw.count)}</span>
+                <span class="chip">Created: \${created}</span>
+                <span class="chip">Friends: \${n(fri.count)}</span>
+                <span class="chip">Followers: \${n(fol.count)}</span>
+                <span class="chip">Following: \${n(folw.count)}</span>
               </div>
-              <p style="text-align:center;margin-top:6px"><b>Bio:</b> ${u.description?String(u.description).replace(/[&<>]/g,m=>({ '&':'&amp;','<':'&lt;','>':'&gt;' }[m])).replace(/\n/g,'<br>'):'<span class="muted">None</span>'}</p>
+              <p style="text-align:center;margin-top:6px"><b>Bio:</b> \${u.description?String(u.description).replace(/[&<>]/g,m=>({ '&':'&amp;','<':'&lt;','>':'&gt;' }[m])).replace(/\\n/g,'<br>'):'<span class="muted">None</span>'}</p>
               <div style="display:flex;justify-content:center;gap:8px;margin-top:8px;flex-wrap:wrap">
-                <a class="btn" target="_blank" rel="noopener" href="https://www.roblox.com/users/${u.id}/profile">Open Profile</a>
-                <button class="btn" onclick="bookmark('user','${u.id}')">Bookmark</button>
+                <a class="btn" target="_blank" rel="noopener" href="https://www.roblox.com/users/\${u.id}/profile">Open Profile</a>
+                <button class="btn" onclick="bookmark('user','\${u.id}')">Bookmark</button>
+                <button class="btn" onclick="navigator.clipboard.writeText(String(\${u.id}))">Copy User ID</button>
               </div>
             </div>
           </div>
-          <div class="pill ${sClass}" style="position:absolute; top:16px; right:16px">${sText}</div>
-        </div>`;
+          <div class="pill \${sClass}" style="position:absolute; top:16px; right:16px">\${sText}</div>
+        </div>\`;
     }
 
     // ---------- Primary lookup with cooldown ----------
@@ -371,55 +486,54 @@
       lastSearchAt = now;
 
       const q=$('#q').value.trim();
-      if(!q){ $('#out').innerHTML=`<div class="card"><p class="error">Type something to search.</p></div>`; return; }
+      if(!q){ $('#out').innerHTML=\`<div class="card"><p class="error">Type something to search.</p></div>\`; return; }
 
       startCooldown();
+      saveRecent(q);
 
       try{
         if(MODE==='user') { await userLookup(q); return; }
 
         // game mode
-        $('#out').innerHTML=`<div class="card"><div class="loader"><div class="spinner"></div><div>Searching games…</div></div></div>${sk()}${sk()}`;
+        $('#out').innerHTML=\`<div class="card"><div class="loader"><div class="spinner"></div><div>Searching games…</div></div></div>\${sk()}\${sk()}\`;
 
         let ids=[];
-        if(/^\d+$/.test(q)){
-          // Try universe id straight
+        if(/^\\d+$/.test(q)){
           const asUni = await gameDetails([Number(q)]);
-          if(asUni.length){ paintGames(asUni); return; }
-          // Maybe it's a place id
+          if(asUni.length){ LAST_RESULTS.games = asUni; paintGames(asUni); return; }
           const uni = await placeToUniverse(q);
           if(uni) ids=[uni];
         }else{
           ids = await autoUniverses(q);
         }
 
-        if(!ids.length){ $('#out').innerHTML=`<div class="card"><p class="error">No games found. Try another name or an ID.</p></div>`; return; }
+        if(!ids.length){ $('#out').innerHTML=\`<div class="card"><p class="error">No games found. Try another name or an ID.</p></div>\`; return; }
         const games = await gameDetails(ids);
-        paintGames(games);
+        LAST_RESULTS.games = games.slice();
+        applyControls(); // uses current sort/filter
       }catch(e){
         console.error(e);
-        $('#out').innerHTML=`<div class="card"><p class="error">Search failed. ${e.message||''}</p></div>`;
+        $('#out').innerHTML=\`<div class="card"><p class="error">Search failed. \${e.message||''}</p></div>\`;
       }
     }
     function startCooldown(){
       const b=$('#go'); b.disabled=true;
       let left=COOLDOWN_MS;
-      b.textContent=`Search ${Math.ceil(left/1000)}s`;
+      b.textContent=\`Search \${Math.ceil(left/1000)}s\`;
       cooldownTick=setInterval(()=>{
         left-=1000;
         if(left<=0){ clearInterval(cooldownTick); b.disabled=false; b.textContent='Search'; }
-        else b.textContent=`Search ${Math.ceil(left/1000)}s`;
+        else b.textContent=\`Search \${Math.ceil(left/1000)}s\`;
       },1000);
     }
-
     async function viewGame(id){
       let g=GAME_CACHE.get(id);
       if(!g){ const arr=await gameDetails([id]).catch(()=>[]); g=arr[0]; }
-      if(!g){ $('#out').innerHTML=`<div class="card"><p class="error">Couldn’t load that game.</p></div>`; return; }
+      if(!g){ $('#out').innerHTML=\`<div class="card"><p class="error">Couldn’t load that game.</p></div>\`; return; }
       paintGame(g);
     }
 
-    // ---------- Bookmarks / share ----------
+    // ---------- Bookmarks / share / recent ----------
     function bookmark(type,id){
       const data=JSON.parse(localStorage.getItem(BOOK_KEY)||'{}');
       if(!data[type]) data[type]=[];
@@ -429,32 +543,116 @@
     }
     async function showBookmarks(){
       const data=JSON.parse(localStorage.getItem(BOOK_KEY)||'{}');
-      const gIds=(data.game||[]).slice(0,20).map(Number);
-      const uIds=(data.user||[]).slice(0,20).map(Number);
-      let html=`<div class="card"><h2 style="text-align:center;margin:0 0 8px">My Bookmarks</h2>`;
+      const gIds=(data.game||[]).slice(0,40).map(Number);
+      const uIds=(data.user||[]).slice(0,40).map(Number);
+      let html=\`<div class="card"><h2 style="text-align:center;margin:0 0 8px">My Bookmarks</h2>\`;
       if(gIds.length){
         const games=await gameDetails(gIds);
-        html+=`<h3 style="text-align:center">Games</h3><div class="list">`+
-          games.map(g=>`<div class="item" onclick="viewGame(${g.id})"><div class="row2"><img class="thumb" src="${g.thumb}" onerror="this.src='https://placehold.co/150x150?text=Game'"><div class="info"><h2>${g.name}</h2><div class="meta"><span>Visits: ${n(g.visits)}</span></div></div></div></div>`).join('')+
-          `</div>`;
+        html+=\`<h3 style="text-align:center">Games</h3><div class="list">\`+
+          games.map(g=>\`<div class="item" onclick="viewGame(\${g.id})"><div class="row2"><img class="thumb" src="\${g.thumb}" onerror="this.src='https://placehold.co/150x150?text=Game'"><div class="info"><h2>\${g.name}</h2><div class="meta"><span>Visits: \${n(g.visits)}</span></div></div></div></div>\`).join('')+
+          \`</div>\`;
       }
       if(uIds.length){
-        html+=`<h3 style="text-align:center;margin-top:12px">Users</h3><div class="list">`+
-          uIds.map(uid=>`<div class="item" onclick="setMode('user'); $('#q').value='${uid}'; lookup();"><div class="row2"><div class="info"><h2 style="text-align:center">User ID ${uid}</h2><div class="meta"><span>Click to open</span></div></div></div></div>`).join('')+
-          `</div>`;
+        html+=\`<h3 style="text-align:center;margin-top:12px">Users</h3><div class="list">\`+
+          uIds.map(uid=>\`<div class="item" onclick="setMode('user'); $('#q').value='\${uid}'; lookup();"><div class="row2"><div class="info"><h2 style="text-align:center">User ID \${uid}</h2><div class="meta"><span>Click to open</span></div></div></div></div>\`).join('')+
+          \`</div>\`;
       }
-      if(!gIds.length && !uIds.length) html+=`<p class="muted" style="text-align:center">No bookmarks yet.</p>`;
-      html+=`</div>`;
+      if(!gIds.length && !uIds.length) html+=\`<p class="muted" style="text-align:center">No bookmarks yet.</p>\`;
+      html+=\`</div>\`;
       $('#out').innerHTML=html;
+    }
+    function exportBookmarks(){
+      const data = localStorage.getItem(BOOK_KEY)||'{}';
+      const blob = new Blob([data], {type:'application/json'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'roblox-bookmarks.json';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+    function importBookmarks(evt){
+      const file = evt.target.files?.[0]; if(!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try{
+          const data = JSON.parse(String(reader.result||'{}'));
+          localStorage.setItem(BOOK_KEY, JSON.stringify(data||{}));
+          alert('Imported!');
+        }catch{ alert('Invalid JSON file.'); }
+      };
+      reader.readAsText(file);
+    }
+    function saveRecent(q){
+      const arr = JSON.parse(localStorage.getItem(RECENT_KEY)||'[]').filter(x=>x!==q);
+      arr.unshift(q); while(arr.length>15) arr.pop();
+      localStorage.setItem(RECENT_KEY, JSON.stringify(arr));
+    }
+    function showRecent(){
+      const arr = JSON.parse(localStorage.getItem(RECENT_KEY)||'[]');
+      if(!arr.length){ alert('No recent searches yet.'); return; }
+      $('#out').innerHTML = \`<div class="card"><h2 style="text-align:center;margin:0 0 8px">Recent searches</h2>\`+
+        \`<div class="list">\`+
+        arr.map(q=>\`<div class="item" onclick="$('#q').value='\${q.replace(/'/g,'&#39;')}'; lookup();"><div class="row2"><div class="info"><h2 style="text-align:center">\${q}</h2><div class="meta"><span>Click to search</span></div></div></div></div>\`).join('')+
+        \`</div></div>\`;
     }
     function copyLink(){
       const p=new URLSearchParams(); p.set('mode',MODE);
       const q=$('#q').value.trim(); if(q) p.set('q',q);
-      const link=`${location.origin}${location.pathname}?${p.toString()}`;
+      const link=\`\${location.origin}\${location.pathname}?\${p.toString()}\`;
       navigator.clipboard.writeText(link).then(()=>{ $('#copyBtn').textContent='Copied!'; setTimeout(()=>$('#copyBtn').textContent='Copy link',1200); });
     }
 
-    // ---------- Contact: AJAX send + Gmail Web fallback ----------
+    // ---------- Compare users (basic) ----------
+    async function idFromNameOrId(x){
+      let id = String(x).trim();
+      if(/^\\d+$/.test(id)) return id;
+      const r=await j(PROXY+encodeURIComponent('https://users.roblox.com/v1/usernames/users'),{
+        method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({usernames:[id.toLowerCase()],excludeBannedUsers:false})
+      });
+      if(!r?.data?.[0]) throw new Error('User not found: '+x);
+      return String(r.data[0].id);
+    }
+    async function getUserLite(id){
+      const [u,fri,fol,folw]=await Promise.all([
+        j(PROXY+encodeURIComponent(\`https://users.roblox.com/v1/users/\${id}\`)),
+        j(PROXY+encodeURIComponent(\`https://friends.roblox.com/v1/users/\${id}/friends/count\`)),
+        j(PROXY+encodeURIComponent(\`https://friends.roblox.com/v1/users/\${id}/followers/count\`)),
+        j(PROXY+encodeURIComponent(\`https://friends.roblox.com/v1/users/\${id}/followings/count\`))
+      ]);
+      return { id:u.id, name:u.name, displayName:u.displayName, created:u.created, friends:fri.count, followers:fol.count, following:folw.count };
+    }
+    async function compareUsers(){
+      const a=$('#cmpA').value.trim(), b=$('#cmpB').value.trim();
+      if(!a||!b){ $('#cmpOut').textContent='Enter two usernames or IDs.'; return; }
+      $('#cmpOut').innerHTML = '<div class="loader"><div class="spinner"></div><div>Comparing…</div></div>';
+      try{
+        const [idA,idB] = await Promise.all([idFromNameOrId(a), idFromNameOrId(b)]);
+        const [ua,ub]   = await Promise.all([getUserLite(idA), getUserLite(idB)]);
+        const older = new Date(ua.created) < new Date(ub.created) ? ua : ub;
+        $('#cmpOut').innerHTML = `
+          <div class="list">
+            <div class="item" tabindex="0">
+              <div class="info">
+                <h2 style="text-align:center">${ua.name} <span class="muted">(${ua.displayName})</span></h2>
+                <div class="meta"><span>Friends: <b>${n(ua.friends)}</b></span><span>Followers: <b>${n(ua.followers)}</b></span><span>Following: <b>${n(ua.following)}</b></span><span>Created: ${new Date(ua.created).toLocaleDateString()}</span></div>
+              </div>
+            </div>
+            <div class="item" tabindex="0">
+              <div class="info">
+                <h2 style="text-align:center">${ub.name} <span class="muted">(${ub.displayName})</span></h2>
+                <div class="meta"><span>Friends: <b>${n(ub.friends)}</b></span><span>Followers: <b>${n(ub.followers)}</b></span><span>Following: <b>${n(ub.following)}</b></span><span>Created: ${new Date(ub.created).toLocaleDateString()}</span></div>
+              </div>
+            </div>
+          </div>
+          <p class="muted" style="text-align:center;margin-top:8px">Older account: <b>${older.name}</b></p>
+        `;
+      }catch(e){
+        $('#cmpOut').textContent = e.message||'Compare failed.';
+      }
+    }
+
+    // ---------- Contact ----------
     const FORM_ENDPOINT = "https://formsubmit.co/ajax/supp.roxzy@gmail.com";
     $('#contactForm').addEventListener('submit', async (e)=>{
       e.preventDefault();
@@ -485,7 +683,6 @@
           throw new Error('Service error');
         }
       }catch(err){
-        // Fallback: Gmail Web compose (no Outlook)
         note.textContent = 'Could not send via service. You can send quickly via Gmail Web.';
         gmailBtn.style.display = 'inline-block';
         gmailBtn.onclick = ()=>{
@@ -508,16 +705,20 @@
       if(e.key.toLowerCase()==='u') setMode('user');
     });
 
-    // Deep link support (optional)
+    // Deep link support
     (function(){
       const p=new URLSearchParams(location.search);
       const m=p.get('mode'); if(m==='user'||m==='game') setMode(m);
       const q=p.get('q'); if(q){ $('#q').value=q; lookup(); }
     })();
 
-    // expose for inline handlers
+    // expose
     window.setMode=setMode; window.viewGame=viewGame; window.lookup=lookup;
     window.bookmark=bookmark; window.showBookmarks=showBookmarks;
+    window.applyControls=applyControls; window.surpriseMe=surpriseMe;
+    window.toggleTheme=toggleTheme; window.exportBookmarks=exportBookmarks;
+    window.importBookmarks=importBookmarks; window.showRecent=showRecent;
+    window.compareUsers=compareUsers; window.copyLink=copyLink;
   </script>
 </body>
 </html>
